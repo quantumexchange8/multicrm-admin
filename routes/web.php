@@ -5,6 +5,8 @@ use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\IBController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,24 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    /**
+     * ==============================
+     *          Member Listing
+     * ==============================
+     */
+    Route::prefix('member')->group(function () {
+        Route::get('/member_listing', [MemberController::class, 'MemberListing'])->name('member_listing');
+    });
+     
+    /**
+     * ==============================
+     *          IB Listing
+     * ==============================
+     */
+    Route::prefix('ib')->group(function () {
+        Route::get('/ib_listing', [IBController::class, 'IBListing'])->name('ib_listing');
+    });
 });
 
 Route::get('/components/buttons', function () {
