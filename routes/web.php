@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\MemberController;
 use App\Http\Controllers\IBController;
+use App\Http\Controllers\NetworkController;
 
 /*
 |--------------------------------------------------------------------------
@@ -52,6 +53,21 @@ Route::middleware('auth')->group(function () {
     Route::prefix('ib')->group(function () {
         Route::get('/ib_listing', [IBController::class, 'IBListing'])->name('ib_listing');
     });
+
+    /**
+     * ==============================
+     *          Trading Account Listing
+     * ==============================
+     */
+    Route::get('/trading_account_listing', [MemberController::class, 'TradingAccountListing'])->name('Trading_Account_Listing');
+
+    /**
+     * ==============================
+     *         Network Tree
+     * ==============================
+     */
+    Route::get('/network_tree', [NetworkController::class, 'Network'])->name('Network_Tree');
+
 });
 
 Route::get('/components/buttons', function () {
