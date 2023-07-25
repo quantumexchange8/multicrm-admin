@@ -43,6 +43,8 @@ Route::middleware('auth')->group(function () {
      */
     Route::prefix('member')->group(function () {
         Route::get('/member_listing', [MemberController::class, 'MemberListing'])->name('member_listing');
+        Route::get('/rebate_allocation', [MemberController::class, 'getrebateallocation'])->name('rebate_allocation');
+        Route::post('/rebate_allocation', [MemberController::class, 'updateRebateAllocation'])->name('updateRebate.update');
     });
      
     /**
