@@ -5,6 +5,12 @@ import { DashboardIcon } from '@/Components/Icons/outline'
 import SidebarCollapsible from '@/Components/Sidebar/SidebarCollapsible.vue'
 import SidebarCollapsibleItem from '@/Components/Sidebar/SidebarCollapsibleItem.vue'
 import { TemplateIcon } from '@heroicons/vue/outline'
+import { library } from '@fortawesome/fontawesome-svg-core'
+/* import specific icons */
+import { faGaugeHigh, faUser, faUserTie } from '@fortawesome/free-solid-svg-icons'
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+library.add(faGaugeHigh, faUser, faUserTie)
+
 </script>
 
 <template>
@@ -19,30 +25,83 @@ import { TemplateIcon } from '@heroicons/vue/outline'
             :active="route().current('dashboard')"
         >
             <template #icon>
-                <DashboardIcon
-                    class="flex-shrink-0 w-6 h-6"
+                <font-awesome-icon
+                    icon="fa-solid fa-gauge-high"
+                    class="flex-shrink-0 w-5 h-5"
                     aria-hidden="true"
                 />
             </template>
         </SidebarLink>
 
+        <!-- member -->
         <SidebarCollapsible
-            title="Components"
-            :active="route().current('components.*')"
+            title="Members"
+            :active="route().current('member.*')"
         >
             <template #icon>
-                <TemplateIcon
-                    class="flex-shrink-0 w-6 h-6"
+                <font-awesome-icon
+                    icon="fa-solid fa-user"
+                    class="flex-shrink-0 w-5 h-5"
                     aria-hidden="true"
                 />
             </template>
 
             <SidebarCollapsibleItem
-                :href="route('components.buttons')"
-                title="Buttons"
-                :active="route().current('components.buttons')"
+                :href="route('member.member_listing')"
+                title="Member Listing"
+                :active="route().current('member.member_listing')"
+            />
+
+            <SidebarCollapsibleItem
+                :href="route('member.trading_account_listing')"
+                title="Trading Account Listing"
+                :active="route().current('member.trading_account_listing')"
+            />
+
+            <SidebarCollapsibleItem
+                :href="route('member.network_tree')"
+                title="Member Tree"
+                :active="route().current('member.network_tree')"
             />
         </SidebarCollapsible>
+
+        <!-- ib -->
+        <SidebarCollapsible
+            title="Introducing Broker"
+            :active="route().current('ib.*')"
+        >
+            <template #icon>
+                <font-awesome-icon
+                    icon="fa-solid fa-user-tie"
+                    class="flex-shrink-0 w-5 h-5"
+                    aria-hidden="true"
+                />
+            </template>
+
+            <SidebarCollapsibleItem
+                :href="route('ib.ib_listing')"
+                title="IB Listing"
+                :active="route().current('ib.ib_listing')"
+            />
+        </SidebarCollapsible>
+
+<!--        <SidebarCollapsible-->
+<!--            title="Components"-->
+<!--            :active="route().current('components.*')"-->
+<!--        >-->
+<!--            <template #icon>-->
+<!--                <TemplateIcon-->
+<!--                    class="flex-shrink-0 w-6 h-6"-->
+<!--                    aria-hidden="true"-->
+<!--                />-->
+<!--            </template>-->
+
+<!--            <SidebarCollapsibleItem-->
+<!--                :href="route('components.buttons')"-->
+<!--                title="Buttons"-->
+<!--                :active="route().current('components.buttons')"-->
+<!--            />-->
+<!--        </SidebarCollapsible>-->
 
         <!-- Examples -->
         <!--

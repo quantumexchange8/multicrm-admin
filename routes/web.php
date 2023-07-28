@@ -21,12 +21,7 @@ use App\Http\Controllers\NetworkController;
 */
 
 Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return redirect()->route('login');
 });
 
 Route::middleware('auth')->group(function () {
@@ -38,37 +33,44 @@ Route::middleware('auth')->group(function () {
 
     /**
      * ==============================
-     *          Member Listing
+     *        Member Listing
      * ==============================
      */
     Route::prefix('member')->group(function () {
-        Route::get('/member_listing', [MemberController::class, 'MemberListing'])->name('member_listing');
+        Route::get('/member_listing', [MemberController::class, 'member_listing'])->name('member.member_listing');
+        Route::patch('/member_update', [MemberController::class, 'member_update'])->name('member.member_update');
         Route::get('/rebate_allocation', [MemberController::class, 'getrebateallocation'])->name('rebate_allocation');
         Route::post('/rebate_allocation', [MemberController::class, 'updateRebateAllocation'])->name('updateRebate.update');
+
+        Route::post('/getIBAccountTypeSymbolGroupRate', [MemberController::class, 'getIBAccountTypeSymbolGroupRate']);
+        Route::post('/upgradeIb', [MemberController::class, 'upgradeIb'])->name('member.upgradeIb');
+
+        Route::post('/reset_member_password', [MemberController::class, 'reset_member_password'])->name('member.reset_member_password');
+        Route::delete('/delete_member', [MemberController::class, 'delete_member'])->name('member.delete_member');
     });
-     
+
     /**
      * ==============================
      *          IB Listing
      * ==============================
      */
     Route::prefix('ib')->group(function () {
-        Route::get('/ib_listing', [IBController::class, 'IBListing'])->name('ib_listing');
+        Route::get('/ib_listing', [IBController::class, 'ib_listing'])->name('ib.ib_listing');
     });
 
     /**
      * ==============================
-     *          Trading Account Listing
+     *    Trading Account Listing
      * ==============================
      */
-    Route::get('/trading_account_listing', [MemberController::class, 'TradingAccountListing'])->name('Trading_Account_Listing');
+    Route::get('/trading_account_listing', [MemberController::class, 'trading_account_listing'])->name('member.trading_account_listing');
 
     /**
      * ==============================
-     *         Network Tree
+     *          Network Tree
      * ==============================
      */
-    Route::get('/network_tree', [NetworkController::class, 'Network'])->name('Network_Tree');
+    Route::get('/network_tree', [NetworkController::class, 'network_tree'])->name('member.network_tree');
 
 });
 

@@ -36,8 +36,8 @@ function formatAmount(amount) {
         </RightbarTitle>
 
         <RightbarTitle title="Today's Rebate">
-            <RightbarContent title="Total Approved Withdrawal ($)" :amount="formatAmount(totalApprovedWithdrawal)" />
-            <RightbarContent title="Total Pending Withdrawal ($)" :amount="formatAmount(totalPendingWithdrawal)" />
+            <RightbarContent title="Total Approved Rebate ($)" :amount="formatAmount(totalApprovedWithdrawal)" />
+            <RightbarContent title="Total Pending Rebate ($)" :amount="formatAmount(totalPendingWithdrawal)" />
         </RightbarTitle>
 
 <!--        <RightbarTitle title="Today's Credit">-->

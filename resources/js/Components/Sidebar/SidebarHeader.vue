@@ -9,9 +9,13 @@ import { sidebarState } from '@/Composables'
 
 <template>
     <div class="flex items-center justify-between flex-shrink-0 px-3">
-        <Link :href="route('dashboard')" class="inline-flex items-center gap-2">
-            <span class="sr-only">K-UI</span>
-            <ApplicationLogo aria-hidden="true" class="w-10 h-auto" />
+        <Link :href="route('dashboard')" class="inline-flex items-center gap-2" v-if="!sidebarState.isOpen">
+            <span class="sr-only">QCG</span>
+            <ApplicationLogo aria-hidden="true" class="ml-1 w-8 h-auto" />
+        </Link>
+        <Link :href="route('dashboard')" class="inline-flex items-center gap-2" v-else>
+            <span class="sr-only">QCG</span>
+            <img src="/assets/logo.png" class="object-cover w-4/5 h-auto" alt="">
         </Link>
 
         <Button

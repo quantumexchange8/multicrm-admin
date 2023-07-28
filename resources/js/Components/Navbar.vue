@@ -116,10 +116,17 @@ onUnmounted(() => {
                     <span class="inline-flex rounded-md">
                         <button
                             type="button"
-                            class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none focus:ring focus:ring-purple-500 focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark-eval-1 dark:bg-dark-eval-1 dark:text-gray-400 dark:hover:text-gray-200"
+                            class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-500 transition duration-150 ease-in-out bg-white border border-transparent rounded-md hover:text-gray-700 focus:outline-none focus:ring focus:ring-gray-500 focus:ring-offset-1 focus:ring-offset-white dark:focus:ring-offset-dark-eval-1 dark:bg-dark-eval-1 dark:text-gray-400 dark:hover:text-gray-200"
                         >
-                            {{ $page.props.auth.user.name }}
-
+                            <img
+                                class="h-10 w-10 rounded-full mr-4"
+                                :src="$page.props.auth.user.picture ? $page.props.auth.user.picture : 'https://img.freepik.com/free-icon/user_318-159711.jpg'"
+                                alt="ProfilePic"
+                            >
+                            <div class="flex flex-col text-left">
+                                <span>{{ $page.props.auth.user.first_name }}</span>
+                                <span>{{ $page.props.auth.user.email }}</span>
+                            </div>
                             <svg
                                 class="ml-2 -mr-0.5 h-4 w-4"
                                 xmlns="http://www.w3.org/2000/svg"
@@ -158,7 +165,7 @@ onUnmounted(() => {
     <!-- Mobile bottom bar -->
     <div
         :class="[
-            'fixed inset-x-0 bottom-0 flex items-center justify-between px-4 py-4 sm:px-6 transition-transform duration-500 bg-white md:hidden dark:bg-dark-eval-1',
+            'fixed inset-x-0 z-50 bottom-0 flex items-center justify-between px-4 py-4 sm:px-6 transition-transform duration-500 bg-white md:hidden dark:bg-dark-eval-1',
             {
                 'translate-y-full': scrolling.down,
                 'translate-y-0': scrolling.up,

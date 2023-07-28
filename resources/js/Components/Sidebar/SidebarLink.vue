@@ -45,7 +45,7 @@ const Tag = !props.external ? Link : 'a'
         </slot>
 
         <span
-            class="text-base font-medium"
+            class="text-base font-medium text-left"
             v-show="sidebarState.isOpen || sidebarState.isHovered"
         >
             {{ title }}
@@ -69,7 +69,7 @@ const Tag = !props.external ? Link : 'a'
         </slot>
 
         <span
-            class="text-base font-medium"
+            class="text-base font-medium text-left"
             v-show="sidebarState.isOpen || sidebarState.isHovered"
         >
             {{ title }}

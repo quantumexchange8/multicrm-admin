@@ -27,6 +27,8 @@
         "@fortawesome/fontawesome-svg-core": "^6.4.0",
         "@fortawesome/free-solid-svg-icons": "^6.4.0",
         "@fortawesome/vue-fontawesome": "^3.0.3",
-        "lodash": "^4.17.21"
+        "@inertiajs/inertia": "^0.11.1",
+        "lodash": "^4.17.21",
+        "vue-tailwind-datepicker": "^1.4.5"
     }
 }

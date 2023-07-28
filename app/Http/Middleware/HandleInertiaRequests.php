@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
                     'location' => $request->url(),
                 ]);
             },
+            'toast' => session('toast'),
             'totalApprovedDeposit' => $rightBarService->getTotalApprovedDeposit(),
             'totalPendingDeposit' => $rightBarService->getTotalPendingDeposit(),
             'totalApprovedWithdrawal' => $rightBarService->getTotalApprovedWithdrawal(),

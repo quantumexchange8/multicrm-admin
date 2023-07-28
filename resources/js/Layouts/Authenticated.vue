@@ -5,6 +5,7 @@ import Navbar from '@/Components/Navbar.vue'
 import PageFooter from '@/Components/PageFooter.vue'
 import { sidebarState } from '@/Composables'
 import Rightbar from "@/Components/Rightbar/Rightbar.vue";
+import ToastList from "@/Components/ToastList.vue";
 
 defineProps({
     title: String
@@ -44,7 +45,7 @@ defineProps({
             <div class="flex-1 px-4 sm:px-6">
                 <div class="flex flex-col md:flex-row gap-4">
                     <main class="flex-1">
-<!--                        <ToastList />-->
+                        <ToastList />
                         <slot />
                     </main>
 

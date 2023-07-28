@@ -9,8 +9,8 @@ use App\Models\User;
 
 class NetworkController extends Controller
 {
-    
-    public function Network(Request $request)
+
+    public function network_tree(Request $request)
     {
         // $user = Auth::user();
 
@@ -75,7 +75,7 @@ class NetworkController extends Controller
             foreach ($children as $child) {
                 $userData['children'][] = $this->convertToNestedStructure($children, $search, $level + 1);
             }
-            
+
         }
 
         // Append user data to the nestedData array

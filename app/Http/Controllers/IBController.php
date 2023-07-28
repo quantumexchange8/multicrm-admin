@@ -8,8 +8,8 @@ use App\Models\User;
 
 class IBController extends Controller
 {
-    
-    public function IBListing(Request $request)
+
+    public function ib_listing(Request $request)
     {
 
         $search = $request->input('search');
