@@ -20,6 +20,10 @@ const props = defineProps({
     childrens: Object,
     ibs: Object,
     filters: Object,
+    childrenAccounts: Object,
+    allibs: Object,
+    childdownline: Object,
+    defaultAccountSymbolGroup: Object,
 });
 
 const childrens = props.childrens;
@@ -98,24 +102,18 @@ function clearField() {
                         
                         class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"
                     >
-                        <div class="dark:text-dark-eval-3 uppercase">
-                            {{ 'Forex' }} (USD) / LOT
+                        <div class="dark:text-dark-eval-3 uppercase"
+                            v-for="defaultIB in defaultAccountSymbolGroup"
+                        >
+                            <span>
+                                {{ defaultIB.symbol_group.name }} (USD) / LOT
+                            </span>
+                            
+                            <span>
+                                {{ defaultIB.amount }}
+                            </span>
                         </div>
-                        <div class="text-center">
-                            {{ '100.00' }}
-                        </div>
-                        <div class="dark:text-dark-eval-3 uppercase">
-                            {{ 'Crypto' }} (USD) / LOT
-                        </div>
-                        <div class="text-center">
-                            {{ '100.00' }}
-                        </div>
-                        <div class="dark:text-dark-eval-3 uppercase">
-                            {{ 'Metal' }} (USD) / LOT
-                        </div>
-                        <div class="text-center">
-                            {{ '100.00' }}
-                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -155,7 +153,14 @@ function clearField() {
         </div>
         </div>
 
-        <RebateChild  :childrens="childrens" :ibs="ibs"/>
+        <RebateChild  
+        :childrens="childrens" 
+        :ibs="ibs" 
+        :childrenAccounts="childrenAccounts" 
+        :allibs="allibs" 
+        :childdownline="childdownline"
+        :defaultAccountSymbolGroup="defaultAccountSymbolGroup"
+        />
 
 </AuthenticatedLayout>
 

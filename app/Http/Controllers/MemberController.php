@@ -177,39 +177,63 @@ class MemberController extends Controller
         $user = Auth::user();
         $search = \Request::input('search');
 
-        $ibs = IbAccountType::where('user_id', $user->id)->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType'])->first();
+        $ibs = IbAccountType::where('user_id', $user->id)->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline'])->first();
 
-        $childrenIds = $ibs ->getIbChildrenIds();
-
-        $query = IbAccountType::whereIn('id', $childrenIds)
-            ->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType']);
-
-
+        // $childrenIds = $ibs ->getIbChildrenIds();
+        
+        // $query = IbAccountType::whereIn('id', $childrenIds)
+        //     ->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline']);
+        
         if ($search) {
             $query->whereHas('ofUser', function ($userQuery) use ($search) {
                 $userQuery->where('first_name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
             });
         }
+        
+        // $childrens = $query->get();
 
-        $childrens = $query->get();
+        // $childrens->each(function ($child) {
+        //     $profilePicUrl = $child->ofUser->getFirstMediaUrl('profile_photo');
+        //     $child->profile_pic = $profilePicUrl;
+        // });
 
-        $childrens->each(function ($child) {
-            $profilePicUrl = $child->ofUser->getFirstMediaUrl('profile_photo');
-            $child->profile_pic = $profilePicUrl;
-        });
+        // get account_type_symbol_groups default amount
+        $allibs = IbAccountType::with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline', 'upline.symbolGroups'])->get();
+        $childdownline = [];
+        foreach($allibs as $key => $ibdownline){
+            
+            if($ibdownline->getIbChildrenIds()){
+                $downline = IbAccountType::whereIn('id', $ibdownline->getIbChildrenIds())
+                    ->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline'])
+                    ->get();
 
+                $allibs[$key]->downline = $downline;
 
+                // Store the downline data in the $childdownline array
+                $childdownline = array_merge($childdownline, $downline->toArray());
+            }
+        }
+
+        $defaultAccountSymbolGroup = AccountTypeSymbolGroup::where('account_type', 1)
+                ->with(['symbolGroup'])
+                ->get();
+        // dd($defaultAccountSymbolGroup);
 
         return Inertia::render('Member/RebateAllocation', [
             'ibs' => $ibs,
-            'childrens' => $childrens,
-            'filters' => \Request::only(['search'])
+            // 'childrens' => $childrens,
+            'filters' => \Request::only(['search']),
+            'childdownline' => $childdownline,
+            // 'childrenAccounts' => $childrenAccounts,
+            'allibs' => $allibs,
+            'defaultAccountSymbolGroup' => $defaultAccountSymbolGroup,
         ]);
     }
 
     public function updateRebateAllocation(Request $request)
     {
+        
         $curIb = IbAccountType::find($request->user_id);
         $upline = IbAccountType::where('user_id', Auth::id())->first();
         $downline = $curIb->downline;
@@ -235,6 +259,8 @@ class MemberController extends Controller
             }
         }
 
+        
+
         $rebateAllocation = RebateAllocation::create(['from' => $curIb->upline_id, 'to' => $request->user_id]);
 
         foreach ($request->symbolGroupItems as $key => $amount) {
@@ -251,6 +277,11 @@ class MemberController extends Controller
         }
 
         return back()->with('toast', 'The rebate allocation has been saved!');
+    }
+
+    public function updateRebateStructure(Request $request)
+    {
+        dd($request->all());
     }
 
 }
