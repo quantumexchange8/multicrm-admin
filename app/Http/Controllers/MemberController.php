@@ -29,7 +29,8 @@ class MemberController extends Controller
             ->where('role', '=', 'member')
             ->with(['tradingAccounts', 'media'])
             ->when($request->input('search'), function ($query, $search) {
-                $query->where('first_name', 'like', "%{$search}%");
+                $query->where('first_name', 'like', "%{$search}%")
+                    ->orWhere('email', 'like', "%{$search}%");
             })
             ->paginate(10)
             ->withQueryString();
@@ -180,17 +181,17 @@ class MemberController extends Controller
         $ibs = IbAccountType::where('user_id', $user->id)->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline'])->first();
 
         // $childrenIds = $ibs ->getIbChildrenIds();
-        
+
         // $query = IbAccountType::whereIn('id', $childrenIds)
         //     ->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline']);
-        
+
         if ($search) {
             $query->whereHas('ofUser', function ($userQuery) use ($search) {
                 $userQuery->where('first_name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
             });
         }
-        
+
         // $childrens = $query->get();
 
         // $childrens->each(function ($child) {
@@ -202,7 +203,7 @@ class MemberController extends Controller
         $allibs = IbAccountType::with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline', 'upline.symbolGroups'])->get();
         $childdownline = [];
         foreach($allibs as $key => $ibdownline){
-            
+
             if($ibdownline->getIbChildrenIds()){
                 $downline = IbAccountType::whereIn('id', $ibdownline->getIbChildrenIds())
                     ->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline'])
@@ -233,7 +234,7 @@ class MemberController extends Controller
 
     public function updateRebateAllocation(Request $request)
     {
-        
+
         $curIb = IbAccountType::find($request->user_id);
         $upline = IbAccountType::where('user_id', Auth::id())->first();
         $downline = $curIb->downline;
@@ -259,7 +260,7 @@ class MemberController extends Controller
             }
         }
 
-        
+
 
         $rebateAllocation = RebateAllocation::create(['from' => $curIb->upline_id, 'to' => $request->user_id]);
 

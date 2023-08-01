@@ -56,6 +56,7 @@ Route::middleware('auth')->group(function () {
      */
     Route::prefix('ib')->group(function () {
         Route::get('/ib_listing', [IBController::class, 'ib_listing'])->name('ib.ib_listing');
+        Route::post('/transfer_ib', [IBController::class, 'transfer_ib'])->name('ib.transfer_ib');
     });
 
     /**

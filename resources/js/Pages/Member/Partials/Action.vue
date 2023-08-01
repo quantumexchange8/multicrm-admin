@@ -123,7 +123,7 @@ const closeModal = () => {
                 <EditMemberDetail
                     :member="member"
                     :countries="countries"
-                    :getMemberId="getMemberId"
+                    :getMemberId="member.id"
                     @update:memberDetailModal="memberDetailModal = $event"
                 />
                 <ManageIbAccountType

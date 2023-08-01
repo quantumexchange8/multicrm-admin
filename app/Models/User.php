@@ -69,6 +69,18 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(TradingAccount::class, 'user_id', 'id');
     }
+    public function ibAccountTypes()
+    {
+        return $this->hasMany(IbAccountType::class, 'user_id', 'id');
+    }
+    public function specificIbAccountTypes($account_type)
+    {
+        return $this->hasOne(IbAccountType::class, 'user_id', 'id')->where('account_type', $account_type);
+    }
+    public function ibAccountTypeSymbolGroupRates()
+    {
+        return $this->hasManyThrough(IbAccountTypeSymbolGroupRate::class, IbAccountType::class, 'user_id', 'ib_account_type', 'email', 'id');
+    }
     public function children()
     {
         return $this->hasMany(User::class, 'referral', 'ib_id');

@@ -76,9 +76,7 @@ import AuthenticatedLayout from '@/Layouts/Authenticated.vue'
                             {{ tradingAcc.credit }}
                         </th>
                         <th>
-                            <button @click="ViewUser">View</button>
-                            <button @click="ResetPass">Reset</button>
-                            <button @click="Destroy">Delete</button>
+                           Actions
                         </th>
                     </tr>
                 </tbody>

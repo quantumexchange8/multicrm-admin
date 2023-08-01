@@ -61,7 +61,7 @@ const leave = (el) => {
                             {
                                 '-rotate-45': isOpen,
                                 'rotate-45': !isOpen,
-                                'bg-white': active,
+                                'bg-gray-500 dark:bg-white': active,
                                 'bg-gray-400': !active,
                             },
                         ]"
@@ -72,7 +72,7 @@ const leave = (el) => {
                             {
                                 'rotate-45': isOpen,
                                 '-rotate-45': !isOpen,
-                                'bg-white': active,
+                                'bg-gray-500 dark:bg-white': active,
                                 'bg-gray-400': !active,
                             },
                         ]"

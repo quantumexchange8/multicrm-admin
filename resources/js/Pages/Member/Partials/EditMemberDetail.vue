@@ -196,7 +196,7 @@ const toggleEdit = () => {
                 <Label for="front_identity">
                     Proof of Identity (FRONT)
                 </Label>
-                <Modal :show="frontIdentityModal" @close="closeModal">
+                <Modal :show="frontIdentityModal" @close="backButton">
                     <div class="relative bg-white rounded-lg shadow dark:bg-dark-eval-1">
                         <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" @click="backButton">
                             <svg class="h-7 w-7 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 13l-4 -4l4 -4m-4 4h11a4 4 0 0 1 0 8h-1" /></svg>
@@ -227,9 +227,8 @@ const toggleEdit = () => {
             <div class="space-y-2">
                 <Label for="back_identity">
                     Proof of Identity (BACK)
-                    <a v-if="hasMediaCollection(member, 'back_identity')" href="javascript:void(0);" @click.prevent="openBackIdentityModal" class="text-blue-500 hover:underline ml-2">Click to view</a>
                 </Label>
-                <Modal :show="backIdentityModal" @close="closeModal">
+                <Modal :show="backIdentityModal" @close="backButton">
                     <div class="relative bg-white rounded-lg shadow dark:bg-dark-eval-1">
                         <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" @click="backButton">
                             <svg class="h-7 w-7 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 13l-4 -4l4 -4m-4 4h11a4 4 0 0 1 0 8h-1" /></svg>
