@@ -1,16 +1,9 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/Authenticated.vue'
-import RebateChild from './Partials/RebateChild.vue'
-import {computed, ref, watch} from "vue";
+import {computed} from "vue";
 import {usePage} from "@inertiajs/vue3";
-import InputIconWrapper from "@/Components/InputIconWrapper.vue";
 import { faSearch,faX,faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { router } from '@inertiajs/vue3'
-import debounce from "lodash/debounce.js";
-import Input from "@/Components/Input.vue";
-import Button from "@/Components/Button.vue";
-import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import IbListing from "@/Pages/Member/RebateAllocation/IbListing.vue";
 
 library.add(faSearch,faX,faRotateRight);
@@ -94,15 +87,6 @@ const props = defineProps({
         :ibDownlines="ibDownlines"
         :get_ibs_sel="get_ibs_sel"
     />
-
-<!--        <RebateChild-->
-<!--        :childrens="childrens"-->
-<!--        :ibs="ibs"-->
-<!--        :childrenAccounts="childrenAccounts"-->
-<!--        :allibs="allibs"-->
-<!--        :childdownline="childdownline"-->
-<!--        :defaultAccountSymbolGroup="defaultAccountSymbolGroup"-->
-<!--        />-->
 
 </AuthenticatedLayout>
 
