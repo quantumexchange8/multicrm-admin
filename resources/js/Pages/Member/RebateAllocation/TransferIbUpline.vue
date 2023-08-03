@@ -7,17 +7,43 @@ import {ref} from "vue";
 import {useForm} from "@inertiajs/vue3";
 import Multiselect from '@vueform/multiselect'
 
-const emit = defineEmits(['update:memberDetailModal']);
+const emit = defineEmits(['update:IbManageModal']);
 
 const props = defineProps({
     ib: Object,
-    select_ibs: Object
+    get_ibs_sel: Object
 })
 
+const loading = ref(false);
+const newIbRebateInfo = ref([]);
+const selectedEmail = ref('');
+
 const form = useForm({
-    id: props.ib.id,
+    id: props.ib.of_user.id,
     new_ib: '',
 })
+
+// Define a method to send the POST request when the input radio is clicked
+const handleNewIbRebateInfo = async () => {
+    try {
+        loading.value = true; // Show loading state
+
+        const response = await axios.post('/member/getNewIbRebateInfo', {
+            new_ib: selectedEmail.value,
+        });
+
+        newIbRebateInfo.value = response.data;
+        loading.value = false; // Hide loading state after getting the response
+    } catch (error) {
+        console.error('Error fetching group data:', error);
+        loading.value = false; // Hide loading state in case of an error
+    }
+};
+
+const handleEmailSelection = (selectedValue) => {
+    form.new_ib = selectedValue;
+    handleNewIbRebateInfo();
+};
 
 const updatePassword = () => {
     form.post(route('ib.transfer_ib'), {
@@ -30,7 +56,7 @@ const updatePassword = () => {
 }
 
 const closeModal = () => {
-    emit('update:memberDetailModal', false);
+    emit('update:IbManageModal', false);
 }
 </script>
 
@@ -38,29 +64,30 @@ const closeModal = () => {
     <h2
         class="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100"
     >
-        Transfer Upline
+        IB Transfer
     </h2>
     <hr>
 
-    <div class="mt-6 w-full">
-        <div class="space-y-2 my-4">
-            <Label for="current_ib" value="Current Upline IB" />
+    <div class="mt-6 w-full grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="space-y-3 my-2">
+            <Label for="current_ib" class="text-xs" value="Current IB" />
 
             <Input
                 id="current_ib"
-                :model-value="props.ib.upline ? props.ib.upline.email : 'No Upline'"
+                :model-value="props.ib.upline ? props.ib.of_user.upline.email : 'No Upline'"
                 type="email"
-                class="mt-1 block w-full"
+                class="mt- block w-full"
                 readonly
             />
 
         </div>
-        <div class="space-y-2 my-4">
-            <Label for="new_ib" value="New Upline IB" />
+        <div class="space-y-3 my-2">
+            <Label for="new_ib" class="text-xs" value="New IB" />
             <Multiselect
-                v-model="form.new_ib"
+                v-model="selectedEmail"
+                @update:modelValue="handleEmailSelection"
                 placeholder="Search IB"
-                :options="select_ibs"
+                :options="get_ibs_sel"
                 :searchable="true"
                 :classes="{
                     container: 'relative rounded-full mx-auto w-full flex items-center justify-end box-border cursor-pointer border border-gray-400 rounded bg-white text-sm leading-snug outline-none dark:border-gray-600 dark:bg-[#202020] dark:text-gray-300 dark:focus:ring-offset-dark-eval-1',
@@ -75,7 +102,7 @@ const closeModal = () => {
                     caretOpen: 'rotate-180 pointer-events-auto',
                     clear: 'pr-3.5 relative z-10 opacity-40 transition duration-300 flex-shrink-0 flex-grow-0 flex hover:opacity-80 rtl:pr-0 rtl:pl-3.5',
                     clearIcon: 'bg-multiselect-remove bg-center bg-no-repeat w-2.5 h-4 py-px box-content inline-block',
-                    dropdown: 'max-h-20 absolute -left-px -right-px bottom-0 transform translate-y-full border border-gray-300 -mt-px overflow-y-scroll z-50 bg-white flex flex-col rounded dark:bg-[#202020] dark:text-gray-300',
+                    dropdown: 'max-h-40 absolute -left-px -right-px bottom-0 transform translate-y-full border border-gray-300 -mt-px overflow-y-scroll z-50 bg-white flex flex-col rounded dark:bg-[#202020] dark:text-gray-300',
                     dropdownTop: '-translate-y-full top-px bottom-auto rounded-b-none rounded-t',
                     dropdownHidden: 'hidden',
                     options: 'flex flex-col p-0 m-0 list-none',
@@ -98,11 +125,51 @@ const closeModal = () => {
                 class="mt-2"
             />
         </div>
-        <div class="mt-6 flex gap-4 justify-end">
-            <Button variant="secondary" @click="closeModal">
-                Cancel
-            </Button>
-            <Button @click.prevent="updatePassword" :disabled="form.processing">Save</Button>
+
+        <div class="space-y-2 my-2">
+            <h3
+                class="text-lg font-medium mb-6 text-gray-900 dark:text-gray-100"
+            >
+                Current IB Rebate Info
+            </h3>
+            <div v-if="ib.upline">
+                <div v-for="uplineRebate in ib.upline.symbol_groups">
+                    <div class="grid grid-cols-2 text-black dark:text-white pr-4 mb-5 items-center">
+                        <span class="text-black dark:text-dark-eval-3 uppercase">{{ uplineRebate.symbol_group.name }} (USD)/LOT</span>
+                        <span class="text-black dark:text-white text-right md:text-center py-2">{{ uplineRebate.amount }}</span>
+                    </div>
+                </div>
+            </div>
+            <div v-else class="flex justify-center">
+                <span class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-purple-500 dark:text-purple-100 uppercase">No Upline</span>
+            </div>
         </div>
+
+        <div class="space-y-2 my-2">
+            <h3
+                class="text-lg font-medium mb-6 text-gray-900 dark:text-gray-100"
+            >
+                New IB Rebate Info
+            </h3>
+            <div v-if="loading" class="w-full flex justify-center mt-4">
+                <div class="px-4 py-2 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
+                    loading...
+                </div>
+            </div>
+            <div v-else>
+                <div v-for="uplineRebate in newIbRebateInfo">
+                    <div class="grid grid-cols-2 text-black dark:text-white pr-4 mb-5 items-center">
+                        <span class="text-black dark:text-dark-eval-3 uppercase">{{ uplineRebate.symbol_group.name }} (USD)/LOT</span>
+                        <span class="text-black dark:text-white text-right md:text-center py-2">{{ uplineRebate.amount }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-6 flex gap-4 justify-end">
+        <Button variant="secondary" @click="closeModal">
+            Cancel
+        </Button>
+        <Button @click.prevent="updatePassword" :disabled="form.processing">Save</Button>
     </div>
 </template>

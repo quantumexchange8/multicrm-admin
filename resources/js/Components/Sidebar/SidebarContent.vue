@@ -63,25 +63,11 @@ library.add(faGaugeHigh, faUser, faUserTie)
                 title="Member Tree"
                 :active="route().current('member.network_tree')"
             />
-        </SidebarCollapsible>
-
-        <!-- ib -->
-        <SidebarCollapsible
-            title="Introducing Broker"
-            :active="route().current('ib.*')"
-        >
-            <template #icon>
-                <font-awesome-icon
-                    icon="fa-solid fa-user-tie"
-                    class="flex-shrink-0 w-5 h-5"
-                    aria-hidden="true"
-                />
-            </template>
 
             <SidebarCollapsibleItem
-                :href="route('ib.ib_listing')"
-                title="IB Listing"
-                :active="route().current('ib.ib_listing')"
+                :href="route('member.rebate_allocation')"
+                title="Rebate Allocation"
+                :active="route().current('member.rebate_allocation')"
             />
         </SidebarCollapsible>
 

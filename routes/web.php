@@ -39,10 +39,13 @@ Route::middleware('auth')->group(function () {
     Route::prefix('member')->group(function () {
         Route::get('/member_listing', [MemberController::class, 'member_listing'])->name('member.member_listing');
         Route::patch('/member_update', [MemberController::class, 'member_update'])->name('member.member_update');
-        Route::get('/rebate_allocation', [MemberController::class, 'getrebateallocation'])->name('rebate_allocation');
-        Route::post('/rebate_allocation', [MemberController::class, 'updateRebateAllocation'])->name('updateRebate.update');
+        Route::get('/rebate_allocation', [MemberController::class, 'rebate_allocation'])->name('member.rebate_allocation');
+        Route::post('/rebate_allocation', [MemberController::class, 'updateRebateAllocation'])->name('member.updateRebate');
+        Route::post('/rebate_structure', [MemberController::class, 'updateRebateStructure'])->name('member.updateRebateStructure');
 
         Route::post('/getIBAccountTypeSymbolGroupRate', [MemberController::class, 'getIBAccountTypeSymbolGroupRate']);
+        Route::post('/getNewIbRebateInfo', [MemberController::class, 'getNewIbRebateInfo']);
+        Route::post('/getIbDownlineRebateInfo', [MemberController::class, 'getIbDownlineRebateInfo']);
         Route::post('/upgradeIb', [MemberController::class, 'upgradeIb'])->name('member.upgradeIb');
 
         Route::post('/reset_member_password', [MemberController::class, 'reset_member_password'])->name('member.reset_member_password');
@@ -51,11 +54,10 @@ Route::middleware('auth')->group(function () {
 
     /**
      * ==============================
-     *          IB Listing
+     *              IB
      * ==============================
      */
     Route::prefix('ib')->group(function () {
-        Route::get('/ib_listing', [IBController::class, 'ib_listing'])->name('ib.ib_listing');
         Route::post('/transfer_ib', [IBController::class, 'transfer_ib'])->name('ib.transfer_ib');
     });
 

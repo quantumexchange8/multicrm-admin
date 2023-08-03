@@ -11,45 +11,19 @@ import debounce from "lodash/debounce.js";
 import Input from "@/Components/Input.vue";
 import Button from "@/Components/Button.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import IbListing from "@/Pages/Member/RebateAllocation/IbListing.vue";
 
 library.add(faSearch,faX,faRotateRight);
 const page = usePage()
 const user = computed(() => page.props.auth.user)
 
 const props = defineProps({
-    childrens: Object,
     ibs: Object,
     filters: Object,
-    childrenAccounts: Object,
-    allibs: Object,
-    childdownline: Object,
     defaultAccountSymbolGroup: Object,
+    ibDownlines: Object,
+    get_ibs_sel: Object,
 });
-
-const childrens = props.childrens;
-const ibs = props.ibs;
-
-let search = ref(props.filters.search);
-
-watch(search, debounce(function  (value) {
-    router.get('/member/rebate_allocation', { search: value }, {
-        preserveState:true,
-        preserveScroll:true,
-        replace:true,
-        onFinish: () => {
-            location.reload();
-        }
-    });
-}, 300));
-
-function formatDate(date) {
-    const formattedDate = new Date(date).toISOString().slice(0, 10);
-    return formattedDate.replace(/-/g, '/');
-}
-
-function clearField() {
-    search.value = '';
-}
 
 </script>
 
@@ -65,102 +39,70 @@ function clearField() {
     </template>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div class="w-full bg-white rounded-lg shadow dark:bg-dark-eval-1 p-6">
-                <div class="flex flex-col items-center mb-4">
-                    <img
-                        class="h-12 w-12 rounded-full"
-                        :src="$page.props.auth.user.picture ? $page.props.auth.user.picture : 'https://img.freepik.com/free-icon/user_318-159711.jpg'"
-                        alt="ProfilePic"
-                    >
-                    <h5 class="my-1 text-xl font-medium text-gray-900 dark:text-white">{{ 'Current Tech' }}</h5>
-                    <span class="text-sm text-gray-500 dark:text-gray-400">{{ 'IB 12345' }}</span>
-                </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center md:text-left">
-                    <div class="text-black dark:text-dark-eval-3">Account type:</div>
-                    <div class="text-black dark:text-white">{{ 'Standard' }}</div>
-
-                    <div class="text-black dark:text-dark-eval-3">Since Date </div>
-                    <div class="text-black dark:text-white">{{ '24-7-23' }}</div>
-
-                    <div class="text-black dark:text-dark-eval-3">Direct IB </div>
-                    <div class="text-black dark:text-white">{{ '20' }}</div>
-
-                    <div class="text-black dark:text-dark-eval-3">Direct Clients </div>
-                    <div class="text-black dark:text-white">{{ '20' }}</div>
-
-                    <div class="text-black dark:text-dark-eval-3">Total Group IB </div>
-                    <div class="text-black dark:text-white">{{ '20' }}</div>
-
-                    <div class="text-black dark:text-dark-eval-3">Total Group Clients </div>
-                    <div class="text-black dark:text-white">{{ '20' }}</div>
-                </div>
+        <div class="w-full bg-white rounded-lg shadow dark:bg-dark-eval-1 p-6">
+            <div class="flex flex-col items-center mb-4">
+                <img
+                    class="h-12 w-12 rounded-full"
+                    :src="$page.props.auth.user.picture ? $page.props.auth.user.picture : 'https://img.freepik.com/free-icon/user_318-159711.jpg'"
+                    alt="ProfilePic"
+                >
+                <h5 class="my-1 text-xl font-medium text-gray-900 dark:text-white">{{ 'Current Tech' }}</h5>
+                <span class="text-sm text-gray-500 dark:text-gray-400">{{ 'IB 12345' }}</span>
             </div>
-            <div class="w-full bg-white rounded-lg shadow dark:bg-dark-eval-1 p-6">
-                <div class="flex flex-col text-center md:text-left">
-                    <h5 class="mb-6 text-xl font-medium text-gray-900 dark:text-white">My Rebate Info</h5>
-                    <div
-                        
-                        class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4"
-                    >
-                        <div class="dark:text-dark-eval-3 uppercase"
-                            v-for="defaultIB in defaultAccountSymbolGroup"
-                        >
-                            <span>
-                                {{ defaultIB.symbol_group.name }} (USD) / LOT
-                            </span>
-                            
-                            <span>
-                                {{ defaultIB.amount }}
-                            </span>
-                        </div>
-                        
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center md:text-left">
+                <div class="text-black dark:text-dark-eval-3">Account type:</div>
+                <div class="text-black dark:text-white">{{ 'Standard' }}</div>
+
+                <div class="text-black dark:text-dark-eval-3">Since Date </div>
+                <div class="text-black dark:text-white">{{ '24-7-23' }}</div>
+
+                <div class="text-black dark:text-dark-eval-3">Direct IB </div>
+                <div class="text-black dark:text-white">{{ '20' }}</div>
+
+                <div class="text-black dark:text-dark-eval-3">Direct Clients </div>
+                <div class="text-black dark:text-white">{{ '20' }}</div>
+
+                <div class="text-black dark:text-dark-eval-3">Total Group IB </div>
+                <div class="text-black dark:text-white">{{ '20' }}</div>
+
+                <div class="text-black dark:text-dark-eval-3">Total Group Clients </div>
+                <div class="text-black dark:text-white">{{ '20' }}</div>
+            </div>
+        </div>
+        <div class="w-full bg-white rounded-lg shadow dark:bg-dark-eval-1 p-6">
+            <div class="flex flex-col text-center md:text-left">
+                <h5 class="mb-6 text-xl font-medium text-gray-900 dark:text-white">My Rebate Info</h5>
+                <div
+                    v-for="defaultIB in defaultAccountSymbolGroup"
+                    class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 text-sm my-2"
+                >
+                    <div class="dark:text-dark-eval-3 uppercase">
+                        {{ defaultIB.symbol_group.name }} (USD) / LOT
+                    </div>
+                    <div class="text-center">
+                        {{ defaultIB.amount }}
                     </div>
                 </div>
             </div>
-
-            <div class="w-full my-6 flex justify-end gap-4">
-            <div class="relative w-full md:w-2/3">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                    </svg>
-                </div>
-                <InputIconWrapper>
-                    <template #icon>
-                        <font-awesome-icon
-                            icon="fa-solid fa-search"
-                            class="flex-shrink-0 w-5 h-5 cursor-pointer"
-                            aria-hidden="true"
-                        />
-                    </template>
-                    <Input withIcon id="name" type="text" placeholder="Name / Email" class="block w-full" v-model="search" />
-                </InputIconWrapper>
-                <button type="submit" class="absolute right-1 bottom-2 py-2.5 text-gray-500 hover:text-dark-eval-4 font-medium rounded-full w-8 h-8 text-sm"><font-awesome-icon
-                    icon="fa-solid fa-x"
-                    class="flex-shrink-0 w-3 h-3 cursor-pointer"
-                    aria-hidden="true"
-                    @click="clearField"
-                /></button>
-            </div>
-            <Button class="justify-center gap-2 rounded-full" iconOnly v-slot="{ iconSizeClasses }">
-                <font-awesome-icon
-                    icon="fa-solid fa-rotate-right"
-                    :class="iconSizeClasses"
-                    aria-hidden="true"
-                    @click="clearField"
-                />
-            </Button>
         </div>
-        </div>
+    </div>
 
-        <RebateChild  
-        :childrens="childrens" 
-        :ibs="ibs" 
-        :childrenAccounts="childrenAccounts" 
-        :allibs="allibs" 
-        :childdownline="childdownline"
+    <IbListing
+        :ibs="props.ibs"
+        :filters="props.filters"
         :defaultAccountSymbolGroup="defaultAccountSymbolGroup"
-        />
+        :ibDownlines="ibDownlines"
+        :get_ibs_sel="get_ibs_sel"
+    />
+
+<!--        <RebateChild-->
+<!--        :childrens="childrens"-->
+<!--        :ibs="ibs"-->
+<!--        :childrenAccounts="childrenAccounts"-->
+<!--        :allibs="allibs"-->
+<!--        :childdownline="childdownline"-->
+<!--        :defaultAccountSymbolGroup="defaultAccountSymbolGroup"-->
+<!--        />-->
 
 </AuthenticatedLayout>
 

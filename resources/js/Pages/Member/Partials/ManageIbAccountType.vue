@@ -26,7 +26,12 @@ const form = useForm({
 })
 
 const submit = () => {
-    form.post(route('member.upgradeIb'))
+    form.post(route('member.upgradeIb'), {
+        preserveScroll: true,
+        onSuccess: () => {
+            closeModal();
+        }
+    })
 }
 
 const closeModal = () => {

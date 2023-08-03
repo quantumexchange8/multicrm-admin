@@ -15,7 +15,6 @@ const props = defineProps({
     childdownline: Object,
     allibs: Object,
     defaultAccountSymbolGroup: Object,
-    childId: Number
 });
 
 const ibs = props.ibs;
@@ -27,7 +26,7 @@ const emit = defineEmits(['cancel-edit', 'close']);
 const childdownline = props.childdownline;
 
 const form = useForm({
-    user_id: props.childId,
+    user_id: '',
 });
 
 const getAmount = (childRebateInfo) => {
@@ -37,7 +36,7 @@ const getAmount = (childRebateInfo) => {
 
 const updateGroupRate = (symbolGroupId, value) => {
     groupRateItems.value[symbolGroupId] = value;
-    
+
     // localStorage.groupRateItems = JSON.stringify(groupRateItems.value);
 };
 
@@ -46,11 +45,11 @@ const updateGroupRate = (symbolGroupId, value) => {
 // SUBMIT REBATE ALLOCATION
 const submitForm  = () => {
     for (const symbolGroupId in groupRateItems.value) {
-        
+
         const amount = groupRateItems.value[symbolGroupId];
-        
+
         const symbolGroup = props.childDetail[symbolGroupId];
-        
+
         if (isNaN(amount)) {
             errors.value[symbolGroupId] = 'Please enter a valid amount';
         } else if (symbolGroup && parseFloat(amount) > parseFloat(symbolGroup.amount)) {
@@ -60,7 +59,7 @@ const submitForm  = () => {
             errors.value[symbolGroupId] = '';
         }
     }
-    
+
     // If there are any errors, prevent form submission
     if (Object.values(errors.value).some((error) => error !== '')) {
         return;
@@ -72,7 +71,7 @@ const submitForm  = () => {
             showForm.value = false;
             childDetail.value = ib;
             currentChildId.value && openRebateAllocationModal(currentChildId.value); // Return to the previous childDetail view
-            
+
         },
     });
 }
@@ -113,7 +112,7 @@ watch(() => props.childDetail, (newValue) => {
                                     <span class="text-black dark:text-dark-eval-3 uppercase">{{ uplineDetail.symbol_group.name }} (USD)/LOT</span>
                                     <span class="text-black dark:text-white text-right md:text-center py-2">{{ uplineDetail.amount }}</span>
                                 </div>
-                            </div> 
+                            </div>
                         </div>
                         <div v-else>
                             <div v-for=" defaultIB in defaultAccountSymbolGroup">
@@ -123,7 +122,7 @@ watch(() => props.childDetail, (newValue) => {
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
 
                     <div v-if="showForm">

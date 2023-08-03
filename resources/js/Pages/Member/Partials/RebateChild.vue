@@ -34,7 +34,7 @@ const selectedChildStructure = ref(null);
 
 const form = useForm({
     child_id: '',
-    
+
 });
 
 // if (localStorage.groupRateItems) {
@@ -44,14 +44,14 @@ const form = useForm({
 // REBATE ALLOCATION
 const openRebateAllocationModal = (IbId) => {
     const ib = props.allibs.find((ib) => ib.id === IbId);
-        
+
     if(ib){
         currentChildId.value = IbId;
         childDetail.value = ib;
         submitAllocation.value = true;
-        
+
     }
-    
+
 };
 
 
@@ -64,19 +64,19 @@ const openRebateStructure = (selectedChildId) => {
         childStructure.value = selectedChild;
         submitAllocation.value = true;
         form.user_id = IbId;
-        
+
     }
 
 
     selectedChildStructure.value = selectedChild;
-    
-    
+
+
     selectedChildStructure.value = selectedChild;
-    
+
 };
 
 // const fetchDownline = (selectedChild) => {
-    
+
 //     const selectedChildId = selectedChild.id;
 
 //     // Initialize the downlineUsers array with the selected child
@@ -93,7 +93,7 @@ const openRebateStructure = (selectedChildId) => {
 //     if (childDownlines.length > 0) {
 //         downlineUsers = [...downlineUsers, ...childDownlines];
 //     }
-    
+
 //     return downlineUsers;
 // }
 
@@ -131,95 +131,95 @@ function formatDate(date) {
 </script>
 
 <template>
-        
+    <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <div class="relative overflow-x-auto sm:rounded-lg mt-4">
             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                 <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">
-                            IB NAME
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            IB NUMBER
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            CURRENT UPLINE
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            DIRECT IB
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            DIRECT CLIENTS
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            TOTAL GROUP IB
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            TOTAL GROUP CLIENT
-                        </th>
-                        <th scope="col" class="px-6 py-3">
-                            ACTIONS
-                        </th>
-                    </tr>
+                <tr class="uppercase">
+                    <th scope="col" class="px-6 py-3">
+                        IB Name
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        IB Number
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Current Upline
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Direct IB
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Direct Client
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Total Group IB
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Total Group Client
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Action
+                    </th>
+                </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="ib in allibs" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
-                        <th scope="row" class="px-6 py-4 font-thin rounded-l-full">
-                            {{ ib.of_user.first_name }}
-                        </th>
-                        <th class="px-6 py-4">
-                            {{ ib.of_user.ib_id }}
-                        </th>
-                        <th>
-                            {{ ib.of_user.upline ? ib.of_user.upline.first_name : 'No Upline' }}
-                        </th>
-                        <th>
-                            {{ ib.of_user.direct_ib }}
-                        </th>
-                        <th>
-                            {{ ib.of_user.direct_client }}
-                        </th>
-                        <th>
-                            {{ ib.of_user.total_ib }}
-                        </th>
-                        <th>
-                            {{ ib.of_user.total_client }}
-                        </th>
-                        <th class="flex gap-2">
-                            <button ref="buttonRef" @click="openRebateAllocationModal(ib.id)">View</button>
-                            <RebateView
-                :childDetail="childDetail"
-                :childId="ib.id"
-                :ibs="allibs"
-                :allibs="allibs"
-                :defaultAccountSymbolGroup="defaultAccountSymbolGroup"
-                @cancel-edit="cancel"
-                @close="closeModal"
-            >
+                <tr v-for="ib in allibs" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
+                    <th scope="row" class="px-6 py-4 font-thin rounded-l-full">
+                        {{ ib.of_user.first_name }}
+                    </th>
+                    <th class="px-6 py-4">
+                        {{ ib.of_user.ib_id }}
+                    </th>
+                    <th>
+                        {{ ib.of_user.upline ? ib.of_user.upline.first_name : 'No Upline' }}
+                    </th>
+                    <th>
+                        {{ ib.of_user.direct_ib }}
+                    </th>
+                    <th>
+                        {{ ib.of_user.direct_client }}
+                    </th>
+                    <th>
+                        {{ ib.of_user.total_ib }}
+                    </th>
+                    <th>
+                        {{ ib.of_user.total_client }}
+                    </th>
+                    <th class="flex gap-2">
+                        <button ref="buttonRef" @click="openRebateAllocationModal(ib.id)">View</button>
 
-            </RebateView>
-                            <button @click="openRebateStructure(ib.id)">structure</button>
-                            <button @click="openIbTransfer">ib tt</button>
-                        </th>
-                    </tr>
+                        <button @click="openRebateStructure(ib.id)">structure</button>
+                        <button @click="openIbTransfer">ib tt</button>
+                    </th>
+                </tr>
                 </tbody>
             </table>
         </div>
+    </div>
 
         <!-- EDIT REBATE ALLOCATION -->
-            
+    <RebateView
+        :childDetail="childDetail"
+        :ibs="allibs"
+        :allibs="allibs"
+        :defaultAccountSymbolGroup="defaultAccountSymbolGroup"
+        @cancel-edit="cancel"
+        @close="closeModal"
+    >
+
+    </RebateView>
 
         <!-- EDIT REBATE STRUCTURE -->
-            <RebateStructure 
+            <RebateStructure
                 :childStructure="childStructure"
                 :childStructureDownline="childStructureDownline"
                 :ibs="ibs"
                 :allibs="allibs"
-                :childrens="childrens" 
+                :childrens="childrens"
                 @cancel-rebate="cancel"
                 @close="closeModal"
             >
 
             </RebateStructure>
-        
+
 </template>

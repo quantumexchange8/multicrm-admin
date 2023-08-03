@@ -100,29 +100,6 @@ class IBController extends Controller
         }
     }
 
-    public function ib_listing(Request $request)
-    {
-        $ibs = User::query()
-            ->where('role', '=', 'ib')
-            ->with(['tradingAccounts', 'media', 'upline'])
-            ->when($request->input('search'), function ($query, $search) {
-                $query->where('first_name', 'like', "%{$search}%")
-                    ->orWhere('email', 'like', "%{$search}%");
-            })
-            ->paginate(10)
-            ->withQueryString();
-
-        $countries = SettingCountry::query()
-            ->select(['id', 'name_en', 'phone_code'])
-            ->get();
-
-        return Inertia::render('Ib/IbListing', [
-            'ibs' => $ibs,
-            'select_ibs' => User::where('role', 'ib')->pluck('email')->toArray(),
-            'countries' => $countries,
-        ]);
-    }
-
     public function transfer_ib(Request $request)
     {
         $user = User::find($request->id);
@@ -272,7 +249,7 @@ class IBController extends Controller
 
 
                     if ($list->contains($user->id)) {
-                        return response()->json(['success' => false, 'message' => 'Referral cannot be same line']);
+                        throw ValidationException::withMessages(['new_ib' => 'Referral cannot be same line']);
                     }
 
 
