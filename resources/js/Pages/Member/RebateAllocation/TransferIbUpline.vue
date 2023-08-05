@@ -46,7 +46,7 @@ const handleEmailSelection = (selectedValue) => {
 };
 
 const updatePassword = () => {
-    form.post(route('ib.transfer_ib'), {
+    form.post(route('member.transfer_ib'), {
         preserveScroll: true,
         onSuccess: () => {
             // form.reset()

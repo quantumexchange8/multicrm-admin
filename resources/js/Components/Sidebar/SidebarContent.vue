@@ -59,9 +59,9 @@ library.add(faGaugeHigh, faUser, faUserTie)
             />
 
             <SidebarCollapsibleItem
-                :href="route('member.network_tree')"
+                :href="route('member.member_tree')"
                 title="Member Tree"
-                :active="route().current('member.network_tree')"
+                :active="route().current('member.member_tree')"
             />
 
             <SidebarCollapsibleItem

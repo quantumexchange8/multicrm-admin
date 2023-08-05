@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
 use PHPOpenSourceSaver\JWTAuth\Contracts\JWTSubject;
@@ -59,6 +60,75 @@ class User extends Authenticatable implements HasMedia
         $this->{$field} = app('hash')->make($password);
 
         return $this;
+    }
+
+    public function getChildrenIds()
+    {
+        $users = User::query()->where('hierarchyList', 'like', '%-' . $this->id . '-%')
+            ->where('status', 1)
+            ->pluck('id')->toArray();
+
+        return $users;
+    }
+
+    public function totalGroupDeposit($user_id)
+    {
+        $users = $this->getChildrenIds();
+        $users[] = $user_id;
+
+        $amount = Payment::query()
+            ->whereIn('user_id', $users)
+            ->where('type', '=', 'Deposit')
+            ->where('status', '=', 'Successful')
+            ->sum('amount');
+
+        $formattedAmount = number_format($amount, 2, '.', ''); // Format to 2 decimal places with no thousands separator
+
+        // If the amount is 0, set it to '0.00'
+        if ($formattedAmount === '0') {
+            $formattedAmount = '0.00';
+        }
+
+        return $formattedAmount;
+    }
+
+    public function totalGroupWithdrawal($user_id)
+    {
+        $users = $this->getChildrenIds();
+        $users[] = $user_id;
+
+        $amount = Payment::query()
+            ->whereIn('user_id', $users)
+            ->where('type', '=', 'Withdrawal')
+            ->where('status', '=', 'Successful')
+            ->sum('amount');
+
+        $formattedAmount = number_format($amount, 2, '.', ''); // Format to 2 decimal places with no thousands separator
+
+        // If the amount is 0, set it to '0.00'
+        if ($formattedAmount === '0') {
+            $formattedAmount = '0.00';
+        }
+
+        return $formattedAmount;
+    }
+
+    public function getIbUserIds()
+    {
+        $users = User::query()->where('role', 'ib')->where('hierarchyList', 'like', '%-' . $this->id . '-%')
+            ->where('status', 1)
+            ->pluck('id')->toArray();
+
+        return $users;
+    }
+
+    public function getMemberUserIds()
+    {
+        $users = User::query()->where('role', 'member')->where('hierarchyList', 'like', '%-' . $this->id . '-%')
+            ->where('status', 1)
+            ->pluck('id')->toArray();
+
+        return $users;
     }
 
     public function tradingUsers()
