@@ -26,6 +26,16 @@ export default {
     },
     computed: {
         hasChildren() {
+            const node = this.node;
+
+            if (node.children && node.children.length > 0) {
+                for (const child of node.children) {
+                    if (child.name === node.name) {
+                        return false;
+                    }
+                }
+            }
+
             return this.node.children;
         },
         iconSizeClasses() {
@@ -58,7 +68,6 @@ export default {
     </div>
     <div v-else>
         <div
-            @click="nodeClicked"
             :style="{'margin-left': `${depth * 10}px`}"
         >
             <div class="flex items-center mb-6 gap-2" v-if="!treeState">
@@ -68,6 +77,7 @@ export default {
                             <!-- Show the MinusCircleIcon if expanded -->
                             <MinusCircleIcon
                                 aria-hidden="true"
+                                @click="nodeClicked"
                                 :class="['w-8 h-8 cursor-pointer', iconSizeClasses]"
                             />
                         </template>
@@ -75,6 +85,7 @@ export default {
                             <!-- Show the PlusCircleIcon if not expanded -->
                             <PlusCircleIcon
                                 aria-hidden="true"
+                                @click="nodeClicked"
                                 :class="['w-8 h-8 cursor-pointer', iconSizeClasses]"
                             />
                         </template>
@@ -137,6 +148,7 @@ export default {
                             <!-- Show the MinusCircleIcon if expanded -->
                             <MinusCircleIcon
                                 aria-hidden="true"
+                                @click="nodeClicked"
                                 :class="['w-8 h-8 cursor-pointer', iconSizeClasses]"
                             />
                         </template>
@@ -144,6 +156,7 @@ export default {
                             <!-- Show the PlusCircleIcon if not expanded -->
                             <PlusCircleIcon
                                 aria-hidden="true"
+                                @click="nodeClicked"
                                 :class="['w-8 h-8 cursor-pointer', iconSizeClasses]"
                             />
                         </template>
