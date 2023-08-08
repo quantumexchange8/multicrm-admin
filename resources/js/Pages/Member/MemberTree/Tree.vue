@@ -1,6 +1,5 @@
 <script>
 import {PlusCircleIcon, MinusCircleIcon} from "@heroicons/vue/solid";
-import {sidebarState} from "@/Composables/index.js";
 export default {
     name: 'Tree',
     components: {PlusCircleIcon, MinusCircleIcon},

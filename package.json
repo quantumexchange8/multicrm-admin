@@ -30,6 +30,7 @@
         "@inertiajs/inertia": "^0.11.1",
         "@vueform/multiselect": "^2.6.2",
         "lodash": "^4.17.21",
+        "sweetalert2": "^11.7.20",
         "vue-tailwind-datepicker": "^1.4.5"
     }
 }

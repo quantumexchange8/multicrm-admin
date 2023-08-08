@@ -13,11 +13,15 @@ use App\Models\RebateAllocationRate;
 use App\Models\RebateAllocationRequest;
 use App\Models\SettingCountry;
 use App\Models\TradingAccount;
+use App\Models\TradingAccountRebateRevenue;
 use App\Models\User;
 use App\Services\RunningNumberService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
@@ -374,4 +378,166 @@ class MemberController extends Controller
         return redirect()->back()->with('toast', 'New rebate allocation has been saved!');
     }
 
+    public function rebate_payout(Request $request)
+    {
+        $query = TradingAccountRebateRevenue::query()
+            ->whereRelation('ofUser', 'role', 'ib')
+            ->whereNot('revenue', 0);
+
+        $search = $request->search;
+        $requestDate = $request->date;
+
+        $dateRange = explode(' ~ ', $requestDate);
+
+        if (count($dateRange) === 2) {
+            $start_date = Carbon::createFromFormat('Y-m-d', $dateRange[0])->startOfDay();
+            $end_date = Carbon::createFromFormat('Y-m-d', $dateRange[1])->endOfDay();
+            $query->whereBetween('closed_time', [$start_date, $end_date]);
+        }
+
+        if ($search) {
+            $query->whereRelation('ofUser', function ($query) use ($search) {
+                $query->where('first_name', '=', $search)
+                    ->orWhere('ib_id', '=', $search);
+            });
+        }
+
+        $histories = clone $query;
+
+        $lists = $query->where('status', 'pending')
+            ->select( DB::raw('DATE(closed_time) as date'), 'trading_account_rebate_revenue.ib_account_types_id', 'trading_account_rebate_revenue.user_id', 'trading_account_rebate_revenue.account_type', 'trading_account_rebate_revenue.meta_login', DB::raw('sum(volume) as total_volume'), DB::raw('sum(revenue) as total_revenue'))
+            ->groupBy(['date', 'ib_account_types_id', 'user_id', 'account_type', 'meta_login'])
+            ->with(['ofUser', 'ofAccountType'])
+            ->paginate(10)
+            ->withQueryString();
+
+        $histories = $histories->where('status', 'approve')
+            ->select('trading_account_rebate_revenue.ib_account_types_id', 'trading_account_rebate_revenue.user_id', 'trading_account_rebate_revenue.account_type', 'trading_account_rebate_revenue.meta_login', DB::raw('sum(volume) as total_volume'), DB::raw('sum(revenue) as total_revenue'), DB::raw('DATE(closed_time) as date'))
+            ->groupBy(['ib_account_types_id', 'user_id', 'account_type', 'date', 'meta_login'])
+            ->with(['ofUser', 'ofAccountType'])
+            ->paginate(10)
+            ->withQueryString();
+
+        return Inertia::render('Member/RebatePayout', [
+            'lists' => $lists,
+            'histories' => $histories,
+            'filters' => \Request::only(['search', 'date'])
+        ]);
+    }
+
+    public function getRebatePayoutDetails(Request $request)
+    {
+        return TradingAccountRebateRevenue::query()
+            ->where('ib_account_types_id', $request->id)->whereRelation('ofUser', 'role', 'ib')
+            ->where('status', $request->status)
+            ->whereNot('revenue', 0)
+            ->whereDate('closed_time', '=', $request->date)
+            ->groupBy(['ticket_user_id', 'account_type', 'meta_login', 'final_net_rebate'])
+            ->select('trading_account_rebate_revenue.ticket_user_id', 'trading_account_rebate_revenue.account_type', 'trading_account_rebate_revenue.meta_login', 'trading_account_rebate_revenue.final_net_rebate',  DB::raw('sum(volume) as total_volume'), DB::raw('sum(revenue) as total_revenue'))
+            ->with(['ofTicketUser', 'ofAccountType'])
+            ->get();
+    }
+
+    private function getUserNameFromId($userId)
+    {
+        $ibAccountType = IbAccountType::where('id', $userId)->with('ofUser')->first();
+
+        // Check if the IbAccountType exists
+        if ($ibAccountType) {
+            $user = $ibAccountType->ofUser;
+
+            if ($user) {
+                return $user->first_name;
+            }
+        }
+
+        return null;
+    }
+
+    public function approve_rebate_payout(Request $request)
+    {
+        $requestDate = $request->date;
+
+        $dateRange = explode(' ~ ', $requestDate);
+
+        switch ($request->type)
+        {
+            case('approve_single'):
+
+                $start_date = count($dateRange) === 2 ? Carbon::createFromFormat('Y-m-d', $dateRange[0])->startOfDay() : Carbon::createFromFormat('Y-m-d', $request->close_date)->startOfDay();
+                $end_date = count($dateRange) === 2 ? Carbon::createFromFormat('Y-m-d', $dateRange[1])->endOfDay() : Carbon::createFromFormat('Y-m-d', $request->close_date)->startOfDay();
+
+                $rec = TradingAccountRebateRevenue::where('ib_account_types_id', $request->ib_account_types_id)->where('status', 'pending');
+
+                if ($start_date) {
+                    $rec =   $rec->where('closed_time', '>=', $start_date->startOfDay());
+                }
+                if ($end_date) {
+                    $rec =  $rec->where('closed_time', '<=',  $end_date->endOfDay());
+                }
+
+                break;
+
+            case('approve_selected'):
+
+                $selectedItems = $request->selected_items;
+
+                // Extract ib_account_types_ids and closed_dates from selected_items
+                $ibAccountTypesIds = array_column($selectedItems, 'ib_account_types_id');
+                $closedDates = array_column($selectedItems, 'closed_date');
+
+                $closedDateRanges = [];
+                foreach ($closedDates as $closedDate) {
+                    $startOfDay = Carbon::createFromFormat('Y-m-d', $closedDate)->startOfDay();
+                    $endOfDay = Carbon::createFromFormat('Y-m-d', $closedDate)->endOfDay();
+                    $closedDateRanges[] = [$startOfDay, $endOfDay];
+                }
+
+                $rec = TradingAccountRebateRevenue::whereIn('ib_account_types_id', $ibAccountTypesIds)
+                    ->where('status', 'pending')
+                    ->where(function ($query) use ($closedDateRanges) {
+                        foreach ($closedDateRanges as $range) {
+                            $query->orWhereBetween('closed_time', $range);
+                        }
+                    });
+
+                break;
+
+            default:
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error Updating Rebate Payout',
+                ], 422);
+        }
+
+        $record = $rec->get();
+
+        $rec->update(['status' => 'approve']);
+
+        //https://stackoverflow.com/a/62550750
+        $groups = $record->groupBy('ib_account_types_id');
+        $finalGroup = $groups->mapWithKeys(function ($group, $key) {
+            return [
+                $key =>
+                    [
+                        'ib_account_types_id' => $key, // $key is what we grouped by, it'll be constant by each  group of rows
+                        'total_revenue' => $group->sum('revenue'),
+                        'total_volume' => $group->whereNotIn('revenue', [0])->sum('volume'),
+                    ]
+            ];
+        });
+
+        foreach ($finalGroup as $r) {
+
+            $t = IbAccountType::find($r['ib_account_types_id']);
+
+            $t->rebate_wallet = number_format($t->rebate_wallet + $r['total_revenue'], 2, '.', '');
+            $t->trade_lot = number_format($t->trade_lot + $r['total_volume'], 2, '.', '');
+
+            $t->save();
+        }
+
+        return response()->json(['success' => true, 'message' => 'Rebate payout approved successfully']);
+
+    }
 }

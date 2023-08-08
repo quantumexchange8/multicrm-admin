@@ -48,6 +48,11 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::post('/rebate_structure', [MemberController::class, 'updateRebateStructure'])->name('member.updateRebateStructure');
         Route::post('/transfer_ib', [IBController::class, 'transfer_ib'])->name('member.transfer_ib');
 
+        //Rebate Payout
+        Route::get('/rebate_payout', [MemberController::class, 'rebate_payout'])->name('member.rebate_payout');
+        Route::post('/getRebatePayoutDetails', [MemberController::class, 'getRebatePayoutDetails'])->name('member.getRebatePayoutDetails');
+        Route::post('/approve_rebate_payout', [MemberController::class, 'approve_rebate_payout'])->name('member.approve_rebate_payout');
+
         Route::post('/getIBAccountTypeSymbolGroupRate', [MemberController::class, 'getIBAccountTypeSymbolGroupRate']);
         Route::post('/getNewIbRebateInfo', [MemberController::class, 'getNewIbRebateInfo']);
         Route::post('/getIbDownlineRebateInfo', [MemberController::class, 'getIbDownlineRebateInfo']);

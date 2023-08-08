@@ -30,8 +30,11 @@ watch(search, debounce(function  (value) {
 }, 300));
 
 function resetField() {
-    search.value = '';
-    role.value = '';
+    const url = new URL(window.location.href);
+    url.searchParams.delete('search');
+
+    // Navigate to the updated URL without the search parameter
+    window.location.href = url.href;
 }
 
 function clearField() {

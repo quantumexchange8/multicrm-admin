@@ -65,6 +65,12 @@ library.add(faGaugeHigh, faUser, faUserTie)
             />
 
             <SidebarCollapsibleItem
+                :href="route('member.rebate_payout')"
+                title="Rebate Payout"
+                :active="route().current('member.rebate_payout')"
+            />
+
+            <SidebarCollapsibleItem
                 :href="route('member.rebate_allocation')"
                 title="Rebate Allocation"
                 :active="route().current('member.rebate_allocation')"

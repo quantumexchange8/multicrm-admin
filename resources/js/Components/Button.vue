@@ -72,7 +72,7 @@ const variantClasses = (variant) => ({
         variant == 'black',
 
     /* Opacity Variant */
-    'bg-[#007bff33] text-[#007BFF] hover:bg-blue-800 focus:ring-blue-500': variant == 'primary-opacity',
+    'bg-[#007bff33] text-[#007bff] hover:bg-blue-300 focus:ring-blue-500': variant == 'primary-opacity',
     'bg-[#af60ff33] text-[#AF60FF] hover:bg-purple-900 focus:ring-purple-500':
         variant == 'secondary-opacity',
     'bg-[#05c46b33] text-[#05C46B] hover:bg-green-800 focus:ring-green-500': variant == 'success-opacity',
