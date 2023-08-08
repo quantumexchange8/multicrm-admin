@@ -74,6 +74,8 @@ class MemberController extends Controller
             'dob' => $request->dob,
             'country' => $request->country,
             'phone' => $request->phone,
+            'kyc_approval' => $request->kyc_approval,
+            'kyc_approval_description' => $request->kyc_approval_description,
         ]);
 
         return redirect()->back()->with('toast', 'The member’s detail has been edited successfully!');

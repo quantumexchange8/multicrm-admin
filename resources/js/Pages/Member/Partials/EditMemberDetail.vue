@@ -39,6 +39,8 @@ const form = useForm({
     country: member.country,
     dob: member.dob,
     phone: member.phone,
+    kyc_approval: member.kyc_approval,
+    kyc_approval_description: member.kyc_approval_description
 })
 
 const submit = () => {
@@ -255,6 +257,31 @@ const toggleEdit = () => {
                     <span v-else>Pending KYC</span>
                 </div>
             </div>
+
+            <div class="space-y-2" v-if="form.kyc_approval === 'pending'">
+                <Label for="kyc_approval">KYC Approval</Label>
+
+                <InputSelect v-model="form.kyc_approval" class="block w-full text-sm" placeholder="Choose Status" :disabled="!isEditing">
+                    <option value="pending">Pending</option>
+                    <option value="approve">Approve</option>
+                    <option value="reject">Reject</option>
+                </InputSelect>
+
+                <InputError class="mt-2" :message="form.errors.kyc_approval" />
+            </div>
+            <div class="space-y-2" v-if="form.kyc_approval === 'pending'">
+                <Label for="kyc_approval_description">KYC Approval Description</Label>
+                <Input
+                    id="kyc_approval_description"
+                    type="text"
+                    class="mt-1 block w-full"
+                    autocomplete="kyc_approval_description"
+                    v-model="form.kyc_approval_description"
+                    :disabled="!isEditing"
+                />
+
+                <InputError class="mt-2" :message="form.errors.kyc_approval_description" />
+            </div>
         </div>
     </div>
 
@@ -266,6 +293,7 @@ const toggleEdit = () => {
             variant="primary"
             class="ml-3"
             @click="submit"
+            :disabled="form.processing"
         >
             {{ isEditing ? 'Save' : 'Edit' }}
         </Button>

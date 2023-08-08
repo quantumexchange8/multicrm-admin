@@ -18,6 +18,7 @@ class UpdateMemberRequest extends FormRequest
             'dob' => ['date'],
             'country' => ['required', 'max:255'],
             'phone' => ['required', 'max:255', Rule::unique(User::class)->ignore($user_id)],
+            'kyc_approval_description' => ['required_if:kyc_approval,approve,reject'],
         ];
     }
 
@@ -34,6 +35,8 @@ class UpdateMemberRequest extends FormRequest
             'dob' => 'Date of Birth',
             'country' => 'Country',
             'phone' => 'Mobile Phone',
+            'kyc_approval' => 'KYC Approval',
+            'kyc_approval_description' => 'KYC Approval Description',
         ];
     }
 }

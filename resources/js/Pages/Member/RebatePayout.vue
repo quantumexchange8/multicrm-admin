@@ -108,6 +108,7 @@ const reset = () => {
                         variant="primary-opacity"
                         class="justify-center"
                         @click.prevent="submitSearch"
+                        :disabled="form.processing"
                     >
                         Search
                     </Button>
