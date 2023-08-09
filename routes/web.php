@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DepositController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -68,6 +69,14 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
      */
     Route::get('/trading_account_listing', [MemberController::class, 'trading_account_listing'])->name('member.trading_account_listing');
 
+    /**
+     * ==============================
+     *         Transaction
+     * ==============================
+     */
+    Route::prefix('transaction')->group(function () {
+        Route::get('/deposit_report', [DepositController::class, 'deposit_report'])->name('transaction.deposit_report');
+    });
 
 });
 
