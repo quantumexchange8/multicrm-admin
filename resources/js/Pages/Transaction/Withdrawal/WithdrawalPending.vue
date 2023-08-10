@@ -7,7 +7,7 @@ const props = defineProps({
     withdrawals: Object
 })
 
-const { getChannelName, formatDate } = transactionFormat();
+const { getChannelName, formatDate, formatAmount } = transactionFormat();
 </script>
 
 <template>
@@ -57,7 +57,7 @@ const { getChannelName, formatDate } = transactionFormat();
                 {{ getChannelName(withdrawal.channel) }}
             </th>
             <th>
-                $ {{ withdrawal.amount }}
+                $ {{ formatAmount(withdrawal.amount) }}
             </th>
             <th>
                 {{ withdrawal.payment_charges ?? '-' }}

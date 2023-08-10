@@ -17,7 +17,7 @@ library.add(faSearch,faX,faRotateRight);
 import { router } from '@inertiajs/vue3'
 import toast from "@/Composables/toast.js";
 import {transactionFormat} from "@/Composables/index.js";
-const { getChannelName, formatDate, getStatusClass } = transactionFormat();
+const { getChannelName, formatDate, getStatusClass, formatAmount } = transactionFormat();
 
 const props = defineProps({
     deposits: Object,
@@ -206,7 +206,7 @@ const reset = () => {
                             {{ getChannelName(deposit.channel) }}
                         </th>
                         <th>
-                            $ {{ deposit.amount }}
+                            $ {{ formatAmount(deposit.amount) }}
                         </th>
                         <th>
                             {{ deposit.payment_charges }}

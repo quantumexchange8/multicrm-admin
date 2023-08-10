@@ -76,9 +76,14 @@ export function transactionFormat() {
         }
     }
 
+    function formatAmount(amount) {
+        return parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
     return {
         getChannelName,
         formatDate,
         getStatusClass,
+        formatAmount
     };
 }

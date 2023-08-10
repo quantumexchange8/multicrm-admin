@@ -180,6 +180,14 @@ const reset = () => {
 
         <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1 mt-6">
             <div class="relative overflow-x-auto sm:rounded-lg">
+                <div class="flex justify-end">
+                    <font-awesome-icon
+                        icon="fa-solid fa-rotate-right"
+                        class="flex-shrink-0 w-5 h-5 cursor-pointer dark:text-dark-eval-4"
+                        aria-hidden="true"
+                        @click="refreshTable"
+                    />
+                </div>
                 <WithdrawalPending
                     v-if="activeComponent === 'pending'"
                     :withdrawals="withdrawals"

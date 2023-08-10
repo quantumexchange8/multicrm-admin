@@ -8,7 +8,7 @@ const props = defineProps({
     histories: Object
 })
 
-const { getChannelName, formatDate, getStatusClass } = transactionFormat();
+const { getChannelName, formatDate, getStatusClass, formatAmount } = transactionFormat();
 </script>
 
 <template>
@@ -61,7 +61,7 @@ const { getChannelName, formatDate, getStatusClass } = transactionFormat();
                 {{ getChannelName(history.channel) }}
             </th>
             <th>
-                $ {{ history.amount }}
+                $ {{ formatAmount(history.amount) }}
             </th>
             <th>
                 {{ history.payment_charges ?? '-' }}
