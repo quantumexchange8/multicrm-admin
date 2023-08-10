@@ -1,7 +1,5 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
-import Paginator from "@/Components/Paginator.vue";
-import Badge from "@/Components/Badge.vue";
 import Label from "@/Components/Label.vue";
 import InputSelect from "@/Components/InputSelect.vue";
 import VueTailwindDatepicker from "vue-tailwind-datepicker";
@@ -16,16 +14,17 @@ import {library} from "@fortawesome/fontawesome-svg-core";
 library.add(faSearch,faX,faRotateRight);
 import { router } from '@inertiajs/vue3'
 import toast from "@/Composables/toast.js";
-import {transactionFormat} from "@/Composables/index.js";
-const { getChannelName, formatDate, getStatusClass } = transactionFormat();
+import WithdrawalPending from "@/Pages/Transaction/Withdrawal/WithdrawalPending.vue";
+import WithdrawalHistory from "@/Pages/Transaction/Withdrawal/WithdrawalHistory.vue";
 
 const props = defineProps({
-    deposits: Object,
+    withdrawals: Object,
+    histories: Object,
     filters: Object
 })
 
 async function refreshTable() {
-    await router.visit('/transaction/deposit_report', { preserveScroll: true, preserveState: true, onFinish: addToast});
+    await router.visit('/transaction/withdrawal_report', { preserveScroll: true, preserveState: true, onFinish: addToast});
 }
 
 function addToast() {
@@ -39,6 +38,12 @@ const formatter = ref({
     month: 'MM'
 });
 
+const activeComponent = ref("pending"); // 'pending' is initially active
+
+const setActiveComponent = (component) => {
+    activeComponent.value = component;
+};
+
 const form = useForm({
     search: props.filters.search,
     date: props.filters.date,
@@ -46,7 +51,7 @@ const form = useForm({
 })
 
 const submitSearch = () => {
-    form.get(route('transaction.deposit_report'), {
+    form.get(route('transaction.withdrawal_report'), {
         preserveScroll: true,
         preserveState: true,
     })
@@ -77,11 +82,11 @@ const reset = () => {
 </script>
 
 <template>
-    <AuthenticatedLayout title="Deposit Report">
+    <AuthenticatedLayout title="Withdrawal Report">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Deposit Report
+                    Withdrawal Report
                 </h2>
             </div>
         </template>
@@ -89,7 +94,7 @@ const reset = () => {
         <form @submit.prevent="submitSearch">
             <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="space-y-2">
-                    <Label>Filter By Deposit Method</Label>
+                    <Label>Filter By Withdrawal Method</Label>
                     <InputSelect
                         class="block w-full text-sm"
                         v-model="form.type"
@@ -97,7 +102,6 @@ const reset = () => {
                     >
                         <option value="bank">Bank Transfer</option>
                         <option value="crypto">Cryptocurrency</option>
-                        <option value="fpx">FPX</option>
                     </InputSelect>
                 </div>
                 <div class="space-y-2">
@@ -155,71 +159,35 @@ const reset = () => {
             </div>
         </form>
 
+        <div class="grid grid-cols-2 gap-4 w-full md:w-1/2">
+            <Button
+                variant="primary-opacity"
+                class="px-6 border border-blue-800 justify-center mt-4 focus:ring-0"
+                :class="{ 'bg-transparent': activeComponent !== 'pending', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'pending' }"
+                @click="setActiveComponent('pending')"
+            >
+                Pending Transaction
+            </Button>
+            <Button
+                variant="primary-opacity"
+                class="px-6 border border-blue-800 justify-center mt-4 focus:ring-0"
+                :class="{ 'bg-transparent': activeComponent !== 'history', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'history' }"
+                @click="setActiveComponent('history')"
+            >
+                Transaction History
+            </Button>
+        </div>
+
         <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1 mt-6">
-            <div class="flex justify-end">
-                <font-awesome-icon
-                    icon="fa-solid fa-rotate-right"
-                    class="flex-shrink-0 w-5 h-5 cursor-pointer dark:text-dark-eval-4"
-                    aria-hidden="true"
-                    @click="refreshTable"
-                />
-            </div>
             <div class="relative overflow-x-auto sm:rounded-lg">
-                <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                    <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
-                    <tr>
-                        <th scope="col" class="px-4 py-3">
-                            Name
-                        </th>
-                        <th scope="col" class="px-4 py-3">
-                            Email
-                        </th>
-                        <th scope="col" class="px-4 py-3">
-                            Date
-                        </th>
-                        <th scope="col" class="px-4 py-3">
-                            Deposit Method
-                        </th>
-                        <th scope="col" class="px-4 py-3">
-                            Deposit Amount
-                        </th>
-                        <th scope="col" class="px-4 py-3">
-                            Payment Charges
-                        </th>
-                        <th scope="col" class="px-4 py-3">
-                            Status
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr v-for="deposit in deposits.data" :key="deposit.id" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
-                        <th scope="row" class="px-6 py-4 font-thin rounded-l-full">
-                            {{ deposit.of_user.first_name }}
-                        </th>
-                        <th class="px-6 py-4">
-                            {{ deposit.of_user.email }}
-                        </th>
-                        <th>
-                            {{ formatDate(deposit.created_at) }}
-                        </th>
-                        <th>
-                            {{ getChannelName(deposit.channel) }}
-                        </th>
-                        <th>
-                            $ {{ deposit.amount }}
-                        </th>
-                        <th>
-                            {{ deposit.payment_charges }}
-                        </th>
-                        <th class="px-6 py-2 font-thin rounded-r-full">
-                            <Badge :status="getStatusClass(deposit.status)">{{ deposit.status }}</Badge>
-                        </th>
-                    </tr>
-                    </tbody>
-                </table>
-            </div>
-            <div class="flex justify-end mt-4">
-                <Paginator :links="props.deposits.links" />
+                <WithdrawalPending
+                    v-if="activeComponent === 'pending'"
+                    :withdrawals="withdrawals"
+                />
+                <WithdrawalHistory
+                    v-if="activeComponent === 'history'"
+                    :histories="histories"
+                />
             </div>
         </div>
     </AuthenticatedLayout>

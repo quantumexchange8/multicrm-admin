@@ -47,3 +47,38 @@ export const handleScroll = () => {
     }
     lastScrollTop = st <= 0 ? 0 : st // For Mobile or negative scrolling
 }
+
+export function transactionFormat() {
+    function getChannelName(name) {
+        if (name === 'bank') {
+            return 'Bank Transfer';
+        } else if (name === 'crypto') {
+            return 'Cryptocurrency';
+        }else if (name === 'fpx') {
+            return 'FPX';
+        }
+    }
+
+    function formatDate(date) {
+        const formattedDate = new Date(date).toISOString().slice(0, 10);
+        return formattedDate.replace(/-/g, '/');
+    }
+
+    function getStatusClass(status) {
+        if (status === 'Successful') {
+            return 'success';
+        } else if (status === 'Submitted') {
+            return 'warning';
+        } else if (status === 'Rejected') {
+            return 'danger';
+        } else {
+            return ''; // Default case or handle other statuses
+        }
+    }
+
+    return {
+        getChannelName,
+        formatDate,
+        getStatusClass,
+    };
+}

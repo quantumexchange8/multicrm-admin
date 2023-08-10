@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
+use App\Http\Controllers\WithdrawalController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Application;
@@ -76,6 +77,8 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
      */
     Route::prefix('transaction')->group(function () {
         Route::get('/deposit_report', [DepositController::class, 'deposit_report'])->name('transaction.deposit_report');
+        Route::get('/withdrawal_report', [WithdrawalController::class, 'withdrawal_report'])->name('transaction.withdrawal_report');
+        Route::post('/withdrawal_approval', [WithdrawalController::class, 'withdrawal_approval'])->name('transaction.withdrawal_approval');
     });
 
 });

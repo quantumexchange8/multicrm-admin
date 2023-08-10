@@ -95,6 +95,11 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer)
                 title="Deposit Report"
                 :active="route().current('transaction.deposit_report')"
             />
+            <SidebarCollapsibleItem
+                :href="route('transaction.withdrawal_report')"
+                title="Withdrawal Report"
+                :active="route().current('transaction.withdrawal_report')"
+            />
         </SidebarCollapsible>
 
 <!--        <SidebarCollapsible-->

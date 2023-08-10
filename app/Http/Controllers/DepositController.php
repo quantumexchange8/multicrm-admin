@@ -39,7 +39,7 @@ class DepositController extends Controller
                     ->orWhere('email', 'like', "%{$search}%");
             });
         }
-        $deposits =  $deposits->latest()->paginate(10);
+        $deposits =  $deposits->latest()->paginate(10)->withQueryString();
 
         return Inertia::render('Transaction/DepositReport',[
             'deposits' => $deposits,
