@@ -8,6 +8,7 @@ use App\Models\AccountType;
 use App\Models\AccountTypeSymbolGroup;
 use App\Models\IbAccountType;
 use App\Models\IbAccountTypeSymbolGroupRate;
+use App\Models\Payment;
 use App\Models\RebateAllocation;
 use App\Models\RebateAllocationRate;
 use App\Models\RebateAllocationRequest;
@@ -537,6 +538,16 @@ class MemberController extends Controller
             $t->trade_lot = number_format($t->trade_lot + $r['total_volume'], 2, '.', '');
 
             $t->save();
+
+            $payment_id = RunningNumberService::getID('transaction');
+            Payment::create([
+                'user_id' => $t->user_id,
+                'payment_id' => $payment_id,
+                'category' => 'rebate_payout',
+                'type' => 'RebateEarned',
+                'amount' => $r['total_revenue'],
+                'status' => 'Successful',
+            ]);
         }
 
         return response()->json(['success' => true, 'message' => 'Rebate payout approved successfully']);

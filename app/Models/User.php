@@ -143,6 +143,10 @@ class User extends Authenticatable implements HasMedia
     {
         return $this->hasMany(IbAccountType::class, 'user_id', 'id');
     }
+    public function userIb()
+    {
+        return $this->hasOne(IbAccountType::class, 'user_id', 'id');
+    }
     public function specificIbAccountTypes($account_type)
     {
         return $this->hasOne(IbAccountType::class, 'user_id', 'id')->where('account_type', $account_type);

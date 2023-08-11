@@ -75,7 +75,7 @@ const getIbDownlineRebateInfo = async () => {
             @click="handleButtonClick"
         >
             <GearIcon aria-hidden="true" class="w-6 h-6 absolute" />
-            <span class="sr-only">Reset</span>
+            <span class="sr-only">Structure</span>
         </Button>
         <Button
             class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
@@ -83,7 +83,7 @@ const getIbDownlineRebateInfo = async () => {
             @click="openMemberDetail(ib.id, 'transferIb')"
         >
             <IbTransferIcon aria-hidden="true" class="w-6 h-6 absolute" />
-            <span class="sr-only">Delete</span>
+            <span class="sr-only">Transfer</span>
         </Button>
     </div>
 

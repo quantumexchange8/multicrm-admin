@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
+use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawalController;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Route;
@@ -79,6 +80,11 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::get('/deposit_report', [DepositController::class, 'deposit_report'])->name('transaction.deposit_report');
         Route::get('/withdrawal_report', [WithdrawalController::class, 'withdrawal_report'])->name('transaction.withdrawal_report');
         Route::post('/withdrawal_approval', [WithdrawalController::class, 'withdrawal_approval'])->name('transaction.withdrawal_approval');
+
+        Route::get('/wallet_report', [WalletController::class, 'wallet_report'])->name('transaction.wallet_report');
+        Route::post('/wallet_adjustment', [WalletController::class, 'wallet_adjustment'])->name('transaction.wallet_adjustment');
+        Route::get('/getCashWalletTransactionHistory/{id}', [WalletController::class, 'getCashWalletTransactionHistory'])->name('transaction.getCashWalletTransactionHistory');
+        Route::get('/getRebateWalletTransactionHistory/{id}', [WalletController::class, 'getRebateWalletTransactionHistory'])->name('transaction.getRebateWalletTransactionHistory');
     });
 
 });
