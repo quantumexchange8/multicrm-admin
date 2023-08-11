@@ -17,7 +17,7 @@ const formatter = ref({
     month: 'MM'
 });
 
-const { getStatusClass, formatDate } = transactionFormat();
+const { getStatusClass, formatDate, formatType } = transactionFormat();
 const emit = defineEmits(['update:userWalletDetailModal']);
 const closeModal = () => {
     emit('update:userWalletDetailModal', false);
@@ -149,7 +149,7 @@ const paginationActiveClass = [
                 {{ formatDate(history.created_at) }}
             </th>
             <th class="px-6 py-4">
-                {{ history.type }}
+                {{ formatType(history.type) }}
             </th>
             <th>
                 <span :class="getAmountClass(history)">{{ getAmountPrefix(history) }} {{ history.amount }}</span>

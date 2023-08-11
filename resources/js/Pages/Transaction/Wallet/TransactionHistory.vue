@@ -31,6 +31,7 @@ const setActiveComponent = (component) => {
             Cash Wallet Transaction
         </Button>
         <Button
+            v-if="user.role ==='ib'"
             variant="primary-opacity"
             class="px-6 border border-blue-600 justify-center mt-4 focus:ring-0"
             :class="{ 'bg-transparent': activeComponent !== 'rebate_wallet', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'rebate_wallet' }"

@@ -80,10 +80,15 @@ export function transactionFormat() {
         return parseFloat(amount).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     }
 
+    const formatType = (type) => {
+        return type.replace(/([a-z])([A-Z])/g, '$1 $2');
+    };
+
     return {
         getChannelName,
         formatDate,
         getStatusClass,
-        formatAmount
+        formatAmount,
+        formatType
     };
 }
