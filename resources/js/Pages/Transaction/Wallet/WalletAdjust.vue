@@ -36,7 +36,7 @@ const submitForm = () => {
     <div class="flex justify-center flex-col text-center mt-8 space-y-2">
         <h4 class="text-lg font-medium text-gray-900 dark:text-dark-eval-4">Cash Wallet Balance</h4>
         <h3 class="text-4xl mb-2 font-medium text-gray-900 dark:text-gray-100">
-            {{ formatAmount(user.cash_wallet) }}
+            $ {{ formatAmount(user.cash_wallet) }}
         </h3>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-6">

@@ -1,8 +1,6 @@
 <script setup>
 import Button from "@/Components/Button.vue";
 import {ref} from "vue";
-import PendingPayout from "@/Pages/Member/RebatePayout/PendingPayout.vue";
-import PayoutHistory from "@/Pages/Member/RebatePayout/PayoutHistory.vue";
 import CashWalletHistory from "@/Pages/Transaction/Wallet/CashWalletHistory.vue";
 import RebateWalletHistory from "@/Pages/Transaction/Wallet/RebateWalletHistory.vue";
 

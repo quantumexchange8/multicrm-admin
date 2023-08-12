@@ -101,6 +101,11 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer)
                 :active="route().current('transaction.withdrawal_report')"
             />
             <SidebarCollapsibleItem
+                :href="route('transaction.internal_transfer_report')"
+                title="Internal Transfer Report"
+                :active="route().current('transaction.internal_transfer_report')"
+            />
+            <SidebarCollapsibleItem
                 :href="route('transaction.wallet_report')"
                 title="All Wallet Report"
                 :active="route().current('transaction.wallet_report')"
