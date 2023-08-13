@@ -53,12 +53,6 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer)
             />
 
             <SidebarCollapsibleItem
-                :href="route('member.trading_account_listing')"
-                title="Trading Account Listing"
-                :active="route().current('member.trading_account_listing')"
-            />
-
-            <SidebarCollapsibleItem
                 :href="route('member.member_tree')"
                 title="Member Tree"
                 :active="route().current('member.member_tree')"

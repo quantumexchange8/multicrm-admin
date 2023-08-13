@@ -73,10 +73,10 @@ const variantClasses = (variant) => ({
 
     /* Opacity Variant */
     'bg-[#007bff33] text-[#007BFF] hover:bg-blue-800 hover:text-white hover:text-white focus:ring-blue-500': variant == 'primary-opacity',
-    'bg-[#af60ff33] text-[#AF60FF] hover:bg-purple-900 focus:ring-purple-500':
+    'bg-[#af60ff33] text-[#AF60FF] hover:bg-purple-900 hover:text-white focus:ring-purple-500':
         variant == 'secondary-opacity',
-    'bg-[#05c46b33] text-[#05C46B] hover:bg-green-800 focus:ring-green-500': variant == 'success-opacity',
-    'bg-[#ff3f3433] text-[#FF3F34] hover:bg-red-800 focus:ring-red-500': variant == 'danger-opacity',
+    'bg-[#05c46b33] text-[#05C46B] hover:bg-green-800 hover:text-white focus:ring-green-500': variant == 'success-opacity',
+    'bg-[#ff3f3433] text-[#FF3F34] hover:bg-red-800 hover:text-white focus:ring-red-500': variant == 'danger-opacity',
     // 'bg-yellow-500 text-white hover:bg-yellow-600 focus:ring-yellow-500': variant == 'warning-opacity',
     // 'bg-cyan-500 text-white hover:bg-cyan-600 focus:ring-cyan-500': variant == 'info-opacity',
     // 'bg-black text-gray-300 hover:text-white hover:bg-gray-800 focus:ring-black dark:hover:bg-dark-eval-3':

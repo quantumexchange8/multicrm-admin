@@ -16,21 +16,14 @@ import { router } from '@inertiajs/vue3'
 import toast from "@/Composables/toast.js";
 import WithdrawalPending from "@/Pages/Transaction/Withdrawal/WithdrawalPending.vue";
 import WithdrawalHistory from "@/Pages/Transaction/Withdrawal/WithdrawalHistory.vue";
+import Action from "@/Pages/Transaction/Withdrawal/Action.vue";
+import {transactionFormat} from "@/Composables/index.js";
+import {TailwindPagination} from "laravel-vue-pagination";
+import Badge from "@/Components/Badge.vue";
 
-const props = defineProps({
-    withdrawals: Object,
-    histories: Object,
-    filters: Object
-})
-
-async function refreshTable() {
-    await router.visit('/transaction/withdrawal_report', { preserveScroll: true, preserveState: true, onFinish: addToast});
-}
-
-function addToast() {
-    toast.add({
-        message: "Table Refreshed!",
-    });
+const { getChannelName, formatDate, formatAmount, getStatusClass } = transactionFormat();
+function refreshTable() {
+    getResults();
 }
 
 const formatter = ref({
@@ -40,21 +33,16 @@ const formatter = ref({
 
 const activeComponent = ref("pending"); // 'pending' is initially active
 
-const setActiveComponent = (component) => {
-    activeComponent.value = component;
+const submitSearch = async () => {
+    const dateRange = date.value.split(' ~ ');
+
+    await getResults(1, type.value, dateRange, search.value);
 };
 
-const form = useForm({
-    search: props.filters.search,
-    date: props.filters.date,
-    type: props.filters.type
-})
+const setActiveComponent = async (component) => {
+    activeComponent.value = component;
 
-const submitSearch = () => {
-    form.get(route('transaction.withdrawal_report'), {
-        preserveScroll: true,
-        preserveState: true,
-    })
+    await getResults();
 };
 
 function clearField() {
@@ -67,18 +55,66 @@ function handleKeyDown(event) {
     }
 }
 
-const reset = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.delete('search');
-    url.searchParams.delete('type');
-    url.searchParams.delete('date%5B%5D');
-    url.searchParams.delete('date[]');
-    url.searchParams.delete('page');
+const pendingTransaction = ref({data: []});
+const transactionHistory = ref({data: []});
+const type = ref('');
+const date = ref('');
+const search = ref('');
+const isLoading = ref(false);
+const currentPage = ref(1);
 
-    // Navigate to the updated URL without the search parameter
-    window.location.href = url.href;
+const getResults = async (page = 1, type = '',  dateRange, search = '') => {
+    isLoading.value = true;
+    try {
+        let url = `/transaction/getPendingTransaction?page=${page}`;
+
+        if (type) {
+            url += `&type=${type}`;
+        }
+
+        if (dateRange) {
+            if (dateRange.length === 2) {
+                const formattedDates = dateRange.map(date => `date[]=${date}`).join('&');
+                url += `&${formattedDates}`;
+            }
+        }
+
+        if (search) {
+            url += `&search=${search}`;
+        }
+
+        const response = await axios.get(url);
+        pendingTransaction.value = response.data.withdrawals;
+        transactionHistory.value = response.data.histories;
+    } catch (error) {
+        console.error(error);
+    } finally {
+        isLoading.value = false;
+    }
+}
+getResults();
+const reset = () => {
+    getResults();
+    date.value = '';
+    type.value = '';
+    search.value = '';
 }
 
+const handlePageChange = (newPage) => {
+    if (newPage >= 1) {
+        currentPage.value = newPage;
+        const dateRange = date.value.split(' ~ ');
+        getResults(currentPage.value, type.value, dateRange, search.value);
+    }
+};
+
+const paginationClass = [
+    'bg-transparent border-0 text-gray-500'
+];
+
+const paginationActiveClass = [
+    'dark:bg-transparent border-0 text-[#FF9E23] dark:text-[#FF9E23]'
+];
 </script>
 
 <template>
@@ -97,7 +133,7 @@ const reset = () => {
                     <Label>Filter By Withdrawal Method</Label>
                     <InputSelect
                         class="block w-full text-sm"
-                        v-model="form.type"
+                        v-model="type"
                         placeholder="All"
                     >
                         <option value="bank">Bank Transfer</option>
@@ -108,7 +144,7 @@ const reset = () => {
                     <Label>Filter By Date</Label>
                     <vue-tailwind-datepicker
                         :formatter="formatter"
-                        v-model="form.date"
+                        v-model="date"
                         input-classes="py-2 border-gray-400 w-full rounded-full text-sm placeholder:text-sm focus:border-gray-400 focus:ring focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:border-gray-600 dark:bg-[#202020] dark:text-gray-300 dark:focus:ring-offset-dark-eval-1 disabled:dark:bg-dark-eval-0 disabled:dark:text-dark-eval-4"
                     />
                 </div>
@@ -128,7 +164,7 @@ const reset = () => {
                                     aria-hidden="true"
                                 />
                             </template>
-                            <Input withIcon id="name" type="text" class="block w-full" v-model="form.search" @keydown="handleKeyDown" />
+                            <Input withIcon id="name" type="text" class="block w-full" v-model="search" @keydown="handleKeyDown" />
                         </InputIconWrapper>
                         <button type="submit" class="absolute right-1 bottom-2 py-2.5 text-gray-500 hover:text-dark-eval-4 font-medium rounded-full w-8 h-8 text-sm"><font-awesome-icon
                             icon="fa-solid fa-x"
@@ -143,7 +179,6 @@ const reset = () => {
                         <Button
                             variant="primary-opacity"
                             class="justify-center"
-                            :disabled="form.processing"
                         >
                             Search
                         </Button>
@@ -188,14 +223,161 @@ const reset = () => {
                         @click="refreshTable"
                     />
                 </div>
-                <WithdrawalPending
-                    v-if="activeComponent === 'pending'"
-                    :withdrawals="withdrawals"
-                />
-                <WithdrawalHistory
-                    v-if="activeComponent === 'history'"
-                    :histories="histories"
-                />
+
+                <!-- Withdrawal Pending -->
+                <div v-if="isLoading && activeComponent === 'pending'" class="w-full flex justify-center mt-8">
+                    <div class="px-4 py-2 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
+                        loading...
+                    </div>
+                </div>
+                <table v-else class="w-full text-sm text-left text-gray-500 dark:text-gray-400" v-if="activeComponent === 'pending'">
+                    <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
+                    <tr>
+                        <th scope="col" class="px-4 py-3">
+                            Name
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Email
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Date
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Withdrawal Method
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Withdrawal Amount
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Payment Charges
+                        </th>
+                        <th scope="col" class="px-4 py-3 w-56">
+                            Action
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-if="pendingTransaction.data.length === 0">
+                        <th colspan="8" class="py-4 text-lg text-center">
+                            No Pending
+                        </th>
+                    </tr>
+                    <tr v-for="withdrawal in pendingTransaction.data" :key="withdrawal.id" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
+                        <th scope="row" class="px-6 py-4 font-thin rounded-l-full">
+                            {{ withdrawal.of_user.first_name }}
+                        </th>
+                        <th class="px-6 py-4">
+                            {{ withdrawal.of_user.email }}
+                        </th>
+                        <th>
+                            {{ formatDate(withdrawal.created_at) }}
+                        </th>
+                        <th>
+                            {{ getChannelName(withdrawal.channel) }}
+                        </th>
+                        <th>
+                            $ {{ formatAmount(withdrawal.amount) }}
+                        </th>
+                        <th>
+                            {{ withdrawal.payment_charges ?? '-' }}
+                        </th>
+                        <th class="py-2 font-thin rounded-r-full">
+                            <Action
+                                :withdrawal="withdrawal"
+                            />
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="flex justify-end mt-4" v-if="activeComponent === 'pending'">
+                    <TailwindPagination
+                        :item-classes=paginationClass
+                        :active-classes=paginationActiveClass
+                        :data="pendingTransaction"
+                        @pagination-change-page="handlePageChange"
+                    />
+                </div>
+
+                <!-- Withdrawal History -->
+                <div v-if="isLoading && activeComponent === 'history'" class="w-full flex justify-center mt-8">
+                    <div class="px-4 py-2 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
+                        loading...
+                    </div>
+                </div>
+                <table v-else class="w-full text-sm text-left text-gray-500 dark:text-gray-400"  v-if="activeComponent === 'history'">
+                    <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
+                    <tr>
+                        <th scope="col" class="px-4 py-3">
+                            Name
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Email
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Date
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Withdrawal Method
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Withdrawal Amount
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Payment Charges
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Status
+                        </th>
+                        <th scope="col" class="px-4 py-3">
+                            Action
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr v-if="transactionHistory.data.length === 0">
+                        <th colspan="8" class="py-4 text-lg text-center">
+                            No Pending
+                        </th>
+                    </tr>
+                    <tr v-for="history in transactionHistory.data" :key="history.id" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
+                        <th scope="row" class="px-6 py-4 font-thin rounded-l-full">
+                            {{ history.of_user.first_name }}
+                        </th>
+                        <th class="px-6 py-4">
+                            {{ history.of_user.email }}
+                        </th>
+                        <th>
+                            {{ formatDate(history.created_at) }}
+                        </th>
+                        <th>
+                            {{ getChannelName(history.channel) }}
+                        </th>
+                        <th>
+                            $ {{ formatAmount(history.amount) }}
+                        </th>
+                        <th>
+                            {{ history.payment_charges ?? '-' }}
+                        </th>
+                        <th>
+                            <Badge :status="getStatusClass(history.status)">{{ history.status }}</Badge>
+                        </th>
+                        <th class="py-2 font-thin rounded-r-full">
+                            <Action
+                                :withdrawal="history"
+                                type="history"
+                            />
+                        </th>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="flex justify-end mt-4" v-if="activeComponent === 'history'">
+                    <TailwindPagination
+                        :item-classes=paginationClass
+                        :active-classes=paginationActiveClass
+                        :data="transactionHistory"
+                        @pagination-change-page="handlePageChange"
+                    />
+                </div>
             </div>
         </div>
     </AuthenticatedLayout>

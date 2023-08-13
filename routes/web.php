@@ -67,10 +67,12 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
 
     /**
      * ==============================
-     *    Trading Account Listing
+     *            Finance
      * ==============================
      */
-    Route::get('/trading_account_listing', [MemberController::class, 'trading_account_listing'])->name('member.trading_account_listing');
+    Route::prefix('transaction')->group(function () {
+
+    });
 
     /**
      * ==============================
@@ -84,6 +86,7 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::get('/internal_transfer_report', [InternalTransferController::class, 'internal_transfer_report'])->name('transaction.internal_transfer_report');
         Route::get('/wallet_report', [WalletController::class, 'wallet_report'])->name('transaction.wallet_report');
         Route::post('/wallet_adjustment', [WalletController::class, 'wallet_adjustment'])->name('transaction.wallet_adjustment');
+        Route::get('/getPendingTransaction', [WithdrawalController::class, 'getPendingTransaction'])->name('transaction.getPendingTransaction');
         Route::get('/getInternalTransferHistory', [InternalTransferController::class, 'getInternalTransferHistory'])->name('transaction.getInternalTransferHistory');
         Route::get('/getCashWalletTransactionHistory/{id}', [WalletController::class, 'getCashWalletTransactionHistory'])->name('transaction.getCashWalletTransactionHistory');
         Route::get('/getRebateWalletTransactionHistory/{id}', [WalletController::class, 'getRebateWalletTransactionHistory'])->name('transaction.getRebateWalletTransactionHistory');

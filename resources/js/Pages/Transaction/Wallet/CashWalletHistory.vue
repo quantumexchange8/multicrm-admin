@@ -106,7 +106,6 @@ const paginationActiveClass = [
             <Label>Filter By Date</Label>
             <vue-tailwind-datepicker
                 :formatter="formatter"
-                as-single
                 v-model="date"
                 input-classes="py-2 border-gray-400 w-full rounded-full text-sm placeholder:text-sm focus:border-gray-400 focus:ring focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:border-gray-600 dark:bg-[#202020] dark:text-gray-300 dark:focus:ring-offset-dark-eval-1 disabled:dark:bg-dark-eval-0 disabled:dark:text-dark-eval-4"
             />

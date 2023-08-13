@@ -17,6 +17,11 @@ class WithdrawalController extends Controller
 {
     public function withdrawal_report(Request $request)
     {
+        return Inertia::render('Transaction/WithdrawalReport');
+    }
+
+    public function getPendingTransaction(Request $request)
+    {
         $search = $request->search;
         $requestDate = $request->date;
         $type = $request->type;
@@ -46,7 +51,6 @@ class WithdrawalController extends Controller
             });
         }
         $histories = clone $withdrawals;
-
         $withdrawals =  $withdrawals
             ->where('status', 'Submitted')
             ->latest()
@@ -59,10 +63,9 @@ class WithdrawalController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('Transaction/WithdrawalReport', [
+        return response()->json([
             'withdrawals' => $withdrawals,
-            'histories' => $histories,
-            'filters' => $request->only(['search', 'type', 'date']),
+            'histories' => $histories
         ]);
     }
 

@@ -7,9 +7,11 @@ use App\Models\Payment;
 use App\Models\User;
 use App\Services\RunningNumberService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
+use function GuzzleHttp\Promise\all;
 
 class WalletController extends Controller
 {
@@ -84,7 +86,10 @@ class WalletController extends Controller
             })
             ->when($request->filled('date'), function ($query) use ($request) {
                 $date = $request->input('date');
-                $query->whereDate('created_at', $date);
+                $dateRange = explode(' ~ ', $date);
+                $start_date = Carbon::createFromFormat('Y-m-d', $dateRange[0])->startOfDay();
+                $end_date = Carbon::createFromFormat('Y-m-d', $dateRange[1])->endOfDay();
+                $query->whereBetween('created_at', [$start_date, $end_date]);
             })
             ->orderByDesc('created_at')
             ->paginate(10);
@@ -107,7 +112,10 @@ class WalletController extends Controller
             })
             ->when($request->filled('date'), function ($query) use ($request) {
                 $date = $request->input('date');
-                $query->whereDate('created_at', $date);
+                $dateRange = explode(' ~ ', $date);
+                $start_date = Carbon::createFromFormat('Y-m-d', $dateRange[0])->startOfDay();
+                $end_date = Carbon::createFromFormat('Y-m-d', $dateRange[1])->endOfDay();
+                $query->whereBetween('created_at', [$start_date, $end_date]);
             })
             ->orderByDesc('created_at')
             ->paginate(10);

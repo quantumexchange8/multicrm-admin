@@ -66,7 +66,7 @@ function refreshTable() {
 const submitSearch = async () => {
     const dateRange = date.value.split(' ~ ');
 
-    await getResults(currentPage.value, type.value, dateRange, search.value);
+    await getResults(1, type.value, dateRange, search.value);
 };
 
 function clearField() {
@@ -89,7 +89,8 @@ const reset = () => {
 const handlePageChange = (newPage) => {
     if (newPage >= 1) {
         currentPage.value = newPage;
-        getResults(currentPage.value, type.value, date.value, search.value);
+        const dateRange = date.value.split(' ~ ');
+        getResults(currentPage.value, type.value, dateRange, search.value);
     }
 };
 
@@ -223,7 +224,7 @@ const paginationActiveClass = [
                 </thead>
                 <tbody>
                 <tr v-if="internalTransfer.data.length === 0">
-                    <th colspan="5" class="py-4 text-lg text-center">
+                    <th colspan="7" class="py-4 text-lg text-center">
                         No History
                     </th>
                 </tr>
