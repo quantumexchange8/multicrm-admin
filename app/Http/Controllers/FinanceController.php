@@ -61,8 +61,10 @@ class FinanceController extends Controller
             }
             return redirect()->back()->withErrors('Something Went Wrong');
         }
+        $changeType = ($request->type === 'deposit') ? ChangeTraderBalanceType::DEPOSIT : ChangeTraderBalanceType::WITHDRAW;
+
         try {
-            $trade = (new CTraderService)->createTrade($request->account_no, $request->amount, $request->comment, ChangeTraderBalanceType::DEPOSIT);
+            $trade = (new CTraderService)->createTrade($request->account_no, $request->amount, $request->comment, $changeType);
         } catch (\Throwable $e) {
             if ($e->getMessage() == "Not found") {
                 TradingUser::firstWhere('meta_login', $request->account_no)->update(['acc_status' => 'Inactive']);
@@ -78,6 +80,7 @@ class FinanceController extends Controller
             'type' => $request->type,
             'amount' => $request->amount,
             'comment' => $request->comment,
+            'handle_by' => Auth::id(),
             'ticket' => $trade->getTicket()
         ]);
 
