@@ -4,8 +4,61 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2a185687752600f52a93969bc78091b3",
+    "content-hash": "a5197f8b3251fc5be139ebf7dce0ab78",
     "packages": [
+        {
+            "name": "aleedhillon/meta-five",
+            "version": "v1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/aleedhillon/meta-five.git",
+                "reference": "5b4055dbbfb9a10abc0322e099463ed0852e87d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/aleedhillon/meta-five/zipball/5b4055dbbfb9a10abc0322e099463ed0852e87d8",
+                "reference": "5b4055dbbfb9a10abc0322e099463ed0852e87d8",
+                "shasum": ""
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "AleeDhillon\\MetaFive\\MetaFiveProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "AleeDhillon\\MetaFive\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Ali A. Dhillon",
+                    "email": "aleedhx@gmail.com"
+                }
+            ],
+            "description": "Metatrader 5 Web API Wrapper for Laravel",
+            "support": {
+                "issues": "https://github.com/aleedhillon/meta-five/issues",
+                "source": "https://github.com/aleedhillon/meta-five/tree/v1.1.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/aleedhillon",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-02-20T22:24:36+00:00"
+        },
         {
             "name": "aws/aws-crt-php",
             "version": "v1.2.1",
