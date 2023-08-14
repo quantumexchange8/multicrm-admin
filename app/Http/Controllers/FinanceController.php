@@ -64,11 +64,7 @@ class FinanceController extends Controller
             return redirect()->back()->withErrors('Something Went Wrong');
         }
         try {
-            if ($request->type === 'deposit') {
-                $trade = (new CTraderService)->createTrade($request->account_no, $request->amount, $request->comment, ChangeTraderBalanceType::DEPOSIT);
-            } elseif ($request->type === 'withdrawal') {
-                $trade = (new CTraderService)->createTrade($request->account_no, $request->amount, $request->comment, ChangeTraderBalanceType::WITHDRAW);
-            }
+            $trade = (new CTraderService)->createTrade($request->account_no, $request->amount, $request->comment, ChangeTraderBalanceType::DEPOSIT);
         } catch (\Throwable $e) {
             if ($e->getMessage() == "Not found") {
                 TradingUser::firstWhere('meta_login', $request->account_no)->update(['acc_status' => 'Inactive']);
