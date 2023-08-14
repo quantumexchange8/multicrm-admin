@@ -27,7 +27,7 @@ const form = useForm({
     amount: '',
     internal_description: '',
     client_description: '',
-    allotted_time: 1,
+    allotted_time: 0,
     type: 'credit_in',
 });
 
@@ -48,8 +48,8 @@ const handleAllottedTimeChange = (value) => {
 };
 
 const handleTypeChange = (value) => {
+    form.reset();
     form.type = value;
-    form.allotted_time = 0;
 };
 </script>
 

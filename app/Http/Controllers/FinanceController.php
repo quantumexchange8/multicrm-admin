@@ -81,6 +81,7 @@ class FinanceController extends Controller
             'type' => $request->type,
             'amount' => $request->amount,
             'comment' => $request->comment,
+            'status' => 'completed',
             'handle_by' => Auth::id(),
             'ticket' => $trade->getTicket()
         ]);
@@ -111,6 +112,7 @@ class FinanceController extends Controller
         }
 
         $comment = ($request->type === 'credit_in') ? 'Credit In' : 'Credit Out';
+        $status = ($request->allotted_time === 0) ? 'completed' : 'running';
 
         FundAdjustment::create([
             'user_id' => $request->user_id,
@@ -123,6 +125,7 @@ class FinanceController extends Controller
             'allotted_time' => $request->allotted_time,
             'start_date' => Carbon::parse($request->start_date),
             'expiry_date' => Carbon::parse($request->end_date),
+            'status' => $status,
             'handle_by' => Auth::id(),
             'ticket' => $trade->getTicket()
         ]);
@@ -152,5 +155,29 @@ class FinanceController extends Controller
             ->paginate(5);
 
         return response()->json($balance_histories);
+    }
+
+    public function getCreditHistory(Request $request, $meta_login)
+    {
+        $credit_histories = FundAdjustment::query()
+            ->where('to', $meta_login)
+            ->whereIn('type', ['credit_in', 'credit_out'])
+            ->when($request->filled('type'), function ($query) use ($request) {
+                $type = $request->input('type');
+                $query->where(function ($innerQuery) use ($type) {
+                    $innerQuery->where('type', $type);
+                });
+            })
+            ->when($request->filled('date'), function ($query) use ($request) {
+                $date = $request->input('date');
+                $dateRange = explode(' ~ ', $date);
+                $start_date = Carbon::createFromFormat('Y-m-d', $dateRange[0])->startOfDay();
+                $end_date = Carbon::createFromFormat('Y-m-d', $dateRange[1])->endOfDay();
+                $query->whereBetween('created_at', [$start_date, $end_date]);
+            })
+            ->latest()
+            ->paginate(5);
+
+        return response()->json($credit_histories);
     }
 }

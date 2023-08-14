@@ -4,7 +4,7 @@ import {GearIcon, ViewIcon, GiftIcon} from "@/Components/Icons/outline.jsx";
 import Button from "@/Components/Button.vue";
 import Modal from "@/Components/Modal.vue";
 import CreditAdjustment from "@/Pages/Finance/CreditAdjustment/CreditAdjustment.vue";
-import CreditHistory from "@/Pages/Finance/CreditAdjustment/CreditHistory.vue";
+import AdjustmentHistory from "@/Pages/Finance/CreditAdjustment/AdjustmentHistory.vue";
 import BalanceAdjustment from "@/Pages/Finance/CreditAdjustment/BalanceAdjustment.vue";
 
 const props = defineProps({
@@ -77,7 +77,7 @@ const closeModal = () => {
 
             <!-- View -->
             <template v-if="modalComponent === 'ViewHistory'">
-                <CreditHistory
+                <AdjustmentHistory
                     :account="account"
                     @update:creditAdjustmentModal="creditAdjustmentModal = $event"
                 />

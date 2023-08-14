@@ -77,6 +77,7 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::post('/balance_adjustment', [FinanceController::class, 'balance_adjustment'])->name('finance.balance_adjustment');
         Route::post('/credit_adjustment', [FinanceController::class, 'credit_adjustment'])->name('finance.credit_adjustment');
         Route::get('/getBalanceHistory/{id}', [FinanceController::class, 'getBalanceHistory'])->name('finance.getBalanceHistory');
+        Route::get('/getCreditHistory/{id}', [FinanceController::class, 'getCreditHistory'])->name('finance.getCreditHistory');
 
     });
 
