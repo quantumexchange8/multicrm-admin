@@ -148,7 +148,7 @@ const paginationActiveClass = [
                 <span :class="getAmountClass(history)">{{ getAmountPrefix(history) }} {{ history.amount }}</span>
             </th>
             <th class="px-6 py-4 font-thin rounded-r-full">
-                {{ history.start_date }} - {{ history.end_date }}
+                {{ history.start_date }} - {{ history.expiry_date }}
             </th>
             <th class="px-6 py-4 font-thin rounded-r-full">
                 {{ history.internal_description ?? '-' }}
