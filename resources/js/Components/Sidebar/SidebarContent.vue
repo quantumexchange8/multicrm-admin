@@ -7,9 +7,9 @@ import SidebarCollapsibleItem from '@/Components/Sidebar/SidebarCollapsibleItem.
 import { TemplateIcon } from '@heroicons/vue/outline'
 import { library } from '@fortawesome/fontawesome-svg-core'
 /* import specific icons */
-import {faGaugeHigh, faMoneyBillTransfer, faUser, faUserTie} from '@fortawesome/free-solid-svg-icons'
+import {faCoins, faGaugeHigh, faMoneyBillTransfer, faUser, faUserTie} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer)
+library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins)
 
 </script>
 
@@ -68,6 +68,26 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer)
                 :href="route('member.rebate_allocation')"
                 title="Rebate Allocation"
                 :active="route().current('member.rebate_allocation')"
+            />
+        </SidebarCollapsible>
+
+        <!-- transaction -->
+        <SidebarCollapsible
+            title="Finance"
+            :active="route().current('finance.*')"
+        >
+            <template #icon>
+                <font-awesome-icon
+                    icon="fa-solid fa-coins"
+                    class="flex-shrink-0 w-5 h-5"
+                    aria-hidden="true"
+                />
+            </template>
+
+            <SidebarCollapsibleItem
+                :href="route('finance.credit_amount_adjustment')"
+                title="Credit Amount Adjustment"
+                :active="route().current('finance.credit_amount_adjustment')"
             />
         </SidebarCollapsible>
 

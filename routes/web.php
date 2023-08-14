@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
+use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\InternalTransferController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawalController;
@@ -70,7 +71,11 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
      *            Finance
      * ==============================
      */
-    Route::prefix('transaction')->group(function () {
+    Route::prefix('finance')->group(function () {
+        Route::get('/credit_amount_adjustment', [FinanceController::class, 'credit_amount_adjustment'])->name('finance.credit_amount_adjustment');
+        Route::get('/getTradingAccounts', [FinanceController::class, 'getTradingAccounts'])->name('finance.getTradingAccounts');
+        Route::post('/balance_adjustment', [FinanceController::class, 'balance_adjustment'])->name('finance.balance_adjustment');
+        Route::get('/getBalanceHistory/{id}', [FinanceController::class, 'getBalanceHistory'])->name('finance.getBalanceHistory');
 
     });
 

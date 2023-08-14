@@ -3,12 +3,12 @@ import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import Label from "@/Components/Label.vue";
 import InputSelect from "@/Components/InputSelect.vue";
 import VueTailwindDatepicker from "vue-tailwind-datepicker";
-import {ref} from "vue";
+import {ref, watchEffect} from "vue";
 import InputIconWrapper from "@/Components/InputIconWrapper.vue";
 import Input from "@/Components/Input.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import Button from "@/Components/Button.vue";
-import {useForm} from "@inertiajs/vue3";
+import {useForm, usePage} from "@inertiajs/vue3";
 import {faRotateRight, faSearch, faX} from "@fortawesome/free-solid-svg-icons";
 import {library} from "@fortawesome/fontawesome-svg-core";
 library.add(faSearch,faX,faRotateRight);
@@ -20,11 +20,18 @@ import Action from "@/Pages/Transaction/Withdrawal/Action.vue";
 import {transactionFormat} from "@/Composables/index.js";
 import {TailwindPagination} from "laravel-vue-pagination";
 import Badge from "@/Components/Badge.vue";
+import Loading from "@/Components/Loading.vue";
 
 const { getChannelName, formatDate, formatAmount, getStatusClass } = transactionFormat();
 function refreshTable() {
     getResults();
 }
+
+watchEffect(() => {
+    if (usePage().props.toast === 'Successfully Updated') {
+        refreshTable();
+    }
+});
 
 const formatter = ref({
     date: 'YYYY-MM-DD',
@@ -214,21 +221,18 @@ const paginationActiveClass = [
         </div>
 
         <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1 mt-6">
+            <div class="flex justify-end">
+                <font-awesome-icon
+                    icon="fa-solid fa-rotate-right"
+                    class="flex-shrink-0 w-5 h-5 cursor-pointer dark:text-dark-eval-4"
+                    aria-hidden="true"
+                    @click="refreshTable"
+                />
+            </div>
             <div class="relative overflow-x-auto sm:rounded-lg">
-                <div class="flex justify-end">
-                    <font-awesome-icon
-                        icon="fa-solid fa-rotate-right"
-                        class="flex-shrink-0 w-5 h-5 cursor-pointer dark:text-dark-eval-4"
-                        aria-hidden="true"
-                        @click="refreshTable"
-                    />
-                </div>
-
                 <!-- Withdrawal Pending -->
-                <div v-if="isLoading && activeComponent === 'pending'" class="w-full flex justify-center mt-8">
-                    <div class="px-4 py-2 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
-                        loading...
-                    </div>
+                <div v-if="isLoading && activeComponent === 'pending'" class="w-full flex justify-center">
+                    <Loading />
                 </div>
                 <table v-else class="w-full text-sm text-left text-gray-500 dark:text-gray-400" v-if="activeComponent === 'pending'">
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
@@ -299,10 +303,8 @@ const paginationActiveClass = [
                 </div>
 
                 <!-- Withdrawal History -->
-                <div v-if="isLoading && activeComponent === 'history'" class="w-full flex justify-center mt-8">
-                    <div class="px-4 py-2 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
-                        loading...
-                    </div>
+                <div v-if="isLoading && activeComponent === 'history'" class="w-full flex justify-center">
+                    <Loading />
                 </div>
                 <table v-else class="w-full text-sm text-left text-gray-500 dark:text-gray-400"  v-if="activeComponent === 'history'">
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">

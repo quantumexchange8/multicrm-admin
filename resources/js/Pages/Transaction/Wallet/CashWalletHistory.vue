@@ -7,6 +7,7 @@ import Label from "@/Components/Label.vue";
 import InputSelect from "@/Components/InputSelect.vue";
 import VueTailwindDatepicker from "vue-tailwind-datepicker";
 import debounce from "lodash/debounce.js";
+import Loading from "@/Components/Loading.vue";
 
 const props = defineProps({
     user: Object,
@@ -113,9 +114,7 @@ const paginationActiveClass = [
     </div>
 
     <div v-if="isLoading" class="w-full flex justify-center mt-8">
-        <div class="px-4 py-2 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
-            loading...
-        </div>
+        <Loading />
     </div>
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400 mt-8" v-else>
         <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">

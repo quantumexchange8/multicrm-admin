@@ -1,30 +1,28 @@
 <script setup>
-import {transactionFormat} from "@/Composables/index.js";
-import { TailwindPagination } from 'laravel-vue-pagination';
-import {ref, watch} from "vue";
-import Badge from "@/Components/Badge.vue";
-import Label from "@/Components/Label.vue";
-import InputSelect from "@/Components/InputSelect.vue";
 import VueTailwindDatepicker from "vue-tailwind-datepicker";
-import debounce from "lodash/debounce.js";
+import InputSelect from "@/Components/InputSelect.vue";
+import Label from "@/Components/Label.vue";
+import {ref, watch} from "vue";
+import {TailwindPagination} from "laravel-vue-pagination";
+import Badge from "@/Components/Badge.vue";
 import Loading from "@/Components/Loading.vue";
+import debounce from "lodash/debounce.js";
+import {transactionFormat} from "@/Composables/index.js";
 
 const props = defineProps({
-    user: Object,
+    account: Object
 })
-
 const formatter = ref({
     date: 'YYYY-MM-DD',
     month: 'MM'
 });
-
-const { getStatusClass, formatDate, formatType } = transactionFormat();
-const emit = defineEmits(['update:userWalletDetailModal']);
+const { formatDate, formatType } = transactionFormat();
+const emit = defineEmits(['update:creditAdjustmentModal']);
 const closeModal = () => {
-    emit('update:userWalletDetailModal', false);
+    emit('update:creditAdjustmentModal', false);
 }
 
-const rebateWalletHistory = ref({data: []});
+const balanceHistories = ref({data: []});
 const type = ref('');
 const date = ref('');
 const isLoading = ref(false);
@@ -32,14 +30,14 @@ const isLoading = ref(false);
 watch(
     [type, date],
     debounce(function ([typeValue, dateValue]) {
-        getResults(1, props.user.id, typeValue, dateValue);
+        getResults(1, props.account.meta_login, typeValue, dateValue);
     }, 300)
 );
 
-const getResults = async (page = 1, user_id = props.user.id, type = '', date = '') => {
+const getResults = async (page = 1, meta_login = props.account.meta_login, type = '', date = '') => {
     isLoading.value = true;
     try {
-        let url = `/transaction/getRebateWalletTransactionHistory/${user_id}?page=${page}`;
+        let url = `/finance/getBalanceHistory/${meta_login}?page=${page}`;
 
         if (type) {
             url += `&type=${type}`;
@@ -50,7 +48,7 @@ const getResults = async (page = 1, user_id = props.user.id, type = '', date = '
         }
 
         const response = await axios.get(url);
-        rebateWalletHistory.value = response.data;
+        balanceHistories.value = response.data;
     } catch (error) {
         console.error(error);
     } finally {
@@ -61,18 +59,18 @@ const getResults = async (page = 1, user_id = props.user.id, type = '', date = '
 getResults();
 
 const getAmountClass = (history) => {
-    if (history.type === 'RebateToWallet') {
+    if (history.type === 'withdrawal') {
         return 'text-[#FF3F34]';
-    } else if (history.type === 'RebateEarned') {
+    } else if (history.type === 'deposit') {
         return 'text-[#05C46B]';
     }
     return '';
 };
 
 const getAmountPrefix = (history) => {
-    if (history.type === 'RebateToWallet') {
+    if (history.type === 'withdrawal') {
         return '-';
-    } else if (history.type === 'RebateEarned') {
+    } else if (history.type === 'deposit') {
         return '+';
     }
     return '';
@@ -90,14 +88,14 @@ const paginationActiveClass = [
 <template>
     <div class="grid grid-cols-3 mt-8 gap-6">
         <div class="space-y-2">
-            <Label>Filter by Transaction Type</Label>
+            <Label>Filter by Adjustment Type</Label>
             <InputSelect
                 class="block w-full text-sm"
                 v-model="type"
             >
                 <option value="">All</option>
-                <option value="RebateEarned">RebateEarned</option>
-                <option value="RebateToWallet">Rebate To Wallet</option>
+                <option value="deposit">Deposit</option>
+                <option value="withdrawal">Withdrawal</option>
             </InputSelect>
         </div>
         <div class="space-y-2">
@@ -120,13 +118,10 @@ const paginationActiveClass = [
                 Date
             </th>
             <th scope="col" class="px-6 py-3 w-48">
-                Transaction Type
+                Adjustment Type
             </th>
             <th scope="col" class="px-6 py-3 w-48">
                 Amount ($)
-            </th>
-            <th scope="col" class="px-6 py-3 w-48">
-                Status
             </th>
             <th scope="col" class="px-6 py-3">
                 Description
@@ -134,12 +129,12 @@ const paginationActiveClass = [
         </tr>
         </thead>
         <tbody>
-        <tr v-if="rebateWalletHistory.data.length === 0">
-            <th colspan="5" class="py-4 text-lg text-center">
+        <tr v-if="balanceHistories.data.length === 0">
+            <th colspan="4" class="py-4 text-lg text-center">
                 No History
             </th>
         </tr>
-        <tr v-for="history in rebateWalletHistory.data" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
+        <tr v-for="history in balanceHistories.data" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
             <th scope="row" class="px-6 py-4 font-thin rounded-l-full">
                 {{ formatDate(history.created_at) }}
             </th>
@@ -149,11 +144,8 @@ const paginationActiveClass = [
             <th>
                 <span :class="getAmountClass(history)">{{ getAmountPrefix(history) }} {{ history.amount }}</span>
             </th>
-            <th>
-                <Badge :status="getStatusClass(history.status)">{{ history.status }}</Badge>
-            </th>
             <th class="px-6 py-4 font-thin rounded-r-full">
-                {{ history.description ?? '-' }}
+                {{ history.comment ?? '-' }}
             </th>
         </tr>
         </tbody>
@@ -163,9 +155,8 @@ const paginationActiveClass = [
         <TailwindPagination
             :item-classes=paginationClass
             :active-classes=paginationActiveClass
-            :data="rebateWalletHistory"
+            :data="balanceHistories"
             @pagination-change-page="getResults"
         />
     </div>
-
 </template>
