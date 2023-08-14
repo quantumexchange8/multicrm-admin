@@ -51,6 +51,8 @@ class FinanceController extends Controller
 
     public function balance_adjustment(FundRequest $request)
     {
+        $trade = null;
+
         $conn = (new CTraderService)->connectionStatus();
         if ($conn['code'] != 0) {
             if ($conn['code'] == 10) {
@@ -72,14 +74,19 @@ class FinanceController extends Controller
             }
             return redirect()->back()->withErrors('Something Went Wrong!');
         }
-        FundAdjustment::create([
-            'user_id' => $request->user_id,
-            'to' => $request->account_no,
-            'type' => $request->type,
-            'amount' => $request->amount,
-            'comment' => $request->comment,
-            'ticket' => $trade->getTicket()
-        ]);
+
+        if ($trade) {
+            FundAdjustment::create([
+                'user_id' => $request->user_id,
+                'to' => $request->account_no,
+                'type' => $request->type,
+                'amount' => $request->amount,
+                'comment' => $request->comment,
+                'ticket' => $trade->getTicket()
+            ]);
+        } else {
+            return redirect()->back()->withErrors('Something Went Wrong..');
+        }
 
         return redirect()->back()->with('toast', 'Successfully Updated Balance');
     }
