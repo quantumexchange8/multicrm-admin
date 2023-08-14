@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\CreditRequest;
 use App\Http\Requests\FundRequest;
 use App\Models\FundAdjustment;
 use App\Models\TradingAccount;
@@ -43,7 +44,7 @@ class FinanceController extends Controller
                         $userQuery->where('first_name', 'like', '%' . $search . '%')
                             ->orWhere('email', 'like', '%' . $search . '%');
                     })
-                        ->orWhere('meta_login', 'like', '%' . $search . '%'); // Search in meta_login column
+                        ->orWhere('meta_login', 'like', '%' . $search . '%');
                 });
             })
             ->orderBy('user_id')
@@ -85,6 +86,48 @@ class FinanceController extends Controller
         ]);
 
         return redirect()->back()->with('toast', 'Successfully Updated Balance');
+    }
+
+    public function credit_adjustment(CreditRequest $request)
+    {
+        $conn = (new CTraderService)->connectionStatus();
+        if ($conn['code'] != 0) {
+            if ($conn['code'] == 10) {
+                return redirect()->back()->withErrors('No Connection with CTrader');
+            }
+            return redirect()->back()->withErrors('Something Went Wrong');
+        }
+        $changeType = ($request->type === 'credit_in') ? ChangeTraderBalanceType::DEPOSIT_NONWITHDRAWABLE_BONUS : ChangeTraderBalanceType::WITHDRAW_NONWITHDRAWABLE_BONUS;
+
+        try {
+            $trade = (new CTraderService)->createTrade($request->account_no, $request->amount, $request->internal_description, $changeType);
+        } catch (\Throwable $e) {
+            if ($e->getMessage() == "Not found") {
+                TradingUser::firstWhere('meta_login', $request->account_no)->update(['acc_status' => 'Inactive']);
+            } else {
+                Log::error($e->getMessage());
+            }
+            return redirect()->back()->withErrors('Something Went Wrong!');
+        }
+
+        $comment = ($request->type === 'credit_in') ? 'Credit In' : 'Credit Out';
+
+        FundAdjustment::create([
+            'user_id' => $request->user_id,
+            'to' => $request->account_no,
+            'type' => $request->type,
+            'amount' => $request->amount,
+            'comment' => $comment,
+            'internal_description' => $request->internal_description,
+            'client_description' => $request->client_description,
+            'allotted_time' => $request->allotted_time,
+            'start_date' => Carbon::parse($request->start_date),
+            'expiry_date' => Carbon::parse($request->end_date),
+            'handle_by' => Auth::id(),
+            'ticket' => $trade->getTicket()
+        ]);
+
+        return redirect()->back()->with('toast', 'Successfully Updated Credit');
     }
 
     public function getBalanceHistory(Request $request, $meta_login)

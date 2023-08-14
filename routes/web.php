@@ -75,6 +75,7 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::get('/credit_amount_adjustment', [FinanceController::class, 'credit_amount_adjustment'])->name('finance.credit_amount_adjustment');
         Route::get('/getTradingAccounts', [FinanceController::class, 'getTradingAccounts'])->name('finance.getTradingAccounts');
         Route::post('/balance_adjustment', [FinanceController::class, 'balance_adjustment'])->name('finance.balance_adjustment');
+        Route::post('/credit_adjustment', [FinanceController::class, 'credit_adjustment'])->name('finance.credit_adjustment');
         Route::get('/getBalanceHistory/{id}', [FinanceController::class, 'getBalanceHistory'])->name('finance.getBalanceHistory');
 
     });

@@ -94,7 +94,7 @@ const paginationActiveClass = [
         <form @submit.prevent="submitSearch">
             <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="space-y-2 col-span-2">
-                    <Label>Search By Name / Email</Label>
+                    <Label>Search By Name / Email / Account No</Label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">

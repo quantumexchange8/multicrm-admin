@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FundRequest extends FormRequest
+class CreditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,12 @@ class FundRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount' => ['required', 'min:30'],
-            'comment' => ['required'],
+            'amount' => ['required', 'numeric', 'min:30'],
             'type' => ['required'],
+            'internal_description' => ['required'],
+            'client_description' => ['required'],
+            'start_date' => ['required_if:allotted_time,1'],
+            'end_date' => ['required_if:allotted_time,1'],
         ];
     }
 
@@ -32,8 +35,11 @@ class FundRequest extends FormRequest
     {
         return [
             'amount' => 'Amount',
-            'comment' => 'Description',
             'type' => 'Type',
+            'internal_description' => 'Internal Description',
+            'client_description' => 'Description (Visible to Client)',
+            'start_date' => 'Start Date',
+            'end_date' => 'End Date',
         ];
     }
 }
