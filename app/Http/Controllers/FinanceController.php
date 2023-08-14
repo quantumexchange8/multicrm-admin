@@ -38,9 +38,12 @@ class FinanceController extends Controller
             ->with(['ofUser.upline', 'accountType', 'tradingUser'])
             ->when($request->filled('search'), function ($query) use ($request) {
                 $search = $request->input('search');
-                $query->whereHas('ofUser', function ($user_query) use ($search) {
-                    $user_query->where('first_name', 'like', '%' . $search . '%')
-                        ->orWhere('email', 'like', '%' . $search . '%');
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery->whereHas('ofUser', function ($userQuery) use ($search) {
+                        $userQuery->where('first_name', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%');
+                    })
+                        ->orWhere('meta_login', 'like', '%' . $search . '%'); // Search in meta_login column
                 });
             })
             ->orderBy('user_id')
