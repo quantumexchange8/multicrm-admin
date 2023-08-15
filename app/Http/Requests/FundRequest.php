@@ -22,7 +22,7 @@ class FundRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount' => ['required', 'min:30'],
+            'amount' => ['required', 'numeric'],
             'comment' => ['required'],
             'type' => ['required'],
         ];

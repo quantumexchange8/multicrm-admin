@@ -22,7 +22,7 @@ class CreditRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'amount' => ['required', 'numeric', 'min:30'],
+            'amount' => ['required', 'numeric'],
             'type' => ['required'],
             'internal_description' => ['required'],
             'client_description' => ['required'],
