@@ -60,8 +60,13 @@ export function transactionFormat() {
     }
 
     function formatDate(date) {
-        const formattedDate = new Date(date).toISOString().slice(0, 10);
-        return formattedDate.replace(/-/g, '/');
+        const formattedDate = new Date(date).toLocaleDateString('en-CA', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            timeZone: 'Asia/Kuala_Lumpur'
+        });
+        return formattedDate.split('-').join('/');
     }
 
     function getStatusClass(status) {
