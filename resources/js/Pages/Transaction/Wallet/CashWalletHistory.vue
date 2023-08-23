@@ -79,11 +79,11 @@ const getAmountPrefix = (history) => {
 };
 
 const paginationClass = [
-    'bg-transparent border-0 text-gray-500'
+    'bg-transparent border-0 text-gray-500 text-xs'
 ];
 
 const paginationActiveClass = [
-    'dark:bg-transparent border-0 text-[#FF9E23] dark:text-[#FF9E23]'
+    'dark:bg-transparent border-0 text-[#FF9E23] dark:text-[#FF9E23] text-xs'
 ];
 </script>
 
@@ -167,6 +167,8 @@ const paginationActiveClass = [
             :item-classes=paginationClass
             :active-classes=paginationActiveClass
             :data="userTransactionHistory"
+            :limit=1
+            :keepLength="true"
             @pagination-change-page="getResults"
         />
     </div>

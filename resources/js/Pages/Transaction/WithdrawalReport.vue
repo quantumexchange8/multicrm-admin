@@ -8,14 +8,10 @@ import InputIconWrapper from "@/Components/InputIconWrapper.vue";
 import Input from "@/Components/Input.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import Button from "@/Components/Button.vue";
-import {useForm, usePage} from "@inertiajs/vue3";
+import {usePage} from "@inertiajs/vue3";
 import {faRotateRight, faSearch, faX} from "@fortawesome/free-solid-svg-icons";
 import {library} from "@fortawesome/fontawesome-svg-core";
 library.add(faSearch,faX,faRotateRight);
-import { router } from '@inertiajs/vue3'
-import toast from "@/Composables/toast.js";
-import WithdrawalPending from "@/Pages/Transaction/Withdrawal/WithdrawalPending.vue";
-import WithdrawalHistory from "@/Pages/Transaction/Withdrawal/WithdrawalHistory.vue";
 import Action from "@/Pages/Transaction/Withdrawal/Action.vue";
 import {transactionFormat} from "@/Composables/index.js";
 import {TailwindPagination} from "laravel-vue-pagination";
@@ -116,11 +112,11 @@ const handlePageChange = (newPage) => {
 };
 
 const paginationClass = [
-    'bg-transparent border-0 text-gray-500'
+    'bg-transparent border-0 text-gray-500 text-xs'
 ];
 
 const paginationActiveClass = [
-    'dark:bg-transparent border-0 text-[#FF9E23] dark:text-[#FF9E23]'
+    'dark:bg-transparent border-0 text-[#FF9E23] dark:text-[#FF9E23] text-xs'
 ];
 </script>
 
@@ -231,7 +227,7 @@ const paginationActiveClass = [
             </div>
             <div class="relative overflow-x-auto sm:rounded-lg">
                 <!-- Withdrawal Pending -->
-                <div v-if="isLoading && activeComponent === 'pending'" class="w-full flex justify-center">
+                <div v-if="isLoading && activeComponent === 'pending'" class="w-full flex justify-center my-12">
                     <Loading />
                 </div>
                 <table v-else class="w-full text-sm text-left text-gray-500 dark:text-gray-400" v-if="activeComponent === 'pending'">
@@ -298,12 +294,14 @@ const paginationActiveClass = [
                         :item-classes=paginationClass
                         :active-classes=paginationActiveClass
                         :data="pendingTransaction"
+                        :limit=1
+                        :keepLength="true"
                         @pagination-change-page="handlePageChange"
                     />
                 </div>
 
                 <!-- Withdrawal History -->
-                <div v-if="isLoading && activeComponent === 'history'" class="w-full flex justify-center">
+                <div v-if="isLoading && activeComponent === 'history'" class="w-full flex justify-center my-12">
                     <Loading />
                 </div>
                 <table v-else class="w-full text-sm text-left text-gray-500 dark:text-gray-400"  v-if="activeComponent === 'history'">
@@ -372,11 +370,13 @@ const paginationActiveClass = [
                     </tr>
                     </tbody>
                 </table>
-                <div class="flex justify-end mt-4" v-if="activeComponent === 'history'">
+                <div class="flex justify-end mt-4" v-if="activeComponent === 'history' && !isLoading">
                     <TailwindPagination
                         :item-classes=paginationClass
                         :active-classes=paginationActiveClass
                         :data="transactionHistory"
+                        :limit=1
+                        :keepLength="true"
                         @pagination-change-page="handlePageChange"
                     />
                 </div>

@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Payment extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
     protected $guarded = [];
 
     protected $casts = [
@@ -16,6 +19,20 @@ class Payment extends Model
         'real_amount' => 'decimal:2',
         'delete' => 'boolean',
     ];
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        $payment = $this->fresh();
+
+        return LogOptions::defaults()
+            ->useLogName('payment')
+            ->logOnly(['from', 'to', 'user_id', 'ticket', 'payment_id', 'category', 'type', 'amount', 'gateway', 'status', 'channel', 'currency', 'description', 'account_no', 'account_type', 'approval_date', 'comment', 'real_amount', 'payment_charges', 'handleBy'])
+            ->setDescriptionForEvent(function (string $eventName) use ($payment) {
+                return Auth::user()->first_name . " has {$eventName} payment_id of {$payment->payment_id}.";
+            })
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
+    }
 
     public function ofUser()
     {

@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class IbAccountType extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory, SoftDeletes, LogsActivity;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
@@ -24,6 +27,20 @@ class IbAccountType extends Model
             ->pluck('id')->toArray();
 
         return $ibUsers;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        $ib_account_type = $this->fresh();
+
+        return LogOptions::defaults()
+            ->useLogName('ib_account_type')
+            ->logOnly(['user_id', 'upline_id', 'hierarchyList', 'account_type', 'rebate_wallet', 'trade_lot'])
+            ->setDescriptionForEvent(function (string $eventName) use ($ib_account_type) {
+                return Auth::user()->first_name . " has {$eventName} ib_account_type_id of {$ib_account_type->id}.";
+            })
+            ->logOnlyDirty()
+            ->dontSubmitEmptyLogs();
     }
 
     public function ofUser()
