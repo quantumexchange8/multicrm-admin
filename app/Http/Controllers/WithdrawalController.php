@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\WithdrawalApprovalRequest;
 use App\Models\Payment;
+use App\Models\PaymentAccount;
 use App\Models\TradingUser;
 use App\Models\User;
 use App\Services\ChangeTraderBalanceType;
@@ -80,6 +81,7 @@ class WithdrawalController extends Controller
             }
 
             $payment = Payment::query()->where('id', $request->id)->first();
+            $paymentAccount = PaymentAccount::query()->where('account_no', $payment->account_no)->first();
 
             if ($payment->status == "Submitted") {
                 $status = $request->status == "approve" ? "Successful" : "Rejected";
@@ -174,8 +176,31 @@ class WithdrawalController extends Controller
                             $payment->ticket = $trade_1->getTicket() . ', ' . $trade_2->getTicket();
                             $payment->save();
                         }
-                    } else return response()->json(['success' => false, 'message' => "Invalid payment category"]);;
-                    return redirect()->back()->with('toast', 'Successfully Updated');
+                    } else return response()->json(['success' => false, 'message' => "Invalid payment category"]);
+
+                    $url = 'https://payout.doitwallet.asia/api/wallet/Withdraw';
+                    $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
+                    $userRef = $payment->payment_id;
+                    $apiKey = '46B157AB13184B229A29E99A04508032';
+                    $token = md5($agentCode . $userRef . $apiKey);
+                    // Data for the POST request
+                    $postData = [
+                        'AgentCode' => $agentCode,
+                        'UserRef' => $userRef,
+                        'Token' => $token,
+                        'TransactionId' => $payment->payment_id,
+                        'FullName' => $paymentAccount->payment_account_name,
+                        'AccountNo' => $payment->account_no,
+                        'BankCode' => $payment->account_type,
+                        'WithdrawType' => 2,
+                        'Amount' => $payment->amount,
+                        'Remark' => $payment->description,
+                        'Currency' => 'USD',
+                    ];
+
+                    \Http::post($url, $postData);
+
+                    return redirect()->back()->with('toast', 'Successfully Approved');
                 } else {
                     if ($payment->category == "payment") {
                         if ($payment->type == "Withdrawal") {
@@ -185,7 +210,7 @@ class WithdrawalController extends Controller
                         }
                     }
                 }
-                return redirect()->back()->with('toast', 'Successfully Updated');
+                return redirect()->back()->with('toast', 'Successfully Rejected');
             }
             return response()->json(['success' => false, 'message' => "Invalid status"], 422);
     }
