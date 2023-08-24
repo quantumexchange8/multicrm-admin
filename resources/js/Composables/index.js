@@ -74,6 +74,8 @@ export function transactionFormat() {
             return 'success';
         } else if (status === 'Submitted') {
             return 'warning';
+        } else if (status === 'Processing') {
+            return 'primary';
         } else if (status === 'Rejected') {
             return 'danger';
         } else {

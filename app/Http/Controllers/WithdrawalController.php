@@ -83,30 +83,38 @@ class WithdrawalController extends Controller
         $payment->save();
 
         if ($payment->status == "Processing") {
-            $url = 'https://payout.doitwallet.asia/api/wallet/Withdraw';
-            $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
-            $userRef = $payment->payment_id;
-            $apiKey = '46B157AB13184B229A29E99A04508032';
-            $token = md5($agentCode . $userRef . $apiKey);
-            // Data for the POST request
-            $postData = [
-                'AgentCode' => $agentCode,
-                'UserRef' => $userRef,
-                'Token' => $token,
-                'TransactionId' => $payment->payment_id,
-                'FullName' => $paymentAccount->payment_account_name,
-                'AccountNo' => $payment->account_no,
-                'BankCode' => $payment->account_type,
-                'WithdrawType' => 2,
-                'Amount' => $payment->amount,
-                'Remark' => $payment->description,
-                'CallbackURL' => url('/payout/callback'),
-                'Currency' => 'VND',
-            ];
+            if ($payment->channel == 'bank') {
+                $url = 'https://payout.doitwallet.asia/api/wallet/Withdraw';
+                $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
+                $userRef = $payment->payment_id;
+                $apiKey = '46B157AB13184B229A29E99A04508032';
+                $token = md5($agentCode . $userRef . $apiKey);
+                // Data for the POST request
+                $postData = [
+                    'AgentCode' => $agentCode,
+                    'UserRef' => $userRef,
+                    'Token' => $token,
+                    'TransactionId' => $payment->payment_id,
+                    'FullName' => $paymentAccount->payment_account_name,
+                    'AccountNo' => $payment->account_no,
+                    'BankCode' => $payment->account_type,
+                    'WithdrawType' => 2,
+                    'Amount' => $payment->amount,
+                    'Remark' => $payment->description,
+                    'CallbackURL' => url('/payout/callback'),
+                    'Currency' => 'VND',
+                ];
 
-            \Http::post($url, $postData);
+                \Http::post($url, $postData);
 
-            return redirect()->back()->with('toast', 'Successfully Update Withdrawal Status');
+                return redirect()->back()->with('toast', 'Successfully Updated Withdrawal Status');
+            } elseif ($payment->channel == 'crypto') {
+                $payment->update([
+                    'status' => 'Successful'
+                ]);
+
+                return redirect()->back()->with('toast', 'Successfully Approved Withdrawal Request');
+            }
         } else {
             $user = User::find($payment->user_id);
             $user->cash_wallet += $payment->amount;
@@ -136,7 +144,7 @@ class WithdrawalController extends Controller
 
         if ($result["Token"] == $token) {
             $payment = Payment::query()->where('payment_id', Str::upper($result['TransactionId']))->where('account_no', $result['AccountNo'])->first();
-            if ($payment->status == "Submitted" || $payment->status == "Processing") {
+            if ($payment->status == "Processing") {
                 if ($result['StatusId'] == 2) {
                     $payment->update([
                         'status' => 'Successful',

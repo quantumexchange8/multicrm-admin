@@ -24,7 +24,7 @@ function refreshTable() {
 }
 
 watchEffect(() => {
-    if (usePage().props.toast === 'Successfully Updated') {
+    if (usePage().props.toast !== null) {
         refreshTable();
     }
 });
