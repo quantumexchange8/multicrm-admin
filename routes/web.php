@@ -36,6 +36,7 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::post('payout/callback', [WithdrawalController::class, 'updateWithdrawalStatus']);
     /**
      * ==============================
      *        Member Listing
@@ -78,6 +79,11 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::post('/credit_adjustment', [FinanceController::class, 'credit_adjustment'])->name('finance.credit_adjustment');
         Route::get('/getBalanceHistory/{id}', [FinanceController::class, 'getBalanceHistory'])->name('finance.getBalanceHistory');
         Route::get('/getCreditHistory/{id}', [FinanceController::class, 'getCreditHistory'])->name('finance.getCreditHistory');
+
+        Route::get('/payment_account_listing', [FinanceController::class, 'payment_account_listing'])->name('finance.payment_account_listing');
+        Route::get('/getPaymentAccount', [FinanceController::class, 'getPaymentAccount'])->name('finance.getPaymentAccount');
+        Route::patch('/update_payment_account', [FinanceController::class, 'update_payment_account'])->name('finance.update_payment_account');
+        Route::delete('/delete_payment_account', [FinanceController::class, 'delete_payment_account'])->name('finance.delete_payment_account');
 
     });
 

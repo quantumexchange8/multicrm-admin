@@ -85,6 +85,11 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins)
             </template>
 
             <SidebarCollapsibleItem
+                :href="route('finance.payment_account_listing')"
+                title="Payment Account Listing"
+                :active="route().current('finance.payment_account_listing')"
+            />
+            <SidebarCollapsibleItem
                 :href="route('finance.credit_amount_adjustment')"
                 title="Credit Amount Adjustment"
                 :active="route().current('finance.credit_amount_adjustment')"

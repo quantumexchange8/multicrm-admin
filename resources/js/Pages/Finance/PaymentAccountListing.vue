@@ -1,14 +1,12 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-import Badge from "@/Components/Badge.vue";
 import {transactionFormat} from "@/Composables/index.js";
 import {ref, watchEffect} from "vue";
 import {TailwindPagination} from "laravel-vue-pagination";
 import {faRotateRight, faSearch, faX} from "@fortawesome/free-solid-svg-icons";
 import {library} from "@fortawesome/fontawesome-svg-core";
-import Action from "@/Pages/Finance/CreditAdjustment/Action.vue";
-import VueTailwindDatepicker from "vue-tailwind-datepicker";
+import Action from "@/Pages/Finance/PaymentAccount/Action.vue";
 import InputSelect from "@/Components/InputSelect.vue";
 import Input from "@/Components/Input.vue";
 import InputIconWrapper from "@/Components/InputIconWrapper.vue";
@@ -18,21 +16,31 @@ import Loading from "@/Components/Loading.vue";
 import {usePage} from "@inertiajs/vue3";
 library.add(faSearch,faX,faRotateRight);
 
+const props = defineProps({
+    countries: Object
+})
+
 const { formatDate, formatAmount } = transactionFormat();
-const tradingAccounts = ref({data: []});
+const paymentAccounts = ref({data: []});
+const type = ref('bank');
+const originalType = ref('bank');
 const search = ref('');
 const isLoading = ref(false);
-const getResults = async (page = 1, search = '') => {
+const getResults = async (page = 1, type = '', search = '') => {
     isLoading.value = true;
     try {
-        let url = `/finance/getTradingAccounts?page=${page}`;
+        let url = `/finance/getPaymentAccount?page=${page}`;
+
+        if (type) {
+            url += `&type=${type}`;
+        }
 
         if (search) {
             url += `&search=${search}`;
         }
 
         const response = await axios.get(url);
-        tradingAccounts.value = response.data;
+        paymentAccounts.value = response.data;
     } catch (error) {
         console.error(error);
     } finally {
@@ -40,15 +48,15 @@ const getResults = async (page = 1, search = '') => {
     }
 }
 
-getResults();
+getResults(1, 'bank');
 
 function refreshTable() {
-    getResults();
+    getResults(1, type.value);
 }
 
 const submitSearch = async () => {
-
-    await getResults(1, search.value);
+    await getResults(1, type.value, search.value);
+    originalType.value = type.value;
 };
 
 function clearField() {
@@ -62,9 +70,11 @@ function handleKeyDown(event) {
 }
 
 const reset = () => {
+    type.value = 'bank'
     search.value = '';
+    originalType.value = type.value;
 
-    getResults();
+    getResults(1, 'bank', search.value);
 }
 
 watchEffect(() => {
@@ -83,18 +93,28 @@ const paginationActiveClass = [
 </script>
 
 <template>
-    <AuthenticatedLayout title="Credit Amount Adjustment">
+    <AuthenticatedLayout title="Payment Account Listing">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Credit Amount Adjustment
+                    Payment Account Listing
                 </h2>
             </div>
         </template>
 
         <form @submit.prevent="submitSearch">
             <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="space-y-2 col-span-2">
+                <div class="space-y-2">
+                    <Label>Payment Account Type</Label>
+                    <InputSelect
+                        class="block w-full text-sm"
+                        v-model="type"
+                    >
+                        <option value="bank">Bank Account</option>
+                        <option value="crypto">Cryptocurrency Wallet</option>
+                    </InputSelect>
+                </div>
+                <div class="space-y-2">
                     <Label>Search By Name / Email / Account No</Label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -116,7 +136,7 @@ const paginationActiveClass = [
                             icon="fa-solid fa-x"
                             class="flex-shrink-0 w-3 h-3 cursor-pointer"
                             aria-hidden="true"
-                            @click="clearField"
+                            @click.prevent="clearField"
                         /></button>
                     </div>
                 </div>
@@ -141,7 +161,11 @@ const paginationActiveClass = [
         </form>
 
         <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1 mt-6">
-            <div class="flex justify-end">
+            <div class="flex justify-between mb-4">
+                <div class="flex gap-6">
+                    <span class="flex items-center text-sm font-medium text-gray-900 dark:text-white"><span class="flex w-5 h-5 bg-green-500 dark:bg-[#013B20] rounded-full mr-1.5 flex-shrink-0"></span>Active</span>
+                    <span class="flex items-center text-sm font-medium text-gray-900 dark:text-white"><span class="flex w-5 h-5 bg-red-500 dark:bg-[#4C1310] rounded-full mr-1.5 flex-shrink-0"></span>Inactive</span>
+                </div>
                 <font-awesome-icon
                     icon="fa-solid fa-rotate-right"
                     class="flex-shrink-0 w-5 h-5 cursor-pointer dark:text-dark-eval-4"
@@ -150,7 +174,7 @@ const paginationActiveClass = [
                 />
             </div>
             <div v-if="isLoading" class="w-full flex justify-center">
-               <Loading />
+                <Loading />
             </div>
             <div v-else class="relative overflow-x-auto sm:rounded-lg">
                 <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
@@ -162,17 +186,23 @@ const paginationActiveClass = [
                         <th scope="col" class="px-4 py-3">
                             Email
                         </th>
-                        <th scope="col" class="px-4 py-3">
-                            Upline Email
+                        <th v-if="originalType === 'bank'" scope="col" class="px-4 py-3">
+                            Bank Name
+                        </th>
+                        <th v-else-if="originalType === 'crypto'" scope="col" class="px-4 py-3">
+                            USDT Protocol Type
+                        </th>
+                        <th v-if="originalType === 'bank'" scope="col" class="px-4 py-3">
+                            Bank Holder Name
+                        </th>
+                        <th v-if="originalType === 'bank'" scope="col" class="px-4 py-3">
+                            Bank Account No
+                        </th>
+                        <th v-else-if="originalType === 'crypto'" scope="col" class="px-4 py-3">
+                            Token Address
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Account Number
-                        </th>
-                        <th scope="col" class="px-4 py-3">
-                            Balance (USD)
-                        </th>
-                        <th scope="col" class="px-4 py-3">
-                            Credit (USD)
+                            Status
                         </th>
                         <th scope="col" class="px-4 py-3">
                             Action
@@ -180,29 +210,31 @@ const paginationActiveClass = [
                     </tr>
                     </thead>
                     <tbody>
-                    <tr v-for="account in tradingAccounts.data" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
+                    <tr v-for="account in paymentAccounts.data" class="bg-white even:dark:bg-transparent odd:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
                         <th scope="row" class="px-6 py-4 font-thin rounded-l-full">
-                            {{ account.of_user.first_name }}
+                            {{ account.user.first_name }}
                         </th>
                         <th class="px-6 py-4">
-                            {{ account.of_user.email }}
+                            {{ account.user.email }}
                         </th>
                         <th>
-                            {{ account.of_user.upline ? account.of_user.upline.email : '' }}
-                            <span v-if="!account.of_user.upline" class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-purple-500 dark:text-purple-100 uppercase">No Upline</span>
+                            {{ account.payment_platform_name }}
+                        </th>
+                        <th v-if="originalType === 'bank'">
+                            {{ account.payment_account_name }}
                         </th>
                         <th>
-                            {{ account.meta_login }}
+                            {{ account.account_no }}
                         </th>
                         <th>
-                            {{ formatAmount(account.balance) }}
-                        </th>
-                        <th>
-                            {{ formatAmount(account.credit) }}
+                            <span v-if="account.status === 1" class="flex w-5 h-5 bg-green-500 dark:bg-[#013B20] mx-auto rounded-full"></span>
+                            <span v-else-if="account.status === 0" class="flex w-5 h-5 bg-red-500 dark:bg-[#4C1310] mx-auto rounded-full"></span>
                         </th>
                         <th class="px-6 py-2 font-thin rounded-r-full">
                             <Action
                                 :account="account"
+                                :countries="countries"
+                                :bankProof="account.media"
                             />
                         </th>
                     </tr>
@@ -212,7 +244,7 @@ const paginationActiveClass = [
                     <TailwindPagination
                         :item-classes=paginationClass
                         :active-classes=paginationActiveClass
-                        :data="tradingAccounts"
+                        :data="paymentAccounts"
                         :limit=1
                         :keepLength="true"
                         @pagination-change-page="getResults"

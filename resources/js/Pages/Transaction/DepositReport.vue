@@ -160,7 +160,7 @@ const paginationActiveClass = [
                     />
                 </div>
                 <div class="space-y-2">
-                    <Label>Search By Name / Email</Label>
+                    <Label>Search By Name / Email / Transaction ID</Label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -202,10 +202,10 @@ const paginationActiveClass = [
                         </Button>
                     </div>
                 </div>
-                <div class="flex col-span-2 justify-end">
+                <div class="flex md:col-span-2 justify-end">
                     <Button
                         variant="primary"
-                        class="justify-center w-1/3"
+                        class="justify-center w-full md:w-1/3"
                         @click.prevent="exportDeposit"
                     >
                         Export

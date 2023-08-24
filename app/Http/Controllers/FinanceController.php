@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\CreditRequest;
 use App\Http\Requests\FundRequest;
+use App\Http\Requests\PaymentAccountRequest;
 use App\Models\FundAdjustment;
+use App\Models\PaymentAccount;
+use App\Models\SettingCountry;
 use App\Models\TradingAccount;
 use App\Models\TradingUser;
 use App\Services\ChangeTraderBalanceType;
@@ -179,5 +182,70 @@ class FinanceController extends Controller
             ->paginate(5);
 
         return response()->json($credit_histories);
+    }
+
+    public function payment_account_listing()
+    {
+        return Inertia::render('Finance/PaymentAccountListing', [
+            'countries' => SettingCountry::all('id', 'name_en'),
+        ]);
+    }
+
+    public function getPaymentAccount(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $paymentAccounts = PaymentAccount::query()
+            ->with(['user', 'media'])
+            ->when($request->filled('type'), function ($query) use ($request) {
+                $type = $request->input('type');
+                $query->where(function ($innerQuery) use ($type) {
+                    $innerQuery->where('payment_platform', $type);
+                });
+            })
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->input('search');
+                $query->where(function ($subQuery) use ($search) {
+                    $subQuery->whereHas('user', function ($userQuery) use ($search) {
+                        $userQuery->where('first_name', 'like', '%' . $search . '%')
+                            ->orWhere('email', 'like', '%' . $search . '%');
+                    })
+                        ->orWhere('account_no', 'like', '%' . $search . '%');
+                });
+            })
+            ->latest()
+            ->paginate(10);
+
+        return response()->json($paymentAccounts);
+    }
+
+    public function update_payment_account(PaymentAccountRequest $request)
+    {
+        $paymentAccount = PaymentAccount::find($request->payment_account_id);
+
+        $paymentAccount->update([
+            'payment_platform_name' => $request->payment_platform_name,
+            'bank_branch_address' => $request->bank_branch_address,
+            'payment_account_name' => $request->payment_account_name,
+            'account_no' => $request->account_no,
+            'bank_swift_code' => $request->bank_swift_code,
+            'bank_code_type' => $request->bank_code_type,
+            'bank_code' => $request->bank_code,
+            'country' => $request->country,
+            'currency' => $request->currency,
+        ]);
+
+        $successMessage = $paymentAccount->payment_platform === 'bank'
+            ? 'The bank account details has been edited successfully!'
+            : 'The cryptocurrency wallet details has been edited successfully!';
+
+        return redirect()->back()->with('toast', $successMessage);
+    }
+
+    public function delete_payment_account(Request $request)
+    {
+        $paymentAccount = PaymentAccount::find($request->id);
+
+        $paymentAccount->delete();
+
+        return redirect()->back()->with('toast', 'The payment account has been deleted successfully');
     }
 }
