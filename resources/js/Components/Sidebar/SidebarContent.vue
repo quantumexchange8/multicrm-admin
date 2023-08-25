@@ -7,9 +7,16 @@ import SidebarCollapsibleItem from '@/Components/Sidebar/SidebarCollapsibleItem.
 import { TemplateIcon } from '@heroicons/vue/outline'
 import { library } from '@fortawesome/fontawesome-svg-core'
 /* import specific icons */
-import {faCoins, faGaugeHigh, faMoneyBillTransfer, faUser, faUserTie} from '@fortawesome/free-solid-svg-icons'
+import {
+    faCoins,
+    faGaugeHigh, faGear,
+    faLaptopFile,
+    faMoneyBillTransfer,
+    faUser,
+    faUserTie
+} from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins)
+library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLaptopFile, faGear)
 
 </script>
 
@@ -27,7 +34,7 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins)
             <template #icon>
                 <font-awesome-icon
                     icon="fa-solid fa-gauge-high"
-                    class="flex-shrink-0 w-5 h-5"
+                    class="flex-shrink-0 w-6 h-6"
                     aria-hidden="true"
                 />
             </template>
@@ -41,7 +48,7 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins)
             <template #icon>
                 <font-awesome-icon
                     icon="fa-solid fa-user"
-                    class="flex-shrink-0 w-5 h-5"
+                    class="flex-shrink-0 w-6 h-6"
                     aria-hidden="true"
                 />
             </template>
@@ -79,7 +86,7 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins)
             <template #icon>
                 <font-awesome-icon
                     icon="fa-solid fa-coins"
-                    class="flex-shrink-0 w-5 h-5"
+                    class="flex-shrink-0 w-6 h-6"
                     aria-hidden="true"
                 />
             </template>
@@ -104,7 +111,7 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins)
             <template #icon>
                 <font-awesome-icon
                     icon="fa-solid fa-money-bill-transfer"
-                    class="flex-shrink-0 w-5 h-5"
+                    class="flex-shrink-0 w-6 h-6"
                     aria-hidden="true"
                 />
             </template>
@@ -128,6 +135,46 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins)
                 :href="route('transaction.wallet_report')"
                 title="All Wallet Report"
                 :active="route().current('transaction.wallet_report')"
+            />
+        </SidebarCollapsible>
+
+        <!-- platform configuration -->
+        <SidebarCollapsible
+            title="Platform Configuration"
+            :active="route().current('platform_configuration.*')"
+        >
+            <template #icon>
+                <font-awesome-icon
+                    icon="fa-solid fa-laptop-file"
+                    class="flex-shrink-0 w-6 h-6"
+                    aria-hidden="true"
+                />
+            </template>
+
+            <SidebarCollapsibleItem
+                :href="route('platform_configuration.ctrader')"
+                title="CTrader"
+                :active="route().current('platform_configuration.ctrader')"
+            />
+        </SidebarCollapsible>
+
+        <!-- setting -->
+        <SidebarCollapsible
+            title="Setting"
+            :active="route().current('setting.*')"
+        >
+            <template #icon>
+                <font-awesome-icon
+                    icon="fa-solid fa-gear"
+                    class="flex-shrink-0 w-6 h-6"
+                    aria-hidden="true"
+                />
+            </template>
+
+            <SidebarCollapsibleItem
+                :href="route('setting.trading_account_setting')"
+                title="Trading Account Setting"
+                :active="route().current('setting.trading_account_setting')"
             />
         </SidebarCollapsible>
 

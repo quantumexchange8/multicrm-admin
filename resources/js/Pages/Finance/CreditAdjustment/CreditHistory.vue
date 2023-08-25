@@ -133,7 +133,7 @@ const paginationActiveClass = [
         </thead>
         <tbody>
         <tr v-if="creditHistories.data.length === 0">
-            <th colspan="4" class="py-4 text-lg text-center">
+            <th colspan="5" class="py-4 text-lg text-center">
                 No History
             </th>
         </tr>

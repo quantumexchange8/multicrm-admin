@@ -4,6 +4,8 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\FinanceController;
 use App\Http\Controllers\InternalTransferController;
+use App\Http\Controllers\PlatformConfigurationController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawalController;
 use Inertia\Inertia;
@@ -105,6 +107,28 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::get('/getCashWalletTransactionHistory/{id}', [WalletController::class, 'getCashWalletTransactionHistory'])->name('transaction.getCashWalletTransactionHistory');
         Route::get('/getRebateWalletTransactionHistory/{id}', [WalletController::class, 'getRebateWalletTransactionHistory'])->name('transaction.getRebateWalletTransactionHistory');
     });
+
+    /**
+     * ==============================
+     *    Platform Configuration
+     * ==============================
+     */
+    Route::prefix('platform_configuration')->group(function () {
+        Route::get('/ctrader', [PlatformConfigurationController::class, 'ctrader'])->name('platform_configuration.ctrader');
+        Route::get('/getCTraderAccounts', [PlatformConfigurationController::class, 'getCTraderAccounts'])->name('platform_configuration.getCTraderAccounts');
+    });
+
+    /**
+     * ==============================
+     *            Setting
+     * ==============================
+     */
+    Route::prefix('setting')->group(function () {
+        Route::get('/trading_account_setting', [SettingController::class, 'trading_account_setting'])->name('setting.trading_account_setting');
+        Route::get('/refreshGroup', [SettingController::class, 'refreshGroup'])->name('setting.refreshGroup');
+        Route::get('/getTradingAccountSettings', [SettingController::class, 'getTradingAccountSettings'])->name('setting.getTradingAccountSettings');
+    });
+
 
 });
 
