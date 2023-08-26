@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "edeb3a409a30fc6a446c702d46b9eb07",
+    "content-hash": "0b44f6d4d23c50dac5842d5659750000",
     "packages": [
         {
             "name": "aleedhillon/meta-five",
@@ -3212,16 +3212,16 @@
         },
         {
             "name": "opcodesio/log-viewer",
-            "version": "v3.0.0",
+            "version": "v2.5.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/opcodesio/log-viewer.git",
-                "reference": "40ed823a38a8b5b175778bc460162ab1d72a8244"
+                "reference": "27b04d7806e74f24385926e21dff23f58dd32399"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/40ed823a38a8b5b175778bc460162ab1d72a8244",
-                "reference": "40ed823a38a8b5b175778bc460162ab1d72a8244",
+                "url": "https://api.github.com/repos/opcodesio/log-viewer/zipball/27b04d7806e74f24385926e21dff23f58dd32399",
+                "reference": "27b04d7806e74f24385926e21dff23f58dd32399",
                 "shasum": ""
             },
             "require": {
@@ -3235,10 +3235,11 @@
                 "guzzlehttp/guzzle": "^7.2",
                 "itsgoingd/clockwork": "^5.1",
                 "laravel/pint": "^1.0",
-                "nunomaduro/collision": "^7.0",
+                "nunomaduro/collision": "^6.0",
                 "orchestra/testbench": "^7.6|^8.0",
-                "pestphp/pest": "^2.0",
-                "pestphp/pest-plugin-laravel": "^2.0",
+                "pestphp/pest": "^1.21",
+                "pestphp/pest-plugin-laravel": "^1.1",
+                "phpunit/phpunit": "^9.5",
                 "spatie/test-time": "^1.3"
             },
             "suggest": {
@@ -3283,7 +3284,7 @@
             ],
             "support": {
                 "issues": "https://github.com/opcodesio/log-viewer/issues",
-                "source": "https://github.com/opcodesio/log-viewer/tree/v3.0.0"
+                "source": "https://github.com/opcodesio/log-viewer/tree/v2.5.5"
             },
             "funding": [
                 {
@@ -3295,7 +3296,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-11T12:00:35+00:00"
+            "time": "2023-08-21T14:14:36+00:00"
         },
         {
             "name": "phpoffice/phpspreadsheet",
