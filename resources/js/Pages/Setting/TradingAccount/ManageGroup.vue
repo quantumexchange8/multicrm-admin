@@ -13,7 +13,6 @@ const isLoading = ref(false);
 watch(
     [search],
     debounce(function ([searchValue]) {
-        console.log(searchValue)
         getResults(1, searchValue);
     }, 300)
 );

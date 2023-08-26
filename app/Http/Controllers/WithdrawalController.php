@@ -84,29 +84,34 @@ class WithdrawalController extends Controller
 
         if ($payment->status == "Processing") {
             if ($payment->channel == 'bank') {
-                $url = 'https://payout.doitwallet.asia/api/wallet/Withdraw';
-                $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
-                $userRef = $payment->payment_id;
-                $apiKey = '46B157AB13184B229A29E99A04508032';
-                $token = md5($agentCode . $userRef . $apiKey);
-                // Data for the POST request
-                $postData = [
-                    'AgentCode' => $agentCode,
-                    'UserRef' => $userRef,
-                    'Token' => $token,
-                    'TransactionId' => $payment->payment_id,
-                    'FullName' => $paymentAccount->payment_account_name,
-                    'AccountNo' => $payment->account_no,
-                    'BankCode' => $payment->account_type,
-                    'WithdrawType' => 2,
-                    'Amount' => $payment->amount,
-                    'Remark' => $payment->description,
-                    'CallbackURL' => url('/payout/callback'),
-                    'Currency' => 'VND',
-                ];
+                if ($paymentAccount->currency == 'MYR') {
+                    $url = 'https://payout.doitwallet.asia/api/wallet/Withdraw';
+                    $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
+                    $userRef = $payment->payment_id;
+                    $apiKey = '46B157AB13184B229A29E99A04508032';
+                    $token = md5($agentCode . $userRef . $apiKey);
+                    // Data for the POST request
+                    $postData = [
+                        'AgentCode' => $agentCode,
+                        'UserRef' => $userRef,
+                        'Token' => $token,
+                        'TransactionId' => $payment->payment_id,
+                        'FullName' => $paymentAccount->payment_account_name,
+                        'AccountNo' => $payment->account_no,
+                        'BankCode' => $payment->account_type,
+                        'WithdrawType' => 2,
+                        'Amount' => $payment->amount,
+                        'Remark' => $payment->description,
+                        'CallbackURL' => url('/payout/callback'),
+                        'Currency' => 'MYR',
+                    ];
 
-                \Http::post($url, $postData);
-
+                    \Http::post($url, $postData);
+                } else {
+                    $payment->update([
+                        'status' => 'Successful'
+                    ]);
+                }
                 return redirect()->back()->with('toast', 'Successfully Updated Withdrawal Status');
             } elseif ($payment->channel == 'crypto') {
                 $payment->update([

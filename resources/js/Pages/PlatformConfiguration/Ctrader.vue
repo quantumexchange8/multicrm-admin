@@ -116,7 +116,7 @@ const formattedTradeOpenDuration = (trade_open_duration) => {
                             {{ account.currency }}
                         </td>
                         <td class="p-4">
-                            {{ account.allow_create_account === '-1' ? 'Yes' : 'No' }}
+                            {{ account.allow_create_account === -1 ? 'No' : 'Yes' }}
                         </td>
                         <td class="p-4">
                             {{ formatType(account.commission_structure) }}
