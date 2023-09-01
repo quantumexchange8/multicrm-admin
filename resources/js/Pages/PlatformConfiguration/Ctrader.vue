@@ -1,10 +1,17 @@
 <script setup>
 import AuthenticatedLayout from "@/Layouts/Authenticated.vue";
-import Button from "@/Components/Button.vue";
-import {ref} from "vue";
+import {ref, watchEffect} from "vue";
 import {TailwindPagination} from "laravel-vue-pagination";
 import Loading from "@/Components/Loading.vue";
 import {transactionFormat} from "@/Composables/index.js";
+import Action from "@/Pages/PlatformConfiguration/Ctrader/Action.vue";
+import AddAccountType from "@/Pages/PlatformConfiguration/Ctrader/AddAccountType.vue";
+import {usePage} from "@inertiajs/vue3";
+
+const props = defineProps({
+    leverages: Object,
+    groups: Object,
+})
 
 const { formatType } = transactionFormat();
 const cTraderAccounts = ref({data: []});
@@ -24,6 +31,12 @@ const getResults = async (page = 1) => {
 }
 
 getResults()
+
+watchEffect(() => {
+    if (usePage().props.toast !== null) {
+        getResults();
+    }
+});
 
 const paginationClass = [
     'bg-transparent border-0 text-gray-500 text-xs'
@@ -53,12 +66,10 @@ const formattedTradeOpenDuration = (trade_open_duration) => {
         </template>
 
         <div class="flex justify-end">
-            <Button
-                variant="primary-opacity"
-                class="px-6"
-            >
-                Create New Account Type
-            </Button>
+            <AddAccountType
+                :leverages="props.leverages"
+                :groups="props.groups"
+            />
         </div>
 
         <div class="p-4 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1 mt-6">
@@ -125,7 +136,11 @@ const formattedTradeOpenDuration = (trade_open_duration) => {
                             {{ formattedTradeOpenDuration(account.trade_open_duration) }}
                         </td>
                         <td class="p-4 rounded-r-full">
-                            Action
+                            <Action
+                                :account="account"
+                                :leverages="leverages"
+                                :groups="groups"
+                            />
                         </td>
                     </tr>
                     </tbody>

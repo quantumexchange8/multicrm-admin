@@ -159,24 +159,24 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
         </SidebarCollapsible>
 
         <!-- setting -->
-        <SidebarCollapsible
-            title="Setting"
-            :active="route().current('setting.*')"
-        >
-            <template #icon>
-                <font-awesome-icon
-                    icon="fa-solid fa-gear"
-                    class="flex-shrink-0 w-6 h-6"
-                    aria-hidden="true"
-                />
-            </template>
+<!--        <SidebarCollapsible-->
+<!--            title="Setting"-->
+<!--            :active="route().current('setting.*')"-->
+<!--        >-->
+<!--            <template #icon>-->
+<!--                <font-awesome-icon-->
+<!--                    icon="fa-solid fa-gear"-->
+<!--                    class="flex-shrink-0 w-6 h-6"-->
+<!--                    aria-hidden="true"-->
+<!--                />-->
+<!--            </template>-->
 
-            <SidebarCollapsibleItem
-                :href="route('setting.trading_account_setting')"
-                title="Trading Account Setting"
-                :active="route().current('setting.trading_account_setting')"
-            />
-        </SidebarCollapsible>
+<!--            <SidebarCollapsibleItem-->
+<!--                :href="route('setting.trading_account_setting')"-->
+<!--                title="Trading Account Setting"-->
+<!--                :active="route().current('setting.trading_account_setting')"-->
+<!--            />-->
+<!--        </SidebarCollapsible>-->
 
 <!--        <SidebarCollapsible-->
 <!--            title="Components"-->

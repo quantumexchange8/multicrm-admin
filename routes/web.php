@@ -116,6 +116,9 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
     Route::prefix('platform_configuration')->group(function () {
         Route::get('/ctrader', [PlatformConfigurationController::class, 'ctrader'])->name('platform_configuration.ctrader');
         Route::get('/getCTraderAccounts', [PlatformConfigurationController::class, 'getCTraderAccounts'])->name('platform_configuration.getCTraderAccounts');
+        Route::post('/addAccountType', [PlatformConfigurationController::class, 'addAccountType'])->name('platform_configuration.addAccountType');
+        Route::patch('/updateAccountType', [PlatformConfigurationController::class, 'updateAccountType'])->name('platform_configuration.updateAccountType');
+        Route::delete('/updateAccountType', [PlatformConfigurationController::class, 'deleteAccountType'])->name('platform_configuration.deleteAccountType');
     });
 
     /**
