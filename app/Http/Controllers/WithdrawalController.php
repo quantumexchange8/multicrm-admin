@@ -81,12 +81,12 @@ class WithdrawalController extends Controller
         $payment->description = $request->comment;
         $payment->approval_date = Carbon::today();
         $payment->save();
-        \Log::info($payment->status);
+        \Log::debug($payment->status);
 
         if ($payment->status == "Processing") {
             if ($payment->channel == 'bank') {
                 if ($paymentAccount->currency == 'MYR') {
-                    \Log::info($paymentAccount->currency);
+                    \Log::debug($paymentAccount->currency);
                     $url = 'https://payout.doitwallet.asia/api/wallet/Withdraw';
                     $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
                     $userRef = $payment->payment_id;
@@ -149,7 +149,7 @@ class WithdrawalController extends Controller
             "Amount" => $data["Amount"],
         ];
 
-        \Log::info($result);
+        \Log::debug($result);
 
         if ($result["Token"] == $token) {
             $payment = Payment::query()->where('payment_id', Str::upper($result['TransactionId']))->where('account_no', $result['AccountNo'])->first();
