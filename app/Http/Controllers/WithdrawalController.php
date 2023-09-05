@@ -81,16 +81,15 @@ class WithdrawalController extends Controller
         $payment->description = $request->comment;
         $payment->approval_date = Carbon::today();
         $payment->save();
-        \Log::debug($payment->status);
 
         if ($payment->status == "Processing") {
             if ($payment->channel == 'bank') {
                 if ($paymentAccount->currency == 'MYR') {
-                    \Log::debug($paymentAccount->currency);
                     $url = 'https://payout.doitwallet.asia/api/wallet/Withdraw';
                     $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
                     $userRef = $payment->payment_id;
                     $apiKey = '46B157AB13184B229A29E99A04508032';
+                    $callbackUrl = url('payout/callback');
                     $token = md5($agentCode . $userRef . $apiKey);
                     // Data for the POST request
                     $postData = [
@@ -104,12 +103,11 @@ class WithdrawalController extends Controller
                         'WithdrawType' => 2,
                         'Amount' => $payment->amount,
                         'Remark' => $payment->description,
-                        'CallbackURL' => url('payout/callback'),
+                        'CallbackURL' => $callbackUrl,
                         'Currency' => 'MYR',
                     ];
 
-                    $response = \Http::post($url, $postData);
-                    \Log::debug($response);
+                    \Http::post($url . "?CallbackURL={$callbackUrl}", $postData);
                 } else {
                     $payment->update([
                         'status' => 'Successful'
