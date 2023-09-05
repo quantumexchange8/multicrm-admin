@@ -109,9 +109,9 @@ class FinanceController extends Controller
             if ($e->getMessage() == "Not found") {
                 TradingUser::firstWhere('meta_login', $request->account_no)->update(['acc_status' => 'Inactive']);
             } else {
-                Log::error($e->getMessage());
+                \Log::error($e->getMessage());
             }
-            return redirect()->back()->withErrors('Something Went Wrong!');
+            return redirect()->back()->withErrors('Something Went Wrong, ' . $e->getMessage());
         }
 
         $comment = ($request->type === 'credit_in') ? 'Credit In' : 'Credit Out';
