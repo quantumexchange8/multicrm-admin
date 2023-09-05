@@ -81,10 +81,12 @@ class WithdrawalController extends Controller
         $payment->description = $request->comment;
         $payment->approval_date = Carbon::today();
         $payment->save();
+        \Log::info($payment->status);
 
         if ($payment->status == "Processing") {
             if ($payment->channel == 'bank') {
                 if ($paymentAccount->currency == 'MYR') {
+                    \Log::info($paymentAccount->currency);
                     $url = 'https://payout.doitwallet.asia/api/wallet/Withdraw';
                     $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
                     $userRef = $payment->payment_id;
@@ -107,7 +109,7 @@ class WithdrawalController extends Controller
                     ];
 
                     $response = \Http::post($url, $postData);
-                    Log::debug($response);
+                    \Log::debug($response);
                 } else {
                     $payment->update([
                         'status' => 'Successful'
@@ -132,7 +134,7 @@ class WithdrawalController extends Controller
     public function updateWithdrawalStatus(Request $request)
     {
         $data = $request->all();
-        Log::info($data);
+        \Log::debug($data);
         $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
         $apiKey = '46B157AB13184B229A29E99A04508032';
         $token = md5($agentCode . $data['TransactionId'] . $apiKey);
@@ -147,7 +149,7 @@ class WithdrawalController extends Controller
             "Amount" => $data["Amount"],
         ];
 
-        Log::info($result);
+        \Log::info($result);
 
         if ($result["Token"] == $token) {
             $payment = Payment::query()->where('payment_id', Str::upper($result['TransactionId']))->where('account_no', $result['AccountNo'])->first();
