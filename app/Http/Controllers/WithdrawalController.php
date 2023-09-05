@@ -102,11 +102,12 @@ class WithdrawalController extends Controller
                         'WithdrawType' => 2,
                         'Amount' => $payment->amount,
                         'Remark' => $payment->description,
-                        'CallbackURL' => url('/payout/callback'),
+                        'CallbackURL' => url('payout/callback'),
                         'Currency' => 'MYR',
                     ];
 
-                    \Http::post($url, $postData);
+                    $response = \Http::post($url, $postData);
+                    Log::debug($response);
                 } else {
                     $payment->update([
                         'status' => 'Successful'
@@ -131,6 +132,7 @@ class WithdrawalController extends Controller
     public function updateWithdrawalStatus(Request $request)
     {
         $data = $request->all();
+        Log::info($data);
         $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
         $apiKey = '46B157AB13184B229A29E99A04508032';
         $token = md5($agentCode . $data['TransactionId'] . $apiKey);
