@@ -89,7 +89,7 @@ class WithdrawalController extends Controller
                     $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
                     $userRef = $payment->payment_id;
                     $apiKey = '46B157AB13184B229A29E99A04508032';
-                    $callbackUrl = url('payout/callback');
+                    $callbackUrl = url('withdrawal/updateWithdrawalStatus');
                     $token = md5($agentCode . $userRef . $apiKey);
                     // Data for the POST request
                     $postData = [
@@ -107,7 +107,9 @@ class WithdrawalController extends Controller
                         'Currency' => 'MYR',
                     ];
 
-                    \Http::post($url . "?CallbackURL={$callbackUrl}", $postData);
+                    $response = \Http::post($url, $postData);
+
+                    \Log::debug($response->body());
                 } else {
                     $payment->update([
                         'status' => 'Successful'

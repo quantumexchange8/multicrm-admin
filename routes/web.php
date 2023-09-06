@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AnnouncementController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\FinanceController;
@@ -30,6 +31,7 @@ use App\Http\Controllers\NetworkController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
+Route::post('withdrawal/updateWithdrawalStatus', [WithdrawalController::class, 'updateWithdrawalStatus']);
 
 Route::middleware('auth')->middleware('role:admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -38,7 +40,16 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::post('payout/callback', [WithdrawalController::class, 'updateWithdrawalStatus']);
+    /**
+     * ==============================
+     *        Announcement
+     * ==============================
+     */
+//    Route::get('/announcement', [AnnouncementController::class, 'index'])->name('announcement.index');
+//    Route::get('/announcement/getAnnouncements', [AnnouncementController::class, 'getAnnouncements'])->name('announcement.getAnnouncements');
+//    Route::post('/create_announcement', [AnnouncementController::class, 'create_announcement'])->name('announcement.create_announcement');
+//    Route::post('/edit_announcement', [AnnouncementController::class, 'edit_announcement'])->name('announcement.edit_announcement');
+
     /**
      * ==============================
      *        Member Listing
@@ -55,6 +66,7 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::post('/rebate_allocation', [MemberController::class, 'updateRebateAllocation'])->name('member.updateRebate');
         Route::post('/rebate_structure', [MemberController::class, 'updateRebateStructure'])->name('member.updateRebateStructure');
         Route::post('/transfer_ib', [IBController::class, 'transfer_ib'])->name('member.transfer_ib');
+//        Route::get('/impersonate/{user}', [MemberController::class, 'impersonate'])->name('member.impersonate');
 
         //Rebate Payout
         Route::get('/rebate_payout', [MemberController::class, 'rebate_payout'])->name('member.rebate_payout');
