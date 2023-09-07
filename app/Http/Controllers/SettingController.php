@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Group;
+use App\Models\SettingHighlight;
 use App\Services\CTraderService;
 use App\Services\MetaTrader5\Group\FetchGroupByPos;
 use App\Services\MetaTrader5\Group\FetchTotalGroup;
@@ -51,5 +52,77 @@ class SettingController extends Controller
         return response()->json([
             'groups' => $groups,
         ]);
+    }
+
+    public function highlights_setting()
+    {
+        $setting_highlight = SettingHighlight::query()->latest()->first();
+        return Inertia::render('Setting/Highlight', [
+            'highlightImage' => $setting_highlight->getMedia('highlights'),
+        ]);
+    }
+
+    public function update_highlights(Request $request)
+    {
+        $imageHighlight = $request->get('imageHighlight');
+
+        if ($imageHighlight) {
+
+            $setting_highlight = SettingHighlight::create([
+                'handle_by' => \Auth::id()
+            ]);
+
+            $images = explode('|', $imageHighlight);
+
+            foreach ($images as $image) {
+                if (filter_var($image, FILTER_VALIDATE_URL)) {
+                    // If it's a valid URL, handle it accordingly
+                    $setting_highlight
+                        ->addMediaFromUrl($image)
+                        ->toMediaCollection('highlights');
+                } else {
+                    // If it's not a valid URL, process it using your existing method
+                    $this->processImage($setting_highlight, $image);
+                }
+            }
+            $old_highlights = SettingHighlight::whereNot('id', $setting_highlight->id)->get();
+            foreach ($old_highlights as $old_highlight) {
+                $old_highlight->clearMediaCollection('highlights');
+            }
+        }
+
+        return redirect()->back()->with('toast', 'Successfully Update Highlights Images');
+    }
+
+    public function upload_highlight_image(Request $request)
+    {
+        if ($request->hasFile('imageHighlight')) {
+            $file = $request->file('imageHighlight');
+
+            // Get the original filename of the uploaded file
+            $originalFilename = $file->getClientOriginalName();
+
+            // Store the file using its original filename
+            return $file->storeAs('uploads/highlights', $originalFilename, 'public');
+        }
+        return '';
+    }
+
+    public function revert_highlight_image(Request $request): void
+    {
+        if ($image = $request->get('imageHighlight')) {
+            $path = storage_path('/app/public/' . $image);
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
+    }
+
+    protected function processImage($setting_highlight, $image): void
+    {
+        $path = storage_path('/app/public/' . $image);
+        if (file_exists($path)) {
+            $setting_highlight->addMedia($path)->toMediaCollection('highlights');
+        }
     }
 }

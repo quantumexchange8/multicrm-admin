@@ -8,6 +8,7 @@ import { TemplateIcon } from '@heroicons/vue/outline'
 import { library } from '@fortawesome/fontawesome-svg-core'
 /* import specific icons */
 import {
+    faBullhorn,
     faCoins,
     faGaugeHigh, faGear,
     faLaptopFile,
@@ -16,7 +17,7 @@ import {
     faUserTie
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
-library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLaptopFile, faGear)
+library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLaptopFile, faGear, faBullhorn)
 
 </script>
 
@@ -34,6 +35,21 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
             <template #icon>
                 <font-awesome-icon
                     icon="fa-solid fa-gauge-high"
+                    class="flex-shrink-0 w-6 h-6"
+                    aria-hidden="true"
+                />
+            </template>
+        </SidebarLink>
+
+        <!-- announcement -->
+        <SidebarLink
+            title="Announcement"
+            :href="route('announcement.index')"
+            :active="route().current('announcement.index')"
+        >
+            <template #icon>
+                <font-awesome-icon
+                    icon="fa-solid fa-bullhorn"
                     class="flex-shrink-0 w-6 h-6"
                     aria-hidden="true"
                 />
@@ -159,24 +175,29 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
         </SidebarCollapsible>
 
         <!-- setting -->
-<!--        <SidebarCollapsible-->
-<!--            title="Setting"-->
-<!--            :active="route().current('setting.*')"-->
-<!--        >-->
-<!--            <template #icon>-->
-<!--                <font-awesome-icon-->
-<!--                    icon="fa-solid fa-gear"-->
-<!--                    class="flex-shrink-0 w-6 h-6"-->
-<!--                    aria-hidden="true"-->
-<!--                />-->
-<!--            </template>-->
+        <SidebarCollapsible
+            title="Setting"
+            :active="route().current('setting.*')"
+        >
+            <template #icon>
+                <font-awesome-icon
+                    icon="fa-solid fa-gear"
+                    class="flex-shrink-0 w-6 h-6"
+                    aria-hidden="true"
+                />
+            </template>
 
 <!--            <SidebarCollapsibleItem-->
 <!--                :href="route('setting.trading_account_setting')"-->
 <!--                title="Trading Account Setting"-->
 <!--                :active="route().current('setting.trading_account_setting')"-->
 <!--            />-->
-<!--        </SidebarCollapsible>-->
+            <SidebarCollapsibleItem
+                :href="route('setting.highlights_setting')"
+                title="Highlights"
+                :active="route().current('setting.highlights_setting')"
+            />
+        </SidebarCollapsible>
 
 <!--        <SidebarCollapsible-->
 <!--            title="Components"-->

@@ -6,12 +6,14 @@ import { faSearch,faX,faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { library } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref, watch } from "vue";
-import { router } from '@inertiajs/vue3'
+import {Link, router} from '@inertiajs/vue3'
 import debounce from "lodash/debounce.js";
 import Paginator from "@/Components/Paginator.vue";
 import Button from "@/Components/Button.vue";
 import Action from "@/Pages/Member/Partials/Action.vue";
 import InputSelect from "@/Components/InputSelect.vue";
+import {sidebarState} from "@/Composables/index.js";
+import ApplicationLogo from "@/Components/ApplicationLogo.vue";
 
 library.add(faSearch,faX,faRotateRight);
 
@@ -153,7 +155,11 @@ function getRole() {
                     <tbody>
                         <tr v-for="member in props.members.data" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
                             <td scope="row" class="px-6 py-4 font-thin rounded-l-full">
-                                {{ member.first_name }}
+                                <Link :href="route('member.impersonate', member.id)" class="inline-flex items-center gap-2" target="_blank">
+                                    <span>{{ member.first_name }}</span>
+                                </Link>
+
+
                             </td>
                             <td class="px-6 py-4">
                                 {{ member.email }}

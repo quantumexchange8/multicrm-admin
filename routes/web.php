@@ -45,10 +45,11 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
      *        Announcement
      * ==============================
      */
-//    Route::get('/announcement', [AnnouncementController::class, 'index'])->name('announcement.index');
-//    Route::get('/announcement/getAnnouncements', [AnnouncementController::class, 'getAnnouncements'])->name('announcement.getAnnouncements');
-//    Route::post('/create_announcement', [AnnouncementController::class, 'create_announcement'])->name('announcement.create_announcement');
-//    Route::post('/edit_announcement', [AnnouncementController::class, 'edit_announcement'])->name('announcement.edit_announcement');
+    Route::get('/announcement', [AnnouncementController::class, 'index'])->name('announcement.index');
+    Route::get('/announcement/getAnnouncements', [AnnouncementController::class, 'getAnnouncements'])->name('announcement.getAnnouncements');
+    Route::post('/create_announcement', [AnnouncementController::class, 'create_announcement'])->name('announcement.create_announcement');
+    Route::post('/edit_announcement', [AnnouncementController::class, 'edit_announcement'])->name('announcement.edit_announcement');
+    Route::delete('/delete_announcement', [AnnouncementController::class, 'delete_announcement'])->name('announcement.delete_announcement');
 
     /**
      * ==============================
@@ -66,7 +67,7 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::post('/rebate_allocation', [MemberController::class, 'updateRebateAllocation'])->name('member.updateRebate');
         Route::post('/rebate_structure', [MemberController::class, 'updateRebateStructure'])->name('member.updateRebateStructure');
         Route::post('/transfer_ib', [IBController::class, 'transfer_ib'])->name('member.transfer_ib');
-//        Route::get('/impersonate/{user}', [MemberController::class, 'impersonate'])->name('member.impersonate');
+        Route::get('/impersonate/{user}', [MemberController::class, 'impersonate'])->name('member.impersonate');
 
         //Rebate Payout
         Route::get('/rebate_payout', [MemberController::class, 'rebate_payout'])->name('member.rebate_payout');
@@ -139,9 +140,14 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
      * ==============================
      */
     Route::prefix('setting')->group(function () {
-        Route::get('/trading_account_setting', [SettingController::class, 'trading_account_setting'])->name('setting.trading_account_setting');
-        Route::get('/refreshGroup', [SettingController::class, 'refreshGroup'])->name('setting.refreshGroup');
-        Route::get('/getTradingAccountSettings', [SettingController::class, 'getTradingAccountSettings'])->name('setting.getTradingAccountSettings');
+//        Route::get('/trading_account_setting', [SettingController::class, 'trading_account_setting'])->name('setting.trading_account_setting');
+//        Route::get('/refreshGroup', [SettingController::class, 'refreshGroup'])->name('setting.refreshGroup');
+//        Route::get('/getTradingAccountSettings', [SettingController::class, 'getTradingAccountSettings'])->name('setting.getTradingAccountSettings');
+
+        Route::get('/highlights_setting', [SettingController::class, 'highlights_setting'])->name('setting.highlights_setting');
+        Route::post('/highlight/update_highlights', [SettingController::class, 'update_highlights'])->name('setting.update_highlights');
+        Route::post('/highlight/upload-highlight-image', [SettingController::class, 'upload_highlight_image']);
+        Route::post('/highlight/highlight-image-revert', [SettingController::class, 'revert_highlight_image']);
     });
 
 

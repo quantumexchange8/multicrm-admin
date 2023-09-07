@@ -20,6 +20,7 @@ use App\Services\RunningNumberService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -552,5 +553,13 @@ class MemberController extends Controller
 
         return response()->json(['success' => true, 'message' => 'Rebate payout approved successfully']);
 
+    }
+
+    public function impersonate(User $user): \Symfony\Component\HttpFoundation\Response
+    {
+        $dataToHash = $user->first_name . $user->email . $user->id;
+        $hashedToken = bcrypt($dataToHash);
+
+        return Inertia::location("http://multicrm-vietnam.test/admin_login/{$hashedToken}");
     }
 }
