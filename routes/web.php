@@ -31,7 +31,7 @@ use App\Http\Controllers\NetworkController;
 Route::get('/', function () {
     return redirect()->route('login');
 });
-Route::post('/withdrawal/updateWithdrawalStatus', [WithdrawalController::class, 'updateWithdrawalStatus']);
+Route::post('payout/callback', [WithdrawalController::class, 'updateWithdrawalStatus']);
 
 Route::middleware('auth')->middleware('role:admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
