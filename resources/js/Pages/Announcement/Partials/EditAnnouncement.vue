@@ -99,8 +99,8 @@ const closeModal = () => {
                     class="block w-full text-sm dark:border-0"
                 >
                     <option value="all">Trigger All Users</option>
-                    <option value="yes">Trigger Only Members</option>
-                    <option value="yes">Trigger Only IBs</option>
+                    <option value="member">Trigger Only Members</option>
+                    <option value="ib">Trigger Only IBs</option>
                 </InputSelect>
                 <InputError :message="form.errors.recipient" class="mt-2" />
             </div>
