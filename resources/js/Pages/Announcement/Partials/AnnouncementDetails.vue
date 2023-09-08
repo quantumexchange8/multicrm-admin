@@ -49,7 +49,7 @@ const deleteAnnouncement = () => {
 const getMediaUrlByCollection = (announcement, collectionName) => {
     const media = announcement.media;
     const foundMedia = media.find((m) => m.collection_name === collectionName);
-    return foundMedia.original_url;
+    return foundMedia ? foundMedia.original_url : '';
 };
 
 </script>

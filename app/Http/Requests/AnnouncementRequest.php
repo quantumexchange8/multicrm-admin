@@ -21,27 +21,16 @@ class AnnouncementRequest extends FormRequest
      */
     public function rules(): array
     {
-        $rules = [
+        return [
             'title' => 'required',
             'content' => 'required',
             'start_date' => 'required|date',
             'end_date' => 'required|date|after_or_equal:start_date',
             'recipient' => 'required',
+            'image' => 'nullable|image',
             'popup' => 'nullable',
             'popup_daily' => 'nullable',
         ];
-
-        // Check the value of the 'request_type' field (you may adjust the field name as needed)
-        // 'create' indicates a create request, 'edit' indicates an edit request
-        if ($this->input('request_type') === 'edit') {
-            // For edit, make the 'image' field nullable
-            $rules['image'] = 'nullable|image';
-        } else {
-            // For create, make the 'image' field required
-            $rules['image'] = 'required|image';
-        }
-
-        return $rules;
     }
 
     public function attributes(): array

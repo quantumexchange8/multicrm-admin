@@ -89,7 +89,7 @@ const formatCustomDate = (dateString) => {
 const getMediaUrlByCollection = (announcement, collectionName) => {
     const media = announcement.media;
     const foundMedia = media.find((m) => m.collection_name === collectionName);
-    return foundMedia.original_url;
+    return foundMedia ? foundMedia.original_url : 'https://static.vecteezy.com/system/resources/thumbnails/005/392/398/small_2x/important-announcement-badge-with-megaphone-icon-free-vector.jpg';
 };
 
 const handlePageChange = (newPage) => {

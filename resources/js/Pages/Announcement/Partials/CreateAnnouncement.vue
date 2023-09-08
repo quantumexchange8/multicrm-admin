@@ -113,7 +113,7 @@ const closeModal = () => {
                         <InputError :message="form.errors.recipient" class="mt-2" />
                     </div>
                     <div class="space-y-2">
-                        <Label for="image" value="Upload Document" />
+                        <Label for="image">Upload Document</Label>
                         <input
                             type="file"
                             id="image"

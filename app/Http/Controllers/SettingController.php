@@ -57,8 +57,14 @@ class SettingController extends Controller
     public function highlights_setting()
     {
         $setting_highlight = SettingHighlight::query()->latest()->first();
+        $highlightImage = null;
+
+        if (!empty($setting_highlight)) {
+            $highlightImage = $setting_highlight->getMedia('highlights');
+        }
+
         return Inertia::render('Setting/Highlight', [
-            'highlightImage' => $setting_highlight->getMedia('highlights'),
+            'highlightImage' => $highlightImage
         ]);
     }
 
