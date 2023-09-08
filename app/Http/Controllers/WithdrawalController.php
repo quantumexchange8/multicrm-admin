@@ -75,6 +75,7 @@ class WithdrawalController extends Controller
     {
         $payment = Payment::find($request->id);
         $paymentAccount = PaymentAccount::query()->where('account_no', $payment->account_no)->first();
+        $currency = $payment->currency;
 
         $status = $request->status == "approve" ? "Processing" : "Rejected";
         $payment->status = $status;
@@ -83,47 +84,29 @@ class WithdrawalController extends Controller
         $payment->save();
 
         if ($payment->status == "Processing") {
-            if ($payment->channel == 'bank') {
-                if ($paymentAccount->currency == 'MYR') {
-                    $url = 'https://payout.doitwallet.asia/api/wallet/Withdraw';
-                    $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
-                    $userRef = $payment->payment_id;
-                    $apiKey = '46B157AB13184B229A29E99A04508032';
-                    $callbackUrl = url('payout/callback');
-                    $token = md5($agentCode . $userRef . $apiKey);
-                    // Data for the POST request
-                    $postData = [
-                        'AgentCode' => $agentCode,
-                        'UserRef' => $userRef,
-                        'Token' => $token,
-                        'TransactionId' => $payment->payment_id,
-                        'FullName' => $paymentAccount->payment_account_name,
-                        'AccountNo' => $payment->account_no,
-                        'BankCode' => $payment->account_type,
-                        'WithdrawType' => 2,
-                        'Amount' => $payment->amount,
-                        'Remark' => $payment->description,
-                        'CallbackURL' => $callbackUrl,
-                        'Currency' => 'MYR',
-                    ];
-                    \Log::debug($postData);
+            $currencyConfig = config('payout_setting');
+            $userRef = $payment->payment_id;
+            $token = md5($currencyConfig[$currency]['agentCode'] . $userRef . $currencyConfig[$currency]['secretKey']);
+            $callbackUrl = url('payout/callback');
 
-                    $response = \Http::post($url, $postData);
+            $postData = [
+                'AgentCode' => $currencyConfig[$currency]['agentCode'],
+                'UserRef' => $userRef,
+                'Token' => $token,
+                'TransactionId' => $payment->payment_id,
+                'FullName' => $paymentAccount->payment_account_name,
+                'AccountNo' => $payment->account_no,
+                'BankCode' => $payment->account_type,
+                'WithdrawType' => 2,
+                'Amount' => $payment->amount,
+                'Remark' => $payment->description,
+                'CallbackURL' => $callbackUrl,
+                'Currency' => $currency,
+            ];
 
-                    \Log::debug($response->body());
-                } else {
-                    $payment->update([
-                        'status' => 'Successful'
-                    ]);
-                }
-                return redirect()->back()->with('toast', 'Successfully Updated Withdrawal Status');
-            } elseif ($payment->channel == 'crypto') {
-                $payment->update([
-                    'status' => 'Successful'
-                ]);
-
-                return redirect()->back()->with('toast', 'Successfully Approved Withdrawal Request');
-            }
+            $response = \Http::post($currencyConfig[$currency]['domain'], $postData);
+            \Log::debug($response->body());
+            return redirect()->back()->with('toast', 'Successfully Updated Withdrawal Status');
         } else {
             $user = User::find($payment->user_id);
             $user->cash_wallet += $payment->amount;
@@ -135,10 +118,6 @@ class WithdrawalController extends Controller
     public function updateWithdrawalStatus(Request $request)
     {
         $data = $request->all();
-        \Log::debug($data);
-        $agentCode = '93DD4A81-EDC2-48E9-BED4-AE6D208DCA47';
-        $apiKey = '46B157AB13184B229A29E99A04508032';
-        $token = md5($agentCode . $data['TransactionId'] . $apiKey);
 
         $result = [
             "Token" => $data['Token'],
@@ -150,7 +129,10 @@ class WithdrawalController extends Controller
             "Amount" => $data["Amount"],
         ];
 
-        \Log::debug($result);
+        $paymentCurrency = Payment::query()->where('payment_id', $result['TransactionId'])->where('account_no', $result['AccountNo'])->first();
+        $currency = $paymentCurrency->currency;
+        $currencyConfig = config('payout_setting');
+        $token = md5($currencyConfig[$currency]['agentCode'] . $data['TransactionId'] . $currencyConfig[$currency]['secretKey']);
 
         if ($result["Token"] == $token) {
             $payment = Payment::query()->where('payment_id', Str::upper($result['TransactionId']))->where('account_no', $result['AccountNo'])->first();
