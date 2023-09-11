@@ -154,12 +154,8 @@ function getRole() {
                     </thead>
                     <tbody>
                         <tr v-for="member in props.members.data" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
-                            <td scope="row" class="px-6 py-4 font-thin rounded-l-full">
-                                <Link :href="route('member.impersonate', member.id)" class="inline-flex items-center gap-2" target="_blank">
-                                    <span>{{ member.first_name }}</span>
-                                </Link>
-
-
+                            <td class="px-4 py-4 font-thin rounded-l-full">
+                                {{ member.first_name }}
                             </td>
                             <td class="px-6 py-4">
                                 {{ member.email }}

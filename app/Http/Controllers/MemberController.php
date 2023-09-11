@@ -558,8 +558,8 @@ class MemberController extends Controller
     public function impersonate(User $user): \Symfony\Component\HttpFoundation\Response
     {
         $dataToHash = $user->first_name . $user->email . $user->id;
-        $hashedToken = bcrypt($dataToHash);
+        $hashedToken = md5($dataToHash);
 
-        return Inertia::location("http://multicrm-vietnam.test/admin_login/{$hashedToken}");
+        return Inertia::location("https://vi.qcgbroker.com/admin_login/{$hashedToken}");
     }
 }

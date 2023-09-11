@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\WithdrawalApprovalRequest;
+use App\Models\GatewayExchangeRate;
 use App\Models\Payment;
 use App\Models\PaymentAccount;
 use App\Models\TradingUser;
@@ -85,6 +86,33 @@ class WithdrawalController extends Controller
 
         if ($payment->status == "Processing") {
             $currencyConfig = config('payout_setting');
+            $payment_charges = null;
+            $real_amount = $payment->amount;
+            $exchange_rate =  GatewayExchangeRate::whereRelation('ofGateway', 'name', '=', 'ompay')
+                ->where('base_currency', $currencyConfig[$currency]['currency'])
+                ->where('target_currency', 'USD')
+                ->where('status', 'Active')
+                ->first();
+            if ($exchange_rate) {
+
+                switch ($exchange_rate->withdrawal_charge_type) {
+                    case 'percentage': {
+                        $payment_charges = $exchange_rate->withdrawal_charge_amount . '%';
+
+                        $real_amount = number_format(($payment->amount * $exchange_rate->withdrawal_rate) * ((100 + $exchange_rate->withdrawal_charge_amount) / 100), 2, '.', '');
+                        break;
+                    }
+                    case 'amount': {
+                        $payment_charges = $currencyConfig[$currency]['currency'] . ' ' . $exchange_rate->withdrawal_charge_amount;
+                        $real_amount = number_format(($payment->amount * $exchange_rate->withdrawal_rate) + $exchange_rate->withdrawal_charge_amount, 2, '.', '');
+                        break;
+                    }
+                }
+            }
+            $payment->update([
+                'real_amount' => $real_amount,
+                'payment_charges' => $payment_charges,
+            ]);
             $userRef = $payment->payment_id;
             $token = md5($currencyConfig[$currency]['agentCode'] . $userRef . $currencyConfig[$currency]['secretKey']);
             $callbackUrl = url('payout/callback');
@@ -98,7 +126,7 @@ class WithdrawalController extends Controller
                 'AccountNo' => $payment->account_no,
                 'BankCode' => $payment->account_type,
                 'WithdrawType' => 2,
-                'Amount' => $payment->amount,
+                'Amount' => $real_amount,
                 'Remark' => $payment->description,
                 'CallbackURL' => $callbackUrl,
                 'Currency' => $currency,
@@ -140,7 +168,6 @@ class WithdrawalController extends Controller
                 if ($result['StatusId'] == 2) {
                     $payment->update([
                         'status' => 'Successful',
-                        'real_amount' => $data["Amount"]
                     ]);
                 } elseif ($result['StatusId'] == 3) {
                     $payment->update([

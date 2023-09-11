@@ -1,20 +1,19 @@
 <script setup>
 import Button from "@/Components/Button.vue";
 import {ResetPasswordIcon, TrashIcon, ViewIcon} from "@/Components/Icons/outline.jsx";
-import {onMounted, ref, watch} from "vue";
+import {ref} from "vue";
 import Modal from "@/Components/Modal.vue";
-import Label from "@/Components/Label.vue";
-import Input from "@/Components/Input.vue";
-import {useForm} from "@inertiajs/vue3";
-import InputSelect from "@/Components/InputSelect.vue";
-import InputError from "@/Components/InputError.vue";
-import VueTailwindDatepicker from "vue-tailwind-datepicker";
 import EditMemberDetail from "@/Pages/Member/Partials/EditMemberDetail.vue";
 import ManageIbAccountType from "@/Pages/Member/Partials/ManageIbAccountType.vue";
 import ResetPortalPassword from "@/Pages/Member/Partials/ResetPortalPassword.vue";
 import DeleteMember from "@/Pages/Member/Partials/DeleteMember.vue";
-import Dropdown from "@/Components/Dropdown.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
+import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
+import {library} from "@fortawesome/fontawesome-svg-core";
+import {
+    faArrowRightToBracket
+} from "@fortawesome/free-solid-svg-icons";
+library.add(faArrowRightToBracket)
+
 
 const props = defineProps({
     member: Object,
@@ -42,10 +41,27 @@ const closeModal = () => {
     modalComponent.value = null;
 }
 
+const openInNewTab = (url) => {
+    window.open(url, '_blank');
+}
+
+
 </script>
 
 <template>
     <div class="flex justify-center">
+        <Button
+            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+            variant="success-opacity"
+            @click="openInNewTab(route('member.impersonate', member.id))"
+        >
+            <font-awesome-icon
+                icon="fa-solid fa-arrow-right-to-bracket"
+                class="flex-shrink-0 w-4 h-4 cursor-pointer"
+                aria-hidden="true"
+            />
+            <span class="sr-only">Impersonate</span>
+        </Button>
         <Button
             class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
             variant="primary-opacity"
