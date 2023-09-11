@@ -10,8 +10,7 @@ import TransferIbUpline from "@/Pages/Member/RebateAllocation/TransferIbUpline.v
 const props = defineProps({
     ib: Object,
     defaultAccountSymbolGroup: Object,
-    ibDownlines: Object,
-    get_ibs_sel: Object
+    get_ibs_sel: Object,
 })
 
 const IbManageModal = ref(false);

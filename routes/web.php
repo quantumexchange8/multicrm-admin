@@ -64,6 +64,7 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::get('/member_tree', [NetworkController::class, 'member_tree'])->name('member.member_tree');
 
         Route::get('/rebate_allocation', [MemberController::class, 'rebate_allocation'])->name('member.rebate_allocation');
+        Route::get('/getIbListing', [MemberController::class, 'getIbListing'])->name('member.getIbListing');
         Route::post('/rebate_allocation', [MemberController::class, 'updateRebateAllocation'])->name('member.updateRebate');
         Route::post('/rebate_structure', [MemberController::class, 'updateRebateStructure'])->name('member.updateRebateStructure');
         Route::post('/transfer_ib', [IBController::class, 'transfer_ib'])->name('member.transfer_ib');

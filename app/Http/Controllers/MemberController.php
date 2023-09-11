@@ -215,8 +215,75 @@ class MemberController extends Controller
 
     public function rebate_allocation(Request $request)
     {
+
+
+        return Inertia::render('Member/RebateAllocation', [
+            'getAccountTypeSel' => AccountType::pluck('name', 'id')->toArray(),
+            'get_ibs_sel' => User::where('role', 'ib')->pluck('email')->toArray()
+        ]);
+    }
+
+    public function getIbListing(Request $request): \Illuminate\Http\JsonResponse
+    {
+        $defaultAccountSymbolGroup = AccountTypeSymbolGroup::query()
+            ->when($request->filled('account_type'), function ($query) use ($request) {
+                $account_type = $request->input('account_type');
+                $query->where(function ($innerQuery) use ($account_type) {
+                    $innerQuery->where('account_type', $account_type);
+                });
+            })
+            ->with(['symbolGroup'])
+            ->get();
+
+        $accountTypeFilter = $request->input('account_type');
+
+        $directIb = IbAccountType::query()
+            ->when($accountTypeFilter, function ($query) use ($accountTypeFilter) {
+                $query->where('account_type', $accountTypeFilter);
+            })
+            ->whereHas('ofUser', function ($query) {
+                $query->where('role', 'ib')
+                    ->whereNull('upline_id');
+            })
+            ->count();
+
+        $directMember = IbAccountType::query()
+            ->when($accountTypeFilter, function ($query) use ($accountTypeFilter) {
+                $query->where('account_type', $accountTypeFilter);
+            })
+            ->whereHas('ofUser', function ($query) {
+                $query->where('role', 'member')
+                    ->whereNull('upline_id');
+            })
+            ->count();
+
+        $totalIb = IbAccountType::query()
+            ->when($accountTypeFilter, function ($query) use ($accountTypeFilter) {
+                $query->where('account_type', $accountTypeFilter);
+            })
+            ->whereHas('ofUser', function ($query) {
+                $query->where('role', 'ib');
+            })
+            ->count();
+
+        $totalMember = IbAccountType::query()
+            ->when($accountTypeFilter, function ($query) use ($accountTypeFilter) {
+                $query->where('account_type', $accountTypeFilter);
+            })
+            ->whereHas('ofUser', function ($query) {
+                $query->where('role', 'member');
+            })
+            ->count();
+
+
         $ibs = IbAccountType::query()
             ->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline', 'upline.symbolGroups', 'upline.symbolGroups.symbolGroup'])
+            ->when($request->filled('account_type'), function ($query) use ($request) {
+                $account_type = $request->input('account_type');
+                $query->where(function ($innerQuery) use ($account_type) {
+                    $innerQuery->where('account_type', $account_type);
+                });
+            })
             ->when($request->filled('search'), function ($query) use ($request) {
                 $search = $request->input('search');
                 $query->whereHas('ofUser', function ($innerQuery) use ($search) {
@@ -224,18 +291,15 @@ class MemberController extends Controller
                         ->orWhere('email', 'like', "%{$search}%");
                 });
             })
-            ->paginate(10)
-            ->withQueryString();
+            ->paginate(10);
 
-        $defaultAccountSymbolGroup = AccountTypeSymbolGroup::where('account_type', 1)
-            ->with(['symbolGroup'])
-            ->get();
-
-        return Inertia::render('Member/RebateAllocation', [
-            'ibs' => $ibs,
-            'filters' => $request->only('search'),
+        return response()->json([
             'defaultAccountSymbolGroup' => $defaultAccountSymbolGroup,
-            'get_ibs_sel' => User::where('role', 'ib')->pluck('email')->toArray(),
+            'getIbListing' => $ibs,
+            'directIb' => $directIb,
+            'directMember' => $directMember,
+            'totalIb' => $totalIb,
+            'totalMember' => $totalMember,
         ]);
     }
 

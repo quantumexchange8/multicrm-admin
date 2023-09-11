@@ -14,6 +14,7 @@ const props = defineProps({
     defaultAccountSymbolGroup: Object,
     ibDownlines: Object,
     get_ibs_sel: Object,
+    account_type: Number,
 })
 
 let search = ref(props.filters.search);
@@ -24,6 +25,7 @@ watch(search, debounce(function  (value) {
         preserveScroll:true,
         replace:true,
     });
+    console.log(props.account_type)
 }, 300));
 
 function resetField() {
