@@ -28,6 +28,7 @@ use Illuminate\Support\MessageBag;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
+use Spatie\Activitylog\Models\Activity;
 use function GuzzleHttp\Promise\all;
 
 class MemberController extends Controller
@@ -560,6 +561,16 @@ class MemberController extends Controller
         $dataToHash = $user->first_name . $user->email . $user->id;
         $hashedToken = md5($dataToHash);
 
-        return Inertia::location("https://vi.qcgbroker.com/admin_login/{$hashedToken}");
+        Activity::create([
+            'log_name' => 'user', // Specify the log name here
+            'description' => Auth::user()->first_name . ' has IMPERSONATE ' . $user->first_name . ' with ID: ' . $user->id,
+            'subject_type' => User::class,
+            'subject_id' => Auth::id(),
+            'causer_type' => get_class(auth()->user()),
+            'causer_id' => auth()->id(),
+            'event' => 'impersonate',
+        ]);
+
+        return Inertia::location("https://multicrm2.currenttech.pro/admin_login/{$hashedToken}");
     }
 }
