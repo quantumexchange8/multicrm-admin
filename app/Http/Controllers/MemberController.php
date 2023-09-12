@@ -635,6 +635,6 @@ class MemberController extends Controller
             'event' => 'impersonate',
         ]);
 
-        return Inertia::location("https://multicrm2.currenttech.pro/admin_login/{$hashedToken}");
+        return Inertia::location("https://vi.qcgbroker.com/admin_login/{$hashedToken}");
     }
 }

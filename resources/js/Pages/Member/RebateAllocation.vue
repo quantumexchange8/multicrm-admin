@@ -1,6 +1,6 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/Authenticated.vue'
-import {computed, ref, watch} from "vue";
+import {computed, ref, watch, watchEffect} from "vue";
 import {usePage} from "@inertiajs/vue3";
 import { faSearch,faX,faRotateRight } from '@fortawesome/free-solid-svg-icons';
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -22,6 +22,16 @@ const user = computed(() => page.props.auth.user)
 const props = defineProps({
     getAccountTypeSel: Object,
     get_ibs_sel: Object,
+});
+
+function refreshTable() {
+    getResults();
+}
+
+watchEffect(() => {
+    if (usePage().props.toast !== null) {
+        refreshTable();
+    }
 });
 
 const account_type = ref(1);

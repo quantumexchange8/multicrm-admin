@@ -258,7 +258,7 @@ const toggleEdit = () => {
                 </div>
             </div>
 
-            <div class="space-y-2" v-if="form.kyc_approval === 'pending'">
+            <div class="space-y-2" v-if="member.kyc_approval === 'pending'">
                 <Label for="kyc_approval">KYC Approval</Label>
 
                 <InputSelect v-model="form.kyc_approval" class="block w-full text-sm" placeholder="Choose Status" :disabled="!isEditing">
@@ -269,7 +269,7 @@ const toggleEdit = () => {
 
                 <InputError class="mt-2" :message="form.errors.kyc_approval" />
             </div>
-            <div class="space-y-2" v-if="form.kyc_approval === 'pending'">
+            <div class="space-y-2" v-if="member.kyc_approval === 'pending'">
                 <Label for="kyc_approval_description">KYC Approval Description</Label>
                 <Input
                     id="kyc_approval_description"
