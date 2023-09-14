@@ -7,6 +7,7 @@ import {transactionFormat} from "@/Composables/index.js";
 import InputError from "@/Components/InputError.vue";
 import Label from "@/Components/Label.vue";
 import Input from "@/Components/Input.vue";
+import Tooltip from "@/Components/Tooltip.vue";
 
 const props = defineProps({
     history: Object
@@ -24,13 +25,15 @@ const closeModal = () => {
 </script>
 
 <template>
-    <Button
-        class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-        variant="primary-opacity"
-        @click="openWalletModal"
-    >
-        <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
-    </Button>
+    <Tooltip content="View" placement="top">
+        <Button
+            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+            variant="primary-opacity"
+            @click="openWalletModal"
+        >
+            <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
+        </Button>
+    </Tooltip>
 
     <Modal :show="internalTransferModal" @close="closeModal" max-width="7xl">
         <div class="p-6">

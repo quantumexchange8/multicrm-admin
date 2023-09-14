@@ -6,6 +6,7 @@ import Modal from "@/Components/Modal.vue";
 import CreditAdjustment from "@/Pages/Finance/CreditAdjustment/CreditAdjustment.vue";
 import AdjustmentHistory from "@/Pages/Finance/CreditAdjustment/AdjustmentHistory.vue";
 import BalanceAdjustment from "@/Pages/Finance/CreditAdjustment/BalanceAdjustment.vue";
+import Tooltip from "@/Components/Tooltip.vue";
 
 const props = defineProps({
     account: Object,
@@ -33,27 +34,34 @@ const closeModal = () => {
 
 <template>
     <div class="flex justify-center">
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="primary-opacity"
-            @click="openWalletModal(account.id, 'balanceAdjust')"
-        >
-            <GearIcon aria-hidden="true" class="w-6 h-6 absolute" />
-        </Button>
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="primary-opacity"
-            @click="openWalletModal(account.id, 'creditAdjust')"
-        >
-            <GiftIcon aria-hidden="true" class="w-6 h-6 absolute" />
-        </Button>
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="primary-opacity"
-            @click="openWalletModal(account.id, 'view')"
-        >
-            <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
-        </Button>
+        <Tooltip content="Balance Adjustment" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="openWalletModal(account.id, 'balanceAdjust')"
+            >
+                <GearIcon aria-hidden="true" class="w-6 h-6 absolute" />
+            </Button>
+        </Tooltip>
+        <Tooltip content="Credit Adjustment" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="openWalletModal(account.id, 'creditAdjust')"
+            >
+                <GiftIcon aria-hidden="true" class="w-6 h-6 absolute" />
+            </Button>
+        </Tooltip>
+        <Tooltip content="View" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="openWalletModal(account.id, 'view')"
+            >
+                <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
+            </Button>
+        </Tooltip>
+
     </div>
 
     <Modal :show="creditAdjustmentModal" @close="closeModal" max-width="7xl">

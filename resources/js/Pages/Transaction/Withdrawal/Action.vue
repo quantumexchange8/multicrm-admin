@@ -5,6 +5,7 @@ import Modal from "@/Components/Modal.vue";
 import {ref} from "vue";
 import Approval from "@/Pages/Transaction/Withdrawal/Approval.vue";
 import View from "@/Pages/Transaction/Withdrawal/View.vue";
+import Tooltip from "@/Components/Tooltip.vue";
 
 const props = defineProps({
     withdrawal: Object,
@@ -50,14 +51,16 @@ const closeModal = () => {
             Reject
         </Button>
         <div class="flex justify-center items-center">
-            <Button
-                class="justify-center px-4 pt-2 rounded-full w-7 h-7 focus:outline-none"
-                variant="primary-opacity"
-                @click="openWithdrawalActionModal(withdrawal.id, 'view')"
-            >
-                <ViewIcon aria-hidden="true" class="w-5 h-5 absolute" />
-                <span class="sr-only">View</span>
-            </Button>
+            <Tooltip content="View" placement="top">
+                <Button
+                    class="justify-center px-4 pt-2 rounded-full w-7 h-7 focus:outline-none"
+                    variant="primary-opacity"
+                    @click="openWithdrawalActionModal(withdrawal.id, 'view')"
+                >
+                    <ViewIcon aria-hidden="true" class="w-5 h-5 absolute" />
+                    <span class="sr-only">View</span>
+                </Button>
+            </Tooltip>
         </div>
 
         <!-- Action Modal -->

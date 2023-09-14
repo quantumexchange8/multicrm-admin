@@ -5,6 +5,7 @@ import {ref} from "vue";
 import Modal from "@/Components/Modal.vue";
 import WalletAdjust from "@/Pages/Transaction/Wallet/WalletAdjust.vue";
 import TransactionHistory from "@/Pages/Transaction/Wallet/TransactionHistory.vue";
+import Tooltip from "@/Components/Tooltip.vue";
 
 const props = defineProps({
     user: Object
@@ -30,20 +31,24 @@ const closeModal = () => {
 
 <template>
     <div class="flex justify-center">
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="primary-opacity"
-            @click="openWalletModal(user.id, 'adjust')"
-        >
-            <GearIcon aria-hidden="true" class="w-6 h-6 absolute" />
-        </Button>
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="primary-opacity"
-            @click="openWalletModal(user.id, 'view')"
-        >
-            <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
-        </Button>
+        <Tooltip content="Fund Adjustment" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="openWalletModal(user.id, 'adjust')"
+            >
+                <GearIcon aria-hidden="true" class="w-6 h-6 absolute" />
+            </Button>
+        </Tooltip>
+        <Tooltip content="View" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="openWalletModal(user.id, 'view')"
+            >
+                <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
+            </Button>
+        </Tooltip>
     </div>
 
     <Modal :show="userWalletDetailModal" @close="closeModal" max-width="7xl">

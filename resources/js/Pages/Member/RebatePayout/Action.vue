@@ -7,6 +7,7 @@ import ViewRebate from "@/Pages/Member/RebateAllocation/ViewRebate.vue";
 import StructureRebate from "@/Pages/Member/RebateAllocation/StructureRebate.vue";
 import Swal from "sweetalert2";
 import PayoutDetails from "@/Pages/Member/RebatePayout/PayoutDetails.vue";
+import Tooltip from "@/Components/Tooltip.vue";
 
 const props = defineProps({
     list: Object,
@@ -166,14 +167,16 @@ const getRebatePayoutInfo = async () => {
         >
             Approve
         </Button>
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-7 h-7 focus:outline-none"
-            variant="primary-opacity"
-            @click="handleViewButton"
-        >
-            <ViewIcon aria-hidden="true" class="w-5 h-5 absolute" />
-            <span class="sr-only">View</span>
-        </Button>
+        <Tooltip content="View" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-7 h-7 focus:outline-none"
+                variant="primary-opacity"
+                @click="handleViewButton"
+            >
+                <ViewIcon aria-hidden="true" class="w-5 h-5 absolute" />
+                <span class="sr-only">View</span>
+            </Button>
+        </Tooltip>
     </div>
 
     <!-- Action Modal -->

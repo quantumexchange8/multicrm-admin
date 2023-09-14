@@ -12,6 +12,7 @@ import {library} from "@fortawesome/fontawesome-svg-core";
 import {
     faArrowRightToBracket
 } from "@fortawesome/free-solid-svg-icons";
+import Tooltip from "@/Components/Tooltip.vue";
 library.add(faArrowRightToBracket)
 
 
@@ -50,42 +51,50 @@ const openInNewTab = (url) => {
 
 <template>
     <div class="flex justify-center">
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="success-opacity"
-            @click="openInNewTab(route('member.impersonate', member.id))"
-        >
-            <font-awesome-icon
-                icon="fa-solid fa-arrow-right-to-bracket"
-                class="flex-shrink-0 w-4 h-4 cursor-pointer"
-                aria-hidden="true"
-            />
-            <span class="sr-only">Impersonate</span>
-        </Button>
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="primary-opacity"
-            @click="openMemberDetail(member.id, 'view')"
-        >
-            <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
-            <span class="sr-only">View</span>
-        </Button>
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="primary-opacity"
-            @click="openMemberDetail(member.id, 'resetPassword')"
-        >
-            <ResetPasswordIcon aria-hidden="true" class="w-6 h-6 absolute" />
-            <span class="sr-only">Reset</span>
-        </Button>
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="danger-opacity"
-            @click="openMemberDetail(member.id, 'deleteMember')"
-        >
-            <TrashIcon aria-hidden="true" class="w-6 h-6 absolute" />
-            <span class="sr-only">Delete</span>
-        </Button>
+        <Tooltip content="Impersonate" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="success-opacity"
+                @click="openInNewTab(route('member.impersonate', member.id))"
+            >
+                <font-awesome-icon
+                    icon="fa-solid fa-arrow-right-to-bracket"
+                    class="flex-shrink-0 w-4 h-4 cursor-pointer"
+                    aria-hidden="true"
+                />
+                <span class="sr-only">Impersonate</span>
+            </Button>
+        </Tooltip>
+        <Tooltip content="View" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="openMemberDetail(member.id, 'view')"
+            >
+                <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
+                <span class="sr-only">View</span>
+            </Button>
+        </Tooltip>
+        <Tooltip content="Reset Password" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="openMemberDetail(member.id, 'resetPassword')"
+            >
+                <ResetPasswordIcon aria-hidden="true" class="w-6 h-6 absolute" />
+                <span class="sr-only">Reset</span>
+            </Button>
+        </Tooltip>
+        <Tooltip content="Delete Member" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="danger-opacity"
+                @click="openMemberDetail(member.id, 'deleteMember')"
+            >
+                <TrashIcon aria-hidden="true" class="w-6 h-6 absolute" />
+                <span class="sr-only">Delete</span>
+            </Button>
+        </Tooltip>
     </div>
 
     <!-- Action Modal -->

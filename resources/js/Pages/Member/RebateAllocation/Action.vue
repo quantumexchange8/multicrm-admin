@@ -6,6 +6,7 @@ import Modal from "@/Components/Modal.vue";
 import ViewRebate from "@/Pages/Member/RebateAllocation/ViewRebate.vue";
 import StructureRebate from "@/Pages/Member/RebateAllocation/StructureRebate.vue";
 import TransferIbUpline from "@/Pages/Member/RebateAllocation/TransferIbUpline.vue";
+import Tooltip from "@/Components/Tooltip.vue";
 
 const props = defineProps({
     ib: Object,
@@ -60,30 +61,36 @@ const getIbDownlineRebateInfo = async () => {
 
 <template>
     <div class="flex justify-center">
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="primary-opacity"
-            @click="openMemberDetail(ib.id, 'view')"
-        >
-            <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
-            <span class="sr-only">View</span>
-        </Button>
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="primary-opacity"
-            @click="handleButtonClick"
-        >
-            <GearIcon aria-hidden="true" class="w-6 h-6 absolute" />
-            <span class="sr-only">Structure</span>
-        </Button>
-        <Button
-            class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
-            variant="primary-opacity"
-            @click="openMemberDetail(ib.id, 'transferIb')"
-        >
-            <IbTransferIcon aria-hidden="true" class="w-6 h-6 absolute" />
-            <span class="sr-only">Transfer</span>
-        </Button>
+        <Tooltip content="View" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="openMemberDetail(ib.id, 'view')"
+            >
+                <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
+                <span class="sr-only">View</span>
+            </Button>
+        </Tooltip>
+        <Tooltip content="Structure" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="handleButtonClick"
+            >
+                <GearIcon aria-hidden="true" class="w-6 h-6 absolute" />
+                <span class="sr-only">Structure</span>
+            </Button>
+        </Tooltip>
+        <Tooltip content="IB Transfer" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="openMemberDetail(ib.id, 'transferIb')"
+            >
+                <IbTransferIcon aria-hidden="true" class="w-6 h-6 absolute" />
+                <span class="sr-only">Transfer</span>
+            </Button>
+        </Tooltip>
     </div>
 
     <!-- Action Modal -->
