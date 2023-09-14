@@ -389,7 +389,7 @@ class MemberController extends Controller
             $downline = $curIb->downline;
             foreach ($symbol_group as $key => $amount) {
                 $parentRate = IbAccountTypeSymbolGroupRate::where('ib_account_type', $upline->id)->where('symbol_group', $key)->first();
-                if ($amount >= $parentRate->amount) {
+                if ($amount > $parentRate->amount) {
                     $fieldKey = 'ibGroupRates.' . $ib . '.' . $key;
                     $errorMessage = 'Cannot higher than ' . $parentRate->amount;
                     $validationErrors->add($fieldKey, $errorMessage);
