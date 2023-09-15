@@ -326,7 +326,7 @@ class MemberController extends Controller
                     ->first();
             }
 
-            if ($parent && $amount >= $parent->amount) {
+            if ($parent && $amount > $parent->amount) {
                 $fieldKey = 'ibGroupRates.' . $key;
                 $errorMessage = $parent->symbolGroup->name . ' amount cannot be higher than ' . $parent->amount;
                 $validationErrors->add($fieldKey, $errorMessage);
