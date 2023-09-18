@@ -22,7 +22,15 @@ const emit = defineEmits(['update:memberDetailModal']);
 const form = useForm({
     id: props.member.id,
     account_type: '',
-    ibGroupRates: {}
+    ibGroupRates: {
+        1: 0,
+        2: 0,
+        3: 0,
+        4: 0,
+        5: 0,
+        6: 0,
+        7: 0,
+    }
 })
 
 const submit = () => {
@@ -113,6 +121,8 @@ const isRadioSelected = computed(() => {
                     :max="groupRate.amount"
                     v-model="form.ibGroupRates[groupRate.symbol_group.id]"
                 />
+
+                <InputError :message="form.errors[`ibGroupRates.${groupRate.symbol_group.id}`]" />
             </div>
         </div>
         <div class="mt-6 flex justify-end">

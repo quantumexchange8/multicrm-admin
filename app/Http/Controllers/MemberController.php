@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Member\ResetMemberPasswordRequest;
 use App\Http\Requests\Member\UpdateMemberRequest;
+use App\Http\Requests\UpgradeIbRequest;
 use App\Models\AccountType;
 use App\Models\AccountTypeSymbolGroup;
 use App\Models\IbAccountType;
@@ -130,12 +131,42 @@ class MemberController extends Controller
         if ($user->role == 'member') {
             $ib_id = RunningNumberService::getID('broker_id');
 
+            $upline = $user->upline;
+            $validationErrors = new MessageBag();
+
+            foreach ($request->ibGroupRates as $key => $amount) {
+                if ($upline) {
+                    $ibAccountType = IbAccountType::query()
+                        ->where('user_id', $upline->id)
+                        ->first();
+
+                    $parent = IbAccountTypeSymbolGroupRate::with('symbolGroup')
+                        ->where('ib_account_type', $ibAccountType->id)
+                        ->where('symbol_group', $key)
+                        ->first();
+                } else {
+                    $parent = AccountTypeSymbolGroup::where('account_type', 1)
+                        ->with('symbolGroup')
+                        ->where('symbol_group', $key)
+                        ->first();
+                }
+
+                if ($parent && $amount > $parent->amount) {
+                    $fieldKey = 'ibGroupRates.' . $key;
+                    $errorMessage = $parent->symbolGroup->name . ' amount cannot be higher than ' . $parent->amount;
+                    $validationErrors->add($fieldKey, $errorMessage);
+                }
+
+                if ($validationErrors->count() > 0) {
+                    return redirect()->back()->withErrors($validationErrors);
+                }
+            }
+
             $user->ib_id = $ib_id;
             $user->role = 'ib';
             $user->assignRole('ib');
             $user->save();
 
-            $upline = $user->upline;
             if ($upline) {
                 $upline->increment('direct_ib');
                 $upline->decrement('direct_client');
@@ -215,8 +246,6 @@ class MemberController extends Controller
 
     public function rebate_allocation(Request $request)
     {
-
-
         return Inertia::render('Member/RebateAllocation', [
             'getAccountTypeSel' => AccountType::pluck('name', 'id')->toArray(),
             'get_ibs_sel' => User::where('role', 'ib')->pluck('email')->toArray()
