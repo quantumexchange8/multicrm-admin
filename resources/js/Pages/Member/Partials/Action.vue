@@ -110,7 +110,7 @@ const openInNewTab = (url) => {
                     @update:memberDetailModal="memberDetailModal = $event"
                 />
                 <ManageIbAccountType
-                    v-if="member.role === 'member'"
+                    v-if="member.role === 'member' && member.upline.role === 'ib'"
                     :accountTypes="accountTypes"
                     :member="member"
                     @update:memberDetailModal="memberDetailModal = $event"
