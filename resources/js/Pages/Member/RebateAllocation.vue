@@ -216,7 +216,7 @@ const accountType = computed(() => {
                         aria-hidden="true"
                     />
                 </template>
-                <Input withIcon id="name" type="text" placeholder="Name / Email" class="block w-full" v-model="search" @keydown="handleKeyDown" />
+                <Input withIcon id="name" type="text" placeholder="Name / Email / Account No" class="block w-full" v-model="search" @keydown="handleKeyDown" />
             </InputIconWrapper>
             <button type="submit" class="absolute right-1 bottom-2 py-2.5 text-gray-500 hover:text-dark-eval-4 font-medium rounded-full w-8 h-8 text-sm"><font-awesome-icon
                 icon="fa-solid fa-x"
@@ -259,6 +259,9 @@ const accountType = computed(() => {
                         IB Number
                     </th>
                     <th scope="col" class="px-6 py-3">
+                        Account Number
+                    </th>
+                    <th scope="col" class="px-6 py-3">
                         Current Upline
                     </th>
                     <th scope="col" class="px-6 py-3">
@@ -290,6 +293,9 @@ const accountType = computed(() => {
                     </th>
                     <th class="px-6 py-4">
                         {{ ib.of_user.ib_id }}
+                    </th>
+                    <th class="px-6 py-4">
+                        <span v-for="tradeAccount in ib.of_user.trading_accounts">{{ tradeAccount.meta_login }} <br/></span>
                     </th>
                     <th>
                         {{ ib.of_user.upline ? ib.of_user.upline.first_name : '' }}

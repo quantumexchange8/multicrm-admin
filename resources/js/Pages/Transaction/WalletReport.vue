@@ -90,7 +90,7 @@ const reset = () => {
                     </InputSelect>
                 </div>
                 <div class="space-y-2 col-span-2">
-                    <Label>Search By Name / Email</Label>
+                    <Label>Search By Name / Email / Account No</Label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -156,6 +156,9 @@ const reset = () => {
                             Email
                         </th>
                         <th scope="col" class="px-4 py-3">
+                            Account Number
+                        </th>
+                        <th scope="col" class="px-4 py-3">
                             Cash Wallet (USD)
                         </th>
                         <th scope="col" class="px-4 py-3">
@@ -173,6 +176,9 @@ const reset = () => {
                         </th>
                         <th class="px-6 py-4">
                             {{ user.email }}
+                        </th>
+                        <th class="px-6 py-4">
+                            <span v-for="tradeAccount in user.trading_accounts">{{ tradeAccount.meta_login }} <br/></span>
                         </th>
                         <th>
                             $ {{ formatAmount(user.cash_wallet) }}

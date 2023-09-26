@@ -36,13 +36,34 @@ class MemberController extends Controller
 {
     public function member_listing(Request $request)
     {
+        // $members = User::query()
+        //     ->whereIn('role', ['member', 'ib'])
+        //     ->when($request->filled('search'), function ($query) use ($request) {
+        //         $search = $request->input('search');
+        //         $query->where(function ($innerQuery) use ($search) {
+        //             $innerQuery->where('first_name', 'like', "%{$search}%")
+        //                 ->orWhere('email', 'like', "%{$search}%");
+        //         });
+        //     })
+        //     ->when($request->filled('role'), function ($query) use ($request) {
+        //         $role = $request->input('role');
+        //         $query->where('role', $role);
+        //     })
+        //     ->with(['tradingAccounts', 'media', 'upline'])
+        //     ->orderByDesc('created_at')
+        //     ->paginate(10)
+        //     ->withQueryString();
+
         $members = User::query()
             ->whereIn('role', ['member', 'ib'])
             ->when($request->filled('search'), function ($query) use ($request) {
                 $search = $request->input('search');
                 $query->where(function ($innerQuery) use ($search) {
                     $innerQuery->where('first_name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
+                        ->orWhere('email', 'like', "%{$search}%")
+                        ->orWhereHas('tradingAccounts', function ($accQuery) use ($search) {
+                            $accQuery->where('meta_login', 'like', "%{$search}%");
+                        });
                 });
             })
             ->when($request->filled('role'), function ($query) use ($request) {
@@ -59,6 +80,7 @@ class MemberController extends Controller
             ->get();
 
         $accountTypes = AccountType::where('id', 1)->first();
+        
 
         return Inertia::render('Member/MemberListing', [
             'members' => $members,
@@ -306,7 +328,7 @@ class MemberController extends Controller
 
 
         $ibs = IbAccountType::query()
-            ->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline', 'upline.symbolGroups', 'upline.symbolGroups.symbolGroup'])
+            ->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline', 'upline.symbolGroups', 'upline.symbolGroups.symbolGroup','ofUser.tradingAccounts'])
             ->when($request->filled('account_type'), function ($query) use ($request) {
                 $account_type = $request->input('account_type');
                 $query->where(function ($innerQuery) use ($account_type) {
@@ -318,6 +340,9 @@ class MemberController extends Controller
                 $query->whereHas('ofUser', function ($innerQuery) use ($search) {
                     $innerQuery->where('first_name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%");
+                })
+                ->orWhereHas('ofUser.tradingAccounts', function ($accQuery) use ($search) {
+                    $accQuery->where('meta_login', 'like', "%{$search}%");
                 });
             })
             ->paginate(10);
@@ -497,6 +522,9 @@ class MemberController extends Controller
             $query->whereRelation('ofUser', function ($query) use ($search) {
                 $query->where('first_name', '=', $search)
                     ->orWhere('ib_id', '=', $search);
+            })
+            ->orWhere(function ($accQuery) use ($search) {
+                $accQuery->where('meta_login', 'like', "%{$search}%");
             });
         }
 

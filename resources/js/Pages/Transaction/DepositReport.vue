@@ -160,7 +160,7 @@ const paginationActiveClass = [
                     />
                 </div>
                 <div class="space-y-2">
-                    <Label>Search By Name / Email / Transaction ID</Label>
+                    <Label>Search By Name / Email / Transaction ID / Account No</Label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -237,6 +237,9 @@ const paginationActiveClass = [
                             Email
                         </th>
                         <th scope="col" class="px-4 py-3">
+                            To Account
+                        </th>
+                        <th scope="col" class="px-4 py-3">
                             Date
                         </th>
                         <th scope="col" class="px-4 py-3">
@@ -266,6 +269,9 @@ const paginationActiveClass = [
                         </th>
                         <th class="px-6 py-4">
                             {{ deposit.of_user.email }}
+                        </th>
+                        <th class="px-6 py-4">
+                            {{ deposit.to }}
                         </th>
                         <th>
                             {{ formatDate(deposit.created_at) }}

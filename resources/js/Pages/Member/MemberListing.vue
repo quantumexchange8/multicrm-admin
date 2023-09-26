@@ -98,7 +98,7 @@ function getRole() {
                                 aria-hidden="true"
                             />
                         </template>
-                        <Input withIcon id="name" type="text" placeholder="Name / Email" class="block w-full" v-model="search" @keydown="handleKeyDown" />
+                        <Input withIcon id="name" type="text" placeholder="Name / Email / Account No" class="block w-full" v-model="search" @keydown="handleKeyDown" />
                     </InputIconWrapper>
                     <button type="submit" class="absolute right-1 bottom-2 py-2.5 text-gray-500 hover:text-dark-eval-4 font-medium rounded-full w-8 h-8 text-sm"><font-awesome-icon
                         icon="fa-solid fa-x"
@@ -142,7 +142,7 @@ function getRole() {
                                 Upline Email
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                Total Account
+                                Account Number
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 Country
@@ -175,7 +175,7 @@ function getRole() {
                                 <span v-if="!member.upline" class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-purple-500 dark:text-purple-100 uppercase">No Upline</span>
                             </td>
                             <td>
-                                {{ member.trading_accounts.length }}
+                                <span v-for="tradeAccount in member.trading_accounts">{{ tradeAccount.meta_login }} <br/></span>
                             </td>
                             <td>
                                 {{ member.country }}

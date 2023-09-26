@@ -20,12 +20,15 @@ class WalletController extends Controller
         $search = $request->search;
         $role = $request->role;
 
-        $users = User::query()->whereIn('role', ['member', 'ib'])->with('userIb');
+        $users = User::query()->whereIn('role', ['member', 'ib'])->with(['userIb','tradingAccounts']);
 
         if ($search) {
             $users->where(function ($query) use ($search) {
                 $query->where('first_name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
+            })
+            ->orWhereHas('tradingAccounts', function ($accQuery) use ($search) {
+                $accQuery->where('meta_login', 'like', "%{$search}%");
             });
         }
 
