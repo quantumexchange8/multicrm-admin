@@ -522,9 +522,6 @@ class MemberController extends Controller
             $query->whereRelation('ofUser', function ($query) use ($search) {
                 $query->where('first_name', '=', $search)
                     ->orWhere('ib_id', '=', $search);
-            })
-            ->orWhere(function ($accQuery) use ($search) {
-                $accQuery->where('meta_login', 'like', "%{$search}%");
             });
         }
 

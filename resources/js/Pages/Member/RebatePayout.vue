@@ -85,7 +85,7 @@ const reset = () => {
                                 aria-hidden="true"
                             />
                         </template>
-                        <Input withIcon id="name" type="text" placeholder="Search by IB name / IB number / Account No" class="block w-full" v-model="form.search" @keydown="handleKeyDown" />
+                        <Input withIcon id="name" type="text" placeholder="Search by IB name or IB number" class="block w-full" v-model="form.search" @keydown="handleKeyDown" />
                     </InputIconWrapper>
                     <button type="submit" class="absolute right-1 bottom-2 py-2.5 text-gray-500 hover:text-dark-eval-4 font-medium rounded-full w-8 h-8 text-sm"><font-awesome-icon
                         icon="fa-solid fa-x"

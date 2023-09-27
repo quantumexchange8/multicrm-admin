@@ -160,9 +160,6 @@ async function approveSelectedRebatePayout() {
                 IB Number
             </th>
             <th scope="col" class="px-6 py-3">
-                Account Number
-            </th>
-            <th scope="col" class="px-6 py-3">
                 Account Type
             </th>
             <th scope="col" class="px-6 py-3">
@@ -198,9 +195,6 @@ async function approveSelectedRebatePayout() {
             </th>
             <th>
                  {{ list.of_user.ib_id }}
-            </th>
-            <th>
-                 {{ list.meta_login }}
             </th>
             <th>
                  {{ (list.of_account_type.name ) }}
