@@ -34,7 +34,7 @@ const closeModal = () => {
     modalComponent.value = null;
 }
 
-async function confirmRebatePayout(amount) {
+async function confirmRebatePayout(amount, type) {
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
             confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500 mx-2',
@@ -46,23 +46,39 @@ async function confirmRebatePayout(amount) {
         color: '#ffffff',
     });
 
-    const result = await swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: `A total of $${amount.toFixed(2)} will be paid to the selected IB!`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        reverseButtons: true,
-    });
+    if (type === 'approve') {
+        const result = await swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: `A total of $${amount.toFixed(2)} will be paid to the selected IB!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true,
+        });
 
-    if (result.isConfirmed) {
-        await rebate_payout();
+        if (result.isConfirmed) {
+            await rebate_payout();
+        }
+    } else {
+        const result = await swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: `A total of $${amount.toFixed(2)} will be rejected to the selected IB!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true,
+        });
+
+        if (result.isConfirmed) {
+            await reject_payout();
+        }
     }
 }
 
-function showConfirmation(amount) {
-    confirmRebatePayout(amount);
+function showConfirmation(amount, type) {
+    confirmRebatePayout(amount, type);
 }
 
 async function rebate_payout() {
@@ -71,8 +87,73 @@ async function rebate_payout() {
         // Make the POST request using axios
         const response = await axios.post('/member/approve_rebate_payout', {
             ib_account_types_id: props.list.ib_account_types_id,
+            meta_login: props.list.meta_login,
             date: props.date,
             type: 'approve_single',
+            close_date: props.list.date,
+        });
+
+        if (response.data.success) {
+            await Swal.fire({
+                title: 'Success',
+                text: response.data.message,
+                icon: 'success',
+                background: '#000000',
+                iconColor: '#ffffff',
+                color: '#ffffff',
+                confirmButtonText: 'OK',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
+                },
+            }).then(() => {
+                // Reload the page after the SweetAlert is closed
+                location.reload();
+            });
+        } else {
+            console.log(response.data.message);
+        }
+    } catch (error) {
+        if (error.response && error.response.status === 422) {
+            await Swal.fire({
+                title: 'Error',
+                text: error.response.data.message,
+                icon: 'error',
+                background: '#000000',
+                iconColor: '#ffffff',
+                color: '#ffffff',
+                confirmButtonText: 'OK',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
+                },
+            });
+        } else {
+            await Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while applying the rebate.',
+                icon: 'error',
+                background: '#000000',
+                iconColor: '#ffffff',
+                color: '#ffffff',
+                confirmButtonText: 'OK',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
+                },
+            });
+        }
+    }
+}
+
+async function reject_payout() {
+    try {
+        // Make the POST request using axios
+        const response = await axios.post('/member/reject_rebate_payout', {
+            ib_account_types_id: props.list.ib_account_types_id,
+            meta_login: props.list.meta_login,
+            date: props.date,
+            type: 'reject_single',
             close_date: props.list.date,
         });
 
@@ -158,18 +239,26 @@ const getRebatePayoutInfo = async () => {
 </script>
 
 <template>
-    <div class="flex justify-center items-center">
+    <div class="inline-flex justify-center items-center gap-2">
         <Button
             v-if="status === 'pending'"
             variant="success-opacity"
-            @click.prevent="showConfirmation(list.total_revenue)"
+            @click.prevent="showConfirmation(list.total_revenue, 'approve')"
             class="text-xs"
         >
             Approve
         </Button>
+        <Button
+            v-if="status === 'pending'"
+            variant="danger-opacity"
+            @click.prevent="showConfirmation(list.total_revenue, 'reject')"
+            class="text-xs"
+        >
+            Reject
+        </Button>
         <Tooltip content="View" placement="top">
             <Button
-                class="justify-center px-4 pt-2 mx-1 rounded-full w-7 h-7 focus:outline-none"
+                class="justify-center rounded-full w-7 h-7 focus:outline-none"
                 variant="primary-opacity"
                 @click="handleViewButton"
             >

@@ -23,25 +23,34 @@ function toggleAllCheckboxes() {
     if (selectAllChecked.value) {
         selectedItems.value = props.lists.data.map((list) => ({
             ib_account_types_id: list.ib_account_types_id,
-            closed_date: list.date, // Add the closed_date from the list
+            closed_date: list.date,
+            meta_login: list.meta_login,
+            total_volume: list.total_volume,
+            total_revenue: list.total_revenue,
         }));
     } else {
         selectedItems.value = [];
     }
 }
 
-function toggleItemCheckbox(itemValue, closedDate) {
-    const existingIndex = selectedItems.value.findIndex((item) => item.ib_account_types_id === itemValue);
-
-    if (existingIndex !== -1) {
-        selectedItems.value.splice(existingIndex, 1);
-    } else {
-        selectedItems.value.push({ ib_account_types_id: itemValue, closed_date: closedDate });
-    }
+function toggleItemCheckbox(itemValue, closedDate, meteLogin, totalVolume, totalRevenue) {
+    selectedItems.value.push({
+        ib_account_types_id: itemValue,
+        closed_date: closedDate,
+        meta_login: meteLogin,
+        total_volume: totalVolume,
+        total_revenue: totalRevenue,
+    });
 }
 
-function isItemSelected(itemValue) {
-    return selectedItems.value.some((item) => item.ib_account_types_id === itemValue);
+function isItemSelected(itemValue, closedDate, metaLogin, totalVolume, totalRevenue) {
+    return selectedItems.value.some(item =>
+        item.ib_account_types_id === itemValue &&
+        item.closed_date === closedDate &&
+        item.meta_login === metaLogin &&
+        item.total_volume === totalVolume &&
+        item.total_revenue === totalRevenue
+    );
 }
 
 const showConfirmButton = computed(() => {
@@ -49,7 +58,7 @@ const showConfirmButton = computed(() => {
 });
 
 
-async function confirmAction() {
+async function confirmAction(type) {
     const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
             confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500 mx-2',
@@ -61,18 +70,34 @@ async function confirmAction() {
         color: '#ffffff',
     });
 
-    const result = await swalWithBootstrapButtons.fire({
-        title: 'Are you sure?',
-        text: `Approve all selected IB!`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Confirm',
-        cancelButtonText: 'Cancel',
-        reverseButtons: true,
-    });
+    if (type === 'approve') {
+        const result = await swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: `Approve all selected IB!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true,
+        });
 
-    if (result.isConfirmed) {
-        await approveSelectedRebatePayout();
+        if (result.isConfirmed) {
+            await approveSelectedRebatePayout();
+        }
+    } else {
+        const result = await swalWithBootstrapButtons.fire({
+            title: 'Are you sure?',
+            text: `Reject all selected IB!`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Confirm',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true,
+        });
+
+        if (result.isConfirmed) {
+            await rejectSelectedRebatePayout();
+        }
     }
 }
 
@@ -83,6 +108,68 @@ async function approveSelectedRebatePayout() {
             selected_items: selectedItems.value,
             date: props.date,
             type: 'approve_selected',
+        });
+
+        if (response.data.success) {
+            await Swal.fire({
+                title: 'Success',
+                text: response.data.message,
+                icon: 'success',
+                background: '#000000',
+                iconColor: '#ffffff',
+                color: '#ffffff',
+                confirmButtonText: 'OK',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
+                },
+            }).then(() => {
+                // Reload the page after the SweetAlert is closed
+                location.reload();
+            });
+        } else {
+            console.log(response.data.message);
+        }
+    } catch (error) {
+        if (error.response && error.response.status === 422) {
+            await Swal.fire({
+                title: 'Error',
+                text: error.response.data.message,
+                icon: 'error',
+                background: '#000000',
+                iconColor: '#ffffff',
+                color: '#ffffff',
+                confirmButtonText: 'OK',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
+                },
+            });
+        } else {
+            await Swal.fire({
+                title: 'Error',
+                text: 'An error occurred while applying the rebate.',
+                icon: 'error',
+                background: '#000000',
+                iconColor: '#ffffff',
+                color: '#ffffff',
+                confirmButtonText: 'OK',
+                buttonsStyling: false,
+                customClass: {
+                    confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
+                },
+            });
+        }
+    }
+}
+
+async function rejectSelectedRebatePayout() {
+    try {
+        // Make the POST request using axios with selectedItems
+        const response = await axios.post('/member/reject_rebate_payout', {
+            selected_items: selectedItems.value,
+            date: props.date,
+            type: 'reject_selected',
         });
 
         if (response.data.success) {
@@ -182,9 +269,8 @@ async function approveSelectedRebatePayout() {
         <tr v-for="list in lists.data" :key="list.ib_account_types_id" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
             <th class="py-2 font-thin rounded-l-full">
                 <Checkbox
-                    :checked="selectAllChecked || isItemSelected(list.ib_account_types_id)"
-                    @change="toggleItemCheckbox(list.ib_account_types_id)"
-                    :value="list.ib_account_types_id"
+                    :checked="selectAllChecked || isItemSelected(list.ib_account_types_id, list.date, list.meta_login, list.total_volume, list.total_revenue)"
+                    @change="toggleItemCheckbox(list.ib_account_types_id, list.date, list.meta_login, list.total_volume, list.total_revenue)"
                 />
             </th>
             <th>
@@ -218,13 +304,22 @@ async function approveSelectedRebatePayout() {
     <div class="flex justify-end mt-4">
         <Paginator :links="props.lists.links" />
     </div>
-    <div class="flex justify-end">
+    <div class="flex justify-end gap-2 m-2">
         <Button
             v-if="showConfirmButton"
+            variant="success"
             class="float-right text-xs"
-            @click="confirmAction"
+            @click="confirmAction('approve')"
         >
-            Confirm
+            Confirm Approve
+        </Button>
+        <Button
+            v-if="showConfirmButton"
+            variant="danger"
+            class="float-right text-xs"
+            @click="confirmAction('reject')"
+        >
+            Confirm Reject
         </Button>
     </div>
 </template>

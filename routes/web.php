@@ -74,6 +74,7 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::get('/rebate_payout', [MemberController::class, 'rebate_payout'])->name('member.rebate_payout');
         Route::post('/getRebatePayoutDetails', [MemberController::class, 'getRebatePayoutDetails'])->name('member.getRebatePayoutDetails');
         Route::post('/approve_rebate_payout', [MemberController::class, 'approve_rebate_payout'])->name('member.approve_rebate_payout');
+        Route::post('/reject_rebate_payout', [MemberController::class, 'reject_rebate_payout'])->name('member.reject_rebate_payout');
 
         Route::post('/getIBAccountTypeSymbolGroupRate', [MemberController::class, 'getIBAccountTypeSymbolGroupRate']);
         Route::post('/getNewIbRebateInfo', [MemberController::class, 'getNewIbRebateInfo']);

@@ -565,7 +565,7 @@ class MemberController extends Controller
                 $start_date = count($dateRange) === 2 ? Carbon::createFromFormat('Y-m-d', $dateRange[0])->startOfDay() : Carbon::createFromFormat('Y-m-d', $request->close_date)->startOfDay();
                 $end_date = count($dateRange) === 2 ? Carbon::createFromFormat('Y-m-d', $dateRange[1])->endOfDay() : Carbon::createFromFormat('Y-m-d', $request->close_date)->startOfDay();
 
-                $rec = TradingAccountRebateRevenue::where('ib_account_types_id', $request->ib_account_types_id)->where('status', 'pending');
+                $rec = TradingAccountRebateRevenue::where('ib_account_types_id', $request->ib_account_types_id)->where('meta_login', $request->meta_login)->where('status', 'pending');
 
                 if ($start_date) {
                     $rec =   $rec->where('closed_time', '>=', $start_date->startOfDay());
@@ -583,6 +583,7 @@ class MemberController extends Controller
                 // Extract ib_account_types_ids and closed_dates from selected_items
                 $ibAccountTypesIds = array_column($selectedItems, 'ib_account_types_id');
                 $closedDates = array_column($selectedItems, 'closed_date');
+                $metaLogin = array_column($selectedItems, 'meta_login');
 
                 $closedDateRanges = [];
                 foreach ($closedDates as $closedDate) {
@@ -592,6 +593,7 @@ class MemberController extends Controller
                 }
 
                 $rec = TradingAccountRebateRevenue::whereIn('ib_account_types_id', $ibAccountTypesIds)
+                    ->whereIn('meta_login', $metaLogin)
                     ->where('status', 'pending')
                     ->where(function ($query) use ($closedDateRanges) {
                         foreach ($closedDateRanges as $range) {
@@ -646,6 +648,71 @@ class MemberController extends Controller
         }
 
         return response()->json(['success' => true, 'message' => 'Rebate payout approved successfully']);
+
+    }
+
+    public function reject_rebate_payout(Request $request)
+    {
+        $requestDate = $request->date;
+
+        $dateRange = explode(' ~ ', $requestDate);
+
+        switch ($request->type)
+        {
+            case('reject_single'):
+
+                $start_date = count($dateRange) === 2 ? Carbon::createFromFormat('Y-m-d', $dateRange[0])->startOfDay() : Carbon::createFromFormat('Y-m-d', $request->close_date)->startOfDay();
+                $end_date = count($dateRange) === 2 ? Carbon::createFromFormat('Y-m-d', $dateRange[1])->endOfDay() : Carbon::createFromFormat('Y-m-d', $request->close_date)->startOfDay();
+
+
+                $rec = TradingAccountRebateRevenue::where('ib_account_types_id', $request->ib_account_types_id)->where('meta_login', $request->meta_login)->where('status', 'pending');
+
+                if ($start_date) {
+                    $rec =   $rec->where('closed_time', '>=', $start_date->startOfDay());
+                }
+                if ($end_date) {
+                    $rec =  $rec->where('closed_time', '<=',  $end_date->endOfDay());
+                }
+
+                break;
+
+            case('reject_selected'):
+
+                $selectedItems = $request->selected_items;
+
+                // Extract ib_account_types_ids and closed_dates from selected_items
+                $ibAccountTypesIds = array_column($selectedItems, 'ib_account_types_id');
+                $closedDates = array_column($selectedItems, 'closed_date');
+                $metaLogin = array_column($selectedItems, 'meta_login');
+
+                $closedDateRanges = [];
+                foreach ($closedDates as $closedDate) {
+                    $startOfDay = Carbon::createFromFormat('Y-m-d', $closedDate)->startOfDay();
+                    $endOfDay = Carbon::createFromFormat('Y-m-d', $closedDate)->endOfDay();
+                    $closedDateRanges[] = [$startOfDay, $endOfDay];
+                }
+
+                $rec = TradingAccountRebateRevenue::whereIn('ib_account_types_id', $ibAccountTypesIds)
+                    ->whereIn('meta_login', $metaLogin)
+                    ->where('status', 'pending')
+                    ->where(function ($query) use ($closedDateRanges) {
+                        foreach ($closedDateRanges as $range) {
+                            $query->orWhereBetween('closed_time', $range);
+                        }
+                    });
+
+                break;
+
+            default:
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Error Updating Rebate Payout',
+                ], 422);
+        }
+
+        $rec->update(['status' => 'rejected']);
+
+        return response()->json(['success' => true, 'message' => 'Rebate payout rejected successfully']);
 
     }
 
