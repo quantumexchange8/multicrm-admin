@@ -244,7 +244,7 @@ async function rejectSelectedRebatePayout() {
                 IB Name
             </th>
             <th scope="col" class="px-6 py-3">
-                Account Number
+                IB Number
             </th>
             <th scope="col" class="px-6 py-3">
                 Account Type
@@ -280,7 +280,7 @@ async function rejectSelectedRebatePayout() {
                  {{ list.of_user.first_name }}
             </th>
             <th>
-                 {{ list.meta_login }}
+                 {{ list.of_user.ib_id }}
             </th>
             <th>
                  {{ (list.of_account_type.name ) }}

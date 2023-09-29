@@ -19,7 +19,7 @@ const props = defineProps({
                 IB Name
             </th>
             <th scope="col" class="px-6 py-3">
-                Account Number
+                IB Number
             </th>
             <th scope="col" class="px-6 py-3">
                 Account Type
@@ -49,7 +49,7 @@ const props = defineProps({
                 {{ rebateHistory.of_user.first_name }}
             </th>
             <th>
-                {{ rebateHistory.meta_login }}
+                {{ rebateHistory.of_user.ib_id }}
             </th>
             <th>
                 {{ rebateHistory.of_account_type.name }}

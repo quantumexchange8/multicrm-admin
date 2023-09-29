@@ -46,7 +46,8 @@ class DepositController extends Controller
                     $query->where('first_name', 'like', "%{$search}%")
                         ->orWhere('email', 'like', "%{$search}%");
                 })
-                    ->orWhere('payment_id', 'like', "%{$search}%");
+                    ->orWhere('payment_id', 'like', "%{$search}%")
+                    ->orWhere('to', 'like', "%{$search}%");
             });
         }
 
