@@ -1,6 +1,6 @@
 <script setup>
 import Button from "@/Components/Button.vue";
-import {ResetPasswordIcon, TrashIcon, ViewIcon} from "@/Components/Icons/outline.jsx";
+import {ResetPasswordIcon, TrashIcon, ViewIcon, IbTransferIcon} from "@/Components/Icons/outline.jsx";
 import {ref} from "vue";
 import Modal from "@/Components/Modal.vue";
 import EditMemberDetail from "@/Pages/Member/Partials/EditMemberDetail.vue";
@@ -13,13 +13,15 @@ import {
     faArrowRightToBracket
 } from "@fortawesome/free-solid-svg-icons";
 import Tooltip from "@/Components/Tooltip.vue";
+import TransferUpline from "@/Pages/Member/Partials/TransferUpline.vue";
 library.add(faArrowRightToBracket)
 
 
 const props = defineProps({
     member: Object,
     countries: Object,
-    accountTypes: Object
+    accountTypes: Object,
+    getMemberSel: Array,
 })
 
 const memberDetailModal = ref(false);
@@ -30,6 +32,8 @@ const openMemberDetail = (memberId, componentType) => {
     memberDetailModal.value = true;
     if (componentType === 'view') {
         modalComponent.value = 'ViewProfileComponent';
+    } else if (componentType === 'transferUpline') {
+        modalComponent.value = 'TransferUpline';
     } else if (componentType === 'resetPassword') {
         modalComponent.value = 'ResetPasswordComponent';
     } else if (componentType === 'deleteMember') {
@@ -75,6 +79,16 @@ const openInNewTab = (url) => {
                 <span class="sr-only">View</span>
             </Button>
         </Tooltip>
+        <Tooltip content="Transfer Upline" placement="top" v-if="member.role === 'member'">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="openMemberDetail(member.id, 'transferUpline')"
+            >
+                <IbTransferIcon aria-hidden="true" class="w-6 h-6 absolute" />
+                <span class="sr-only">Transfer Upline</span>
+            </Button>
+        </Tooltip>
         <Tooltip content="Reset Password" placement="top">
             <Button
                 class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
@@ -113,6 +127,15 @@ const openInNewTab = (url) => {
                     v-if="member.role === 'member' && member.upline"
                     :accountTypes="accountTypes"
                     :member="member"
+                    @update:memberDetailModal="memberDetailModal = $event"
+                />
+            </template>
+
+            <!-- Transfer Content -->
+            <template v-if="modalComponent === 'TransferUpline'">
+                <TransferUpline
+                    :member="member"
+                    :getMemberSel="props.getMemberSel"
                     @update:memberDetailModal="memberDetailModal = $event"
                 />
             </template>

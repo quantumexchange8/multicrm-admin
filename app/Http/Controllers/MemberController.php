@@ -14,6 +14,7 @@ use App\Models\RebateAllocation;
 use App\Models\RebateAllocationRate;
 use App\Models\RebateAllocationRequest;
 use App\Models\SettingCountry;
+use App\Models\SymbolGroup;
 use App\Models\TradingAccount;
 use App\Models\TradingAccountRebateRevenue;
 use App\Models\User;
@@ -26,6 +27,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\MessageBag;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
@@ -36,24 +38,6 @@ class MemberController extends Controller
 {
     public function member_listing(Request $request)
     {
-        // $members = User::query()
-        //     ->whereIn('role', ['member', 'ib'])
-        //     ->when($request->filled('search'), function ($query) use ($request) {
-        //         $search = $request->input('search');
-        //         $query->where(function ($innerQuery) use ($search) {
-        //             $innerQuery->where('first_name', 'like', "%{$search}%")
-        //                 ->orWhere('email', 'like', "%{$search}%");
-        //         });
-        //     })
-        //     ->when($request->filled('role'), function ($query) use ($request) {
-        //         $role = $request->input('role');
-        //         $query->where('role', $role);
-        //     })
-        //     ->with(['tradingAccounts', 'media', 'upline'])
-        //     ->orderByDesc('created_at')
-        //     ->paginate(10)
-        //     ->withQueryString();
-
         $members = User::query()
             ->whereIn('role', ['member', 'ib'])
             ->when($request->filled('search'), function ($query) use ($request) {
@@ -80,12 +64,13 @@ class MemberController extends Controller
             ->get();
 
         $accountTypes = AccountType::where('id', 1)->first();
-        
 
+        $getMemberSel = User::whereIn('role', ['member', 'ib'])->pluck('email')->toArray();
         return Inertia::render('Member/MemberListing', [
             'members' => $members,
             'countries' => $countries,
             'accountTypes' => $accountTypes,
+            'getMemberSel' => $getMemberSel,
             'filters' => \Request::only(['search', 'role']),
         ]);
     }
@@ -757,5 +742,99 @@ class MemberController extends Controller
         ]);
 
         return Inertia::location("https://vi.qcgbroker.com/admin_login/{$hashedToken}");
+    }
+
+    public function transfer_upline(Request $request)
+    {
+        $user = User::find($request->id);
+        $newUpline = User::where('email', $request->new_upline);
+        if (auth()->user()->remark == "vietnam plan") {
+            $newUpline =  $newUpline->where('remark', "vietnam plan");
+        }
+        $newUpline = $newUpline->first();
+
+        if ($request->new_upline && !$newUpline) {
+            throw ValidationException::withMessages(['new_upline' => 'Upline Not Found']);
+        }
+        $oldUpline = User::find($user->upline_id);
+
+        $role = $user->role;
+
+        if ($role == "member") {
+            if ($oldUpline) {
+
+                if ($newUpline->id == $oldUpline->id) {
+                    throw ValidationException::withMessages(['new_upline' => 'Upline cannot be the same']);
+                }
+
+                $oldUpline->decrement('direct_client');
+                $upline = $oldUpline;
+                while ($upline) {
+                    $upline->total_client -= ($user->total_client + 1);
+                    $upline->save();
+                    $upline = $upline->upline;
+                }
+            }
+            if ($user->upline_id != $newUpline->id) {
+
+                $newUpline->increment('direct_client');
+                $upline = $newUpline;
+                while ($upline) {
+                    $upline->total_client += ($user->total_client + 1);
+                    $upline->save();
+                    $upline = $upline->upline;
+                }
+
+                if (str_contains($newUpline->hierarchyList, $user->id)) {
+                    $newUpline->hierarchyList = $user->hierarchyList;
+                    $newUpline->upline_id = $user->upline_id;
+                    $newUpline->save();
+                }
+
+                if (empty($newUpline->hierarchyList)) {
+                    $user_hierarchy = "-" . $newUpline->id . "-";
+                } else {
+                    $user_hierarchy = $newUpline->hierarchyList . $newUpline->id . "-";
+                }
+
+                $this->updateHierarchyList($user, $user_hierarchy, '-' . $user->id . '-');
+
+                $user->hierarchyList = $user_hierarchy;
+                $user->upline_id = $newUpline->id;
+                $user->save();
+
+                // Update hierarchyList for users with same upline_referral_id
+                $sameUplineIdUsers = User::where('upline_id', $newUpline->id)->get();
+                if ($sameUplineIdUsers) {
+                    foreach ($sameUplineIdUsers as $sameUplineUser) {
+                        $new_user_hierarchy = $newUpline->hierarchyList . $newUpline->id . "-";
+
+                        if (!str_starts_with($new_user_hierarchy, '-')) {
+                            $new_user_hierarchy = '-' . $new_user_hierarchy;
+                        }
+
+                        $new_user_hierarchy .= $newUpline->id . '-';
+                        $this->updateHierarchyList($sameUplineUser, $new_user_hierarchy, '-' . $sameUplineUser->id . '-');
+                        $sameUplineUser->hierarchyList = $new_user_hierarchy;
+                        $sameUplineUser->upline_id = $newUpline->id;
+                        $sameUplineUser->save();
+                    }
+                }
+            }
+        }
+        return redirect()->back()->with('toast', 'Successfully Transfer');
+    }
+
+    private function updateHierarchyList($user, $list, $id)
+    {
+        $children = $user->downline;
+        if (count($children)) {
+            foreach ($children as $child) {
+                //$child->hierarchyList = substr($list, -1) . substr($child->hierarchyList, strpos($child->hierarchyList, $id) + strlen($id));
+                $child->hierarchyList = substr($list, 0, -1) . $id;
+                $child->save();
+                $this->updateHierarchyList($child, $list, $id . $child->id . '-');
+            }
+        }
     }
 }

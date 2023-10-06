@@ -22,6 +22,7 @@ const props = defineProps({
     countries: Object,
     accountTypes: Object,
     filters: Object,
+    getMemberSel: Array,
 });
 
 let search = ref(props.filters.search);
@@ -181,7 +182,12 @@ function getRole() {
                                 {{ member.country }}
                             </td>
                             <td class="px-6 py-4 space-x-2 font-thin rounded-r-full">
-                                <Action :member="member" :countries="props.countries" :accountTypes="props.accountTypes" />
+                                <Action
+                                    :member="member"
+                                    :countries="props.countries"
+                                    :accountTypes="props.accountTypes"
+                                    :getMemberSel="props.getMemberSel"
+                                />
                             </td>
                         </tr>
                     </tbody>
