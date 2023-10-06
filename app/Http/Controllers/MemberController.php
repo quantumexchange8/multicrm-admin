@@ -761,6 +761,9 @@ class MemberController extends Controller
         $role = $user->role;
 
         if ($role == "member") {
+            if ($user->id == $newUpline->id) {
+                throw ValidationException::withMessages(['new_upline' => 'Upline cannot be themselves']);
+            }
             if ($oldUpline) {
 
                 if ($newUpline->id == $oldUpline->id) {
@@ -813,7 +816,6 @@ class MemberController extends Controller
                             $new_user_hierarchy = '-' . $new_user_hierarchy;
                         }
 
-                        $new_user_hierarchy .= $newUpline->id . '-';
                         $this->updateHierarchyList($sameUplineUser, $new_user_hierarchy, '-' . $sameUplineUser->id . '-');
                         $sameUplineUser->hierarchyList = $new_user_hierarchy;
                         $sameUplineUser->upline_id = $newUpline->id;
