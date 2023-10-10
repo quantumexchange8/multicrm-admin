@@ -25,19 +25,19 @@ function formatAmount(amount) {
 
 <template>
     <aside class="w-full md:w-auto space-y-4">
-        <RightbarTitle title="Today's Deposit">
-            <RightbarContent title="Total Approved Deposit ($)" :amount="formatAmount(totalApprovedDeposit)" />
-            <RightbarContent title="Total Pending Deposit ($)" :amount="formatAmount(totalPendingDeposit)" />
+        <RightbarTitle :title="$t('public.rightbar.Today\'s Deposit')">
+            <RightbarContent :title="$t('public.rightbar.Total Approved Deposit') + ' ($)'" :amount="formatAmount(totalApprovedDeposit)" />
+            <RightbarContent :title="$t('public.rightbar.Total Pending Deposit') + ' ($)'" :amount="formatAmount(totalPendingDeposit)" />
         </RightbarTitle>
 
-        <RightbarTitle title="Today's Withdrawal">
-            <RightbarContent title="Total Approved Withdrawal ($)" :amount="formatAmount(totalApprovedWithdrawal)" />
-            <RightbarContent title="Total Pending Withdrawal ($)" :amount="formatAmount(totalPendingWithdrawal)" />
+        <RightbarTitle :title="$t('public.rightbar.Today\'s Withdrawal')">
+            <RightbarContent :title="$t('public.rightbar.Total Approved Withdrawal') + ' ($)'" :amount="formatAmount(totalApprovedWithdrawal)" />
+            <RightbarContent :title="$t('public.rightbar.Total Pending Withdrawal') + ' ($)'" :amount="formatAmount(totalPendingWithdrawal)" />
         </RightbarTitle>
 
-        <RightbarTitle title="Today's Rebate">
-            <RightbarContent title="Total Approved Rebate ($)" :amount="formatAmount(totalApprovedWithdrawal)" />
-            <RightbarContent title="Total Pending Rebate ($)" :amount="formatAmount(totalPendingWithdrawal)" />
+        <RightbarTitle :title="$t('public.rightbar.Today\'s Rebate')">
+            <RightbarContent :title="$t('public.rightbar.Total Approved Rebate') + ' ($)'" :amount="formatAmount(totalApprovedWithdrawal)" />
+            <RightbarContent :title="$t('public.rightbar.Total Pending Rebate') + ' ($)'" :amount="formatAmount(totalPendingWithdrawal)" />
         </RightbarTitle>
 
 <!--        <RightbarTitle title="Today's Credit">-->

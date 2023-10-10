@@ -105,11 +105,11 @@ const paginationActiveClass = [
 </script>
 
 <template>
-    <AuthenticatedLayout title="Internal Transfer Report">
+    <AuthenticatedLayout :title="$t('public.Internal Transfer Report')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Internal Transfer Report
+                    {{ $t('public.Internal Transfer Report') }}
                 </h2>
             </div>
         </template>
@@ -117,20 +117,20 @@ const paginationActiveClass = [
         <form @submit.prevent="submitSearch">
             <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="space-y-2">
-                    <Label>Filter by Transaction Type</Label>
+                    <Label>{{ $t('public.Filter by Transaction Type') }}</Label>
                     <InputSelect
                         class="block w-full text-sm"
                         v-model="type"
                     >
-                        <option value="">All</option>
-                        <option value="WalletToAccount">Wallet To Account</option>
-                        <option value="AccountToWallet">Account To Wallet</option>
-                        <option value="AccountToAccount">Account To Account</option>
-                        <option value="RebateToWallet">Rebate To Wallet</option>
+                        <option value="">{{ $t('public.All') }}</option>
+                        <option value="WalletToAccount">{{ $t('public.Wallet To Account') }}</option>
+                        <option value="AccountToWallet">{{ $t('public.Account To Wallet') }}</option>
+                        <option value="AccountToAccount">{{ $t('public.Account To Account') }}</option>
+                        <option value="RebateToWallet">{{ $t('public.Rebate To Wallet') }}</option>
                     </InputSelect>
                 </div>
                 <div class="space-y-2">
-                    <Label>Filter By Date</Label>
+                    <Label>{{ $t('public.Filter By Date') }}</Label>
                     <vue-tailwind-datepicker
                         :formatter="formatter"
                         v-model="date"
@@ -138,7 +138,7 @@ const paginationActiveClass = [
                     />
                 </div>
                 <div class="space-y-2">
-                    <Label>Search By Name / Email</Label>
+                    <Label>{{ $t('public.Search By Name / Email') }}</Label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -169,14 +169,14 @@ const paginationActiveClass = [
                             variant="primary-opacity"
                             class="justify-center"
                         >
-                            Search
+                            {{ $t('public.Search') }}
                         </Button>
                         <Button
                             variant="danger-opacity"
                             class="justify-center"
                             @click.prevent="reset"
                         >
-                            Reset
+                            {{ $t('public.Reset') }}
                         </Button>
                     </div>
                 </div>
@@ -200,32 +200,32 @@ const paginationActiveClass = [
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                     <tr class="uppercase">
                         <th scope="col" class="px-6 py-3">
-                            Name
+                            {{ $t('public.Name') }}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Email
+                            {{ $t('public.Email') }}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Date
+                            {{ $t('public.Date') }}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Internal Transfer Type
+                            {{ $t('public.Internal Transfer Type') }}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Amount
+                            {{ $t('public.Amount') }}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Status
+                            {{ $t('public.Status') }}
                         </th>
                         <th scope="col" class="px-6 py-3">
-                            Action
+                            {{ $t('public.Action') }}
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-if="internalTransfer.data.length === 0">
                         <th colspan="7" class="py-4 text-lg text-center">
-                            No History
+                            {{ $t('public.No History') }}
                         </th>
                     </tr>
                     <tr v-for="history in internalTransfer.data" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
@@ -239,13 +239,13 @@ const paginationActiveClass = [
                             {{ formatDate(history.created_at) }}
                         </th>
                         <th>
-                            {{ formatType(history.type) }}
+                            {{ $t('public.' + formatType(history.type)) }}
                         </th>
                         <th>
                             $ {{ formatAmount(history.amount) }}
                         </th>
                         <th>
-                            <Badge :status="getStatusClass(history.status)">{{ history.status }}</Badge>
+                            <Badge :status="getStatusClass(history.status)">{{ $t('public.' + history.status) }}</Badge>
                         </th>
                         <th class="px-6 py-4 font-thin rounded-r-full">
                             <Action

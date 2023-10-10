@@ -55,12 +55,12 @@ const closeModal = () => {
 </script>
 
 <template>
-    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">Edit Announcement</h2>
+    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.Edit Announcement') }}</h2>
     <hr>
 
     <form enctype="multipart/form-data">
         <div class="my-6 space-y-2">
-            <Label for="title" value="Title" />
+            <Label for="title" :value="$t('public.Title')" />
             <Input
                 id="title"
                 type="text"
@@ -73,7 +73,7 @@ const closeModal = () => {
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
-                <Label for="start_date" value="Post Date" />
+                <Label for="start_date" :value="$t('public.Post Date')" />
                 <vue-tailwind-datepicker
                     as-single
                     :formatter="formatter"
@@ -83,7 +83,7 @@ const closeModal = () => {
                 <InputError :message="form.errors.start_date" class="mt-2" />
             </div>
             <div class="space-y-2">
-                <Label for="end_date" value="Expired Date" />
+                <Label for="end_date" :value="$t('public.Expired Date')" />
                 <vue-tailwind-datepicker
                     as-single
                     :formatter="formatter"
@@ -93,19 +93,19 @@ const closeModal = () => {
                 <InputError :message="form.errors.end_date" class="mt-2" />
             </div>
             <div class="space-y-2">
-                <Label for="recipient" value="Trigger Email" />
+                <Label for="recipient" :value="$t('public.Trigger Email')" />
                 <InputSelect
                     v-model="form.recipient"
                     class="block w-full text-sm dark:border-0"
                 >
-                    <option value="all">Trigger All Users</option>
-                    <option value="member">Trigger Only Members</option>
-                    <option value="ib">Trigger Only IBs</option>
+                    <option value="all">{{ $t('public.Trigger All Users') }}</option>
+                    <option value="member">{{ $t('public.Trigger Only Members') }}</option>
+                    <option value="ib">{{ $t('public.Trigger Only IBs') }}</option>
                 </InputSelect>
                 <InputError :message="form.errors.recipient" class="mt-2" />
             </div>
             <div class="space-y-2">
-                <Label for="image" value="Upload Document" />
+                <Label for="image" :value="$t('public.Upload Document')" />
                 <input
                     type="file"
                     id="image"
@@ -117,7 +117,7 @@ const closeModal = () => {
             </div>
         </div>
         <div class="my-6 space-y-2">
-            <Label for="content" value="Announcement Details" />
+            <Label for="content" :value="$t('public.Announcement Details')" />
             <CKEditor class="ck-content" :editor="ClassicEditor" v-model="form.content" :config="editorConfig"></CKEditor>
             <InputError :message="form.errors.content" class="mt-2" />
         </div>
@@ -126,35 +126,35 @@ const closeModal = () => {
                 <div class="flex items-center justify-between mt-4">
                     <label class="flex items-center" for="popup">
                         <Checkbox id="popup" :checked="form.popup" v-model="form.popup" />
-                        <span class="ml-2 text-sm dark:text-white">Popup when user login portal</span>
+                        <span class="ml-2 text-sm dark:text-white">{{ $t('public.Popup when user login portal') }}</span>
                     </label>
                 </div>
                 <InputError :message="form.errors.popup" class="mt-2" />
                 <div class="flex items-center justify-between mt-4">
                     <label class="flex items-center" for="popup_daily">
                         <Checkbox id="popup_daily" :checked="form.popup_daily" v-model="form.popup_daily" />
-                        <span class="ml-2 text-sm dark:text-white">Popup everyday first login</span>
+                        <span class="ml-2 text-sm dark:text-white">{{ $t('public.Popup everyday first login') }}</span>
                     </label>
                 </div>
                 <InputError :message="form.errors.popup_daily" class="mt-2" />
             </div>
             <div class="space-y-2">
-                <Label for="status">Status</Label>
+                <Label for="status">{{ $t('public.Status') }}</Label>
                 <InputSelect
                     v-model="form.status"
                     class="block w-full text-sm dark:border-0"
                 >
-                    <option value="Active">Active</option>
-                    <option value="Inactive">Inactive</option>
+                    <option value="Active">{{ $t('public.Active') }}</option>
+                    <option value="Inactive">{{ $t('public.Inactive') }}</option>
                 </InputSelect>
                 <InputError :message="form.errors.status" class="mt-2" />
             </div>
         </div>
         <div class="mt-6 flex gap-4 justify-end">
             <Button variant="secondary" @click.prevent="closeModal">
-                Cancel
+                {{ $t('public.Cancel') }}
             </Button>
-            <Button @click="submit" :disabled="form.processing">Save</Button>
+            <Button @click="submit" :disabled="form.processing">{{ $t('public.Save') }}</Button>
         </div>
     </form>
 </template>

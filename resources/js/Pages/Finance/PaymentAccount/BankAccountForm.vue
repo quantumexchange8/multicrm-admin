@@ -67,13 +67,13 @@ const toggleEdit = () => {
 </script>
 
 <template>
-    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">View Bank Account Details</h2>
+    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.Bank Account Details') }}</h2>
     <hr>
 
     <form class="my-6">
         <div class="grid col-span-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
-                <Label for="name">Name</Label>
+                <Label for="name">{{ $t('public.Name') }}</Label>
 
                 <Input
                     id="name"
@@ -87,7 +87,7 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.name" />
             </div>
             <div class="space-y-2">
-                <Label for="email">Email</Label>
+                <Label for="email">{{ $t('public.Email') }}</Label>
 
                 <Input
                     id="email"
@@ -101,7 +101,7 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
             <div class="space-y-2">
-                <Label for="payment_platform_name" value="Bank Name" />
+                <Label for="payment_platform_name" :value="$t('public.Bank Name')" />
 
                 <Input
                     id="payment_platform_name"
@@ -115,7 +115,7 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.payment_platform_name" />
             </div>
             <div class="space-y-2">
-                <Label for="bank_branch_address" value="Bank Branch Address" />
+                <Label for="bank_branch_address" :value="$t('public.Bank Branch Address')" />
 
                 <Input
                     id="bank_branch_address"
@@ -129,7 +129,7 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.bank_branch_address" />
             </div>
             <div class="space-y-2">
-                <Label for="payment_account_name" value="Bank Account Holder Name" />
+                <Label for="payment_account_name" :value="$t('public.Bank Account Holder Name')" />
 
                 <Input
                     id="payment_account_name"
@@ -143,7 +143,7 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.payment_account_name" />
             </div>
             <div class="space-y-2">
-                <Label for="account_no" value="Account No." />
+                <Label for="account_no" :value="$t('public.Account No')" />
 
                 <Input
                     id="account_no"
@@ -157,7 +157,7 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.account_no" />
             </div>
             <div class="space-y-2">
-                <Label for="bank_swift_code" value="Bank Swift Code" />
+                <Label for="bank_swift_code" :value="$t('public.Bank Swift Code')" />
 
                 <Input
                     id="bank_swift_code"
@@ -171,7 +171,7 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.bank_swift_code" />
             </div>
             <div class="space-y-2">
-                <Label for="bank_code">Bank Code</Label>
+                <Label for="bank_code">{{ $t('public.Bank Code') }}</Label>
 
                 <Input
                     id="bank_code"
@@ -199,18 +199,18 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.bank_code_type" />
             </div>
             <div class="space-y-2">
-                <Label for="country" value="Country" />
+                <Label for="country" :value="$t('public.Country')" />
 
-                <InputSelect v-model="form.country" class="block w-full text-sm" :disabled="!isEditing" placeholder="Select a country">
+                <InputSelect v-model="form.country" class="block w-full text-sm" :disabled="!isEditing" :placeholder="$t('public.Select a country')">
                     <option v-for="country in props.countries" :value="country.name_en" :key="country.id">{{ country.name_en }}</option>
                 </InputSelect>
 
                 <InputError class="mt-2" :message="form.errors.country" />
             </div>
             <div class="space-y-2">
-                <Label for="currency" value="Your Country Currency" />
+                <Label for="currency" :value="$t('public.Your Country Currency')" />
 
-                <InputSelect v-model="form.currency" class="block w-full text-sm" :disabled="!isEditing" placeholder="Select a currency">
+                <InputSelect v-model="form.currency" class="block w-full text-sm" :disabled="!isEditing" :placeholder="$t('public.Select a currency')">
                     <option value="VND">VND</option>
                     <option value="MYR">MYR</option>
                 </InputSelect>
@@ -218,14 +218,14 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.currency" />
             </div>
             <div class="space-y-2">
-                <Label for="proof_of_bank">Proof of Bank Account</Label>
+                <Label for="proof_of_bank">{{ $t('public.Proof of Bank Account') }}</Label>
 
                 <Input
                     v-if="bankProof"
                     id="front_identity"
                     type="text"
                     class="mt-1 block w-full cursor-pointer text-blue-500 dark:text-blue-500 hover:underline bg-white dark:bg-dark-eval-0"
-                    value="Click to view"
+                    :value="$t('public.Click to view')"
                     @click="openBankProofModal"
                     readonly
                 />
@@ -234,7 +234,7 @@ const toggleEdit = () => {
                     id="front_identity"
                     type="text"
                     class="mt-1 block w-full"
-                    value="Proof of Bank Account"
+                    :value="$t('public.Proof of Bank Account')"
                     disabled
                 />
 
@@ -247,7 +247,7 @@ const toggleEdit = () => {
                             <span class="sr-only">Close modal</span>
                         </button>
                         <div class="px-6 py-6 lg:px-8">
-                            <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Proof of Bank Account</h3>
+                            <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">{{ $t('public.Proof of Bank Account') }}</h3>
                             <div class="flex justify-center" v-for="bankFile in bankProof">
                                 <img class="rounded" :src="bankFile.original_url" alt="Proof of Identity (Front)">
                             </div>
@@ -258,7 +258,7 @@ const toggleEdit = () => {
         </div>
         <div class="mt-6 flex justify-end">
             <Button variant="secondary" v-if="isEditing" @click.prevent="toggleEdit">
-                Cancel
+                {{ $t('public.Cancel') }}
             </Button>
             <Button
                 variant="primary"
@@ -266,7 +266,7 @@ const toggleEdit = () => {
                 @click.prevent="submit"
                 :disabled="form.processing"
             >
-                {{ props.isEditing ? 'Save' : 'Edit' }}
+                {{ $t('public.' + (props.isEditing ? 'Save' : 'Edit')) }}
             </Button>
         </div>
     </form>

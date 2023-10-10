@@ -4,11 +4,11 @@ import Action from "@/Pages/Setting/TradingAccount/Action.vue";
 </script>
 
 <template>
-    <AuthenticatedLayout title="Trading Account Setting">
+    <AuthenticatedLayout :title="$t('public.Trading Account Setting')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Trading Account Setting
+                    {{ $t('public.Trading Account Setting') }}
                 </h2>
             </div>
         </template>
@@ -19,17 +19,17 @@ import Action from "@/Pages/Setting/TradingAccount/Action.vue";
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                     <tr>
                         <th scope="col" class="px-4 py-3">
-                            Setting Name
+                            {{ $t('public.Setting Name') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Action
+                            {{ $t('public.Action') }}
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr class="bg-white even:dark:bg-transparent odd:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
                         <th scope="row" class="p-4 font-thin rounded-l-full">
-                            Group
+                            {{ $t('public.Group') }}
                         </th>
                         <td class="p-4 rounded-r-full">
                             <Action />

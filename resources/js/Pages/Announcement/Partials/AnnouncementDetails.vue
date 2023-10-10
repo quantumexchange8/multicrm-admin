@@ -59,7 +59,7 @@ const getMediaUrlByCollection = (announcement, collectionName) => {
         class="w-full flex justify-center"
         @click="openAnnouncementDetailModal"
     >
-        View Details
+        {{ $t('public.View Details') }}
     </Button>
 
     <Modal :show="announcementDetailModal" @close="closeModal" max-width="2xl">
@@ -71,7 +71,7 @@ const getMediaUrlByCollection = (announcement, collectionName) => {
                 <span class="sr-only">Close modal</span>
             </button>
             <div class="px-6 py-6 lg:px-8 space-y-4 text-gray-500 dark:text-dark-eval-4">
-                <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">View Announcement Details</h2>
+                <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.View Announcement Details') }}</h2>
                 <hr>
 
                 <div class="my-6">
@@ -84,9 +84,9 @@ const getMediaUrlByCollection = (announcement, collectionName) => {
 
                 <div class="mt-6 flex gap-4 justify-end">
                     <Button variant="danger" @click="openDeleteDetailModal">
-                        Delete
+                        {{ $t('public.Delete') }}
                     </Button>
-                    <Button @click="openEditModal">Edit</Button>
+                    <Button @click="openEditModal">{{ $t('public.Edit') }}</Button>
                 </div>
             </div>
         </div>
@@ -113,17 +113,17 @@ const getMediaUrlByCollection = (announcement, collectionName) => {
             </div>
             <div class="mt-6 text-center">
                 <h1 class="mb-4 text-2xl font-bold leading-none tracking-tight text-gray-900 md:text-3xl lg:text-4xl dark:text-white" style="font-family: Montserrat,sans-serif">
-                    Delete Announcement?
+                    {{ $t('public.Delete Announcement?') }}
                 </h1>
                 <p class="dark:text-dark-eval-3">
-                    The announcement will be deleted permanently!
+                    {{ $t('public.The announcement will be deleted permanently!')}}
                 </p>
             </div>
             <div class="mt-6 flex gap-4 justify-center">
                 <Button variant="secondary" class="px-6" @click="closeDeleteModal">
-                    Cancel
+                    {{ $t('public.Cancel') }}
                 </Button>
-                <Button class="px-6" variant="danger" @click.prevent="deleteAnnouncement">Delete</Button>
+                <Button class="px-6" variant="danger" @click.prevent="deleteAnnouncement">{{ $t('public.Delete') }}</Button>
             </div>
         </div>
     </Modal>

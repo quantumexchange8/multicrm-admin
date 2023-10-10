@@ -16,7 +16,7 @@ const setActiveComponent = (component) => {
 </script>
 
 <template>
-    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">View Adjustment History</h2>
+    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.View Adjustment History') }}</h2>
     <hr>
 
     <div class="grid grid-cols-2 my-8 gap-6">
@@ -26,7 +26,7 @@ const setActiveComponent = (component) => {
             :class="{ 'bg-transparent': activeComponent !== 'cash_wallet', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'balance' }"
             @click="setActiveComponent('balance')"
         >
-            Balance History
+            {{ $t('public.Balance History') }}
         </Button>
         <Button
             variant="primary-opacity"
@@ -34,7 +34,7 @@ const setActiveComponent = (component) => {
             :class="{ 'bg-transparent': activeComponent !== 'rebate_wallet', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'credit' }"
             @click="setActiveComponent('credit')"
         >
-            Credit History
+            {{ $t('public.Credit History') }}
         </Button>
     </div>
 

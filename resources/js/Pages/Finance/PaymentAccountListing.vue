@@ -93,11 +93,11 @@ const paginationActiveClass = [
 </script>
 
 <template>
-    <AuthenticatedLayout title="Payment Account Listing">
+    <AuthenticatedLayout :title="$t('public.Payment Account Listing')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Payment Account Listing
+                    {{ $t('public.Payment Account Listing') }}
                 </h2>
             </div>
         </template>
@@ -105,17 +105,17 @@ const paginationActiveClass = [
         <form @submit.prevent="submitSearch">
             <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="space-y-2">
-                    <Label>Payment Account Type</Label>
+                    <Label>{{ $t('public.Payment Account Type')}}</Label>
                     <InputSelect
                         class="block w-full text-sm"
                         v-model="type"
                     >
-                        <option value="bank">Bank Account</option>
-                        <option value="crypto">Cryptocurrency Wallet</option>
+                        <option value="bank">{{ $t('public.Bank Account') }}</option>
+                        <option value="crypto">{{ $t('public.Cryptocurrency Wallet') }}</option>
                     </InputSelect>
                 </div>
                 <div class="space-y-2">
-                    <Label>Search By Name / Email / Account No</Label>
+                    <Label>{{ $t('public.Search By Name / Email / Account No') }}</Label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -146,14 +146,14 @@ const paginationActiveClass = [
                             variant="primary-opacity"
                             class="justify-center py-3"
                         >
-                            Search
+                            {{ $t('public.Search') }}
                         </Button>
                         <Button
                             variant="danger-opacity"
                             class="justify-center py-3"
                             @click.prevent="reset"
                         >
-                            Reset
+                            {{ $t('public.Reset') }}
                         </Button>
                     </div>
                 </div>
@@ -181,31 +181,31 @@ const paginationActiveClass = [
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                     <tr>
                         <th scope="col" class="px-4 py-3">
-                            Name
+                            {{ $t('public.Name') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Email
+                            {{ $t('public.Email') }}
                         </th>
                         <th v-if="originalType === 'bank'" scope="col" class="px-4 py-3">
-                            Bank Name
+                            {{ $t('public.Bank Name') }}
                         </th>
                         <th v-else-if="originalType === 'crypto'" scope="col" class="px-4 py-3">
-                            USDT Protocol Type
+                            {{ $t('public.USDT Protocol Type') }}
                         </th>
                         <th v-if="originalType === 'bank'" scope="col" class="px-4 py-3">
-                            Bank Holder Name
+                            {{ $t('public.Bank Holder Name') }}
                         </th>
                         <th v-if="originalType === 'bank'" scope="col" class="px-4 py-3">
-                            Bank Account No
+                            {{ $t('public.Bank Account No') }}
                         </th>
                         <th v-else-if="originalType === 'crypto'" scope="col" class="px-4 py-3">
-                            Token Address
+                            {{ $t('public.Token Address')}}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Status
+                            {{ $t('public.Status') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Action
+                            {{ $t('public.Action') }}
                         </th>
                     </tr>
                     </thead>

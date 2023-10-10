@@ -71,7 +71,7 @@ const closeModal = () => {
             <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
             <tr class="uppercase">
                 <th scope="col" class="px-6 py-3 uppercase">
-                    Ib Name
+                    {{ $t('public.IB Name') }}
                 </th>
                 <th scope="col" class="px-2 py-3" v-for="uplineSymbolGroup in ib.symbol_groups">
                     {{ uplineSymbolGroup.symbol_group.name }} <br>
@@ -83,7 +83,7 @@ const closeModal = () => {
                 <template v-if="downlineGroupRates.length === 0">
                     <tr>
                         <td colspan="8" class="text-center py-4">
-                            <span class="bg-indigo-100 text-indigo-800 text-md font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">No Downline Found</span>
+                            <span class="bg-indigo-100 text-indigo-800 text-md font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-indigo-900 dark:text-indigo-300">{{ $t('public.No Downline Found') }}</span>
                         </td>
                     </tr>
                 </template>
@@ -109,10 +109,10 @@ const closeModal = () => {
         </table>
         <div class="mt-6 flex justify-end gap-2">
         <Button variant="secondary" @click="closeModal">
-            Cancel
+            {{ $t('public.Cancel')}}
         </Button>
         <Button @click.prevent="submitForm">
-            Save
+            {{ $t('public.Save')}}
         </Button>
     </div>
     </div>

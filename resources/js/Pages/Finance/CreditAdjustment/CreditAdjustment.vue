@@ -54,26 +54,26 @@ const handleTypeChange = (value) => {
 </script>
 
 <template>
-    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">Credit Adjustment</h2>
+    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.Credit Adjustment') }}</h2>
     <hr>
     <ValidationErrors class="my-4" v-if="!form.errors.amount && !form.errors.start_date && !form.errors.end_date && !form.errors.internal_description && !form.errors.client_description"/>
     <ul class="grid w-full gap-6 md:grid-cols-2 mt-8">
         <li>
             <input type="radio" id="credit_in" v-model="form.type" value="credit_in" @change="handleTypeChange('credit_in')" class="hidden peer">
             <label for="credit_in" class="inline-flex items-center justify-between text-center w-full py-2 text-white bg-white border border-blue-600 rounded-full cursor-pointer dark:hover:text-white dark:border-blue-600 dark:peer-checked:text-white dark:peer-checked:bg-[#007BFF] peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-blue-100 dark:text-white dark:bg-dark-eval-0 dark:hover:bg-blue-500">
-                <span class="w-full">Add Credit</span>
+                <span class="w-full">{{ $t('public.Add Credit') }}</span>
             </label>
         </li>
         <li>
             <input type="radio" id="credit_out" v-model="form.type" value="credit_out" @change="handleTypeChange('credit_out')" class="hidden peer">
             <label for="credit_out" class="inline-flex items-center justify-between text-center w-full py-2 text-white bg-white border border-blue-600 rounded-full cursor-pointer dark:hover:text-white dark:border-blue-600 dark:peer-checked:text-white dark:peer-checked:bg-[#007BFF] peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-600 hover:bg-blue-100 dark:text-white dark:bg-dark-eval-0 dark:hover:bg-blue-500">
-                <span class="w-full">Withdraw Credit</span>
+                <span class="w-full">{{ $t('public.Withdraw Credit') }}</span>
             </label>
         </li>
     </ul>
 
     <div class="flex justify-center flex-col text-center mt-8 space-y-2">
-        <h4 class="text-lg font-medium text-gray-900 dark:text-dark-eval-4">Account Balance</h4>
+        <h4 class="text-lg font-medium text-gray-900 dark:text-dark-eval-4">{{ $t('public.Account Balance') }}</h4>
         <h3 class="text-4xl mb-2 font-medium text-gray-900 dark:text-gray-100">
             $ {{ formatAmount(account.balance) }}
         </h3>
@@ -81,15 +81,15 @@ const handleTypeChange = (value) => {
 
     <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-6">
         <div class="space-y-6 mb-4 md:mb-0">
-            <Label for="source">Credit Source</Label>
+            <Label for="source">{{ $t('public.Credit Source') }}</Label>
             <Input
                 disabled
                 class="w-full border-0"
-                model-value="Broker"
+                :model-value="$t('public.Broker')"
             />
         </div>
         <div class="space-y-6 mb-4 md:mb-0">
-            <Label for="credit">Available Credit Balance ($)</Label>
+            <Label for="credit">{{ $t('public.Available Credit Balance') }} ($)</Label>
             <Input
                 disabled
                 class="w-full border-0"
@@ -97,20 +97,20 @@ const handleTypeChange = (value) => {
             />
         </div>
         <div class="space-y-6 md:col-span-2 mb-4 md:mb-0" v-if="form.type === 'credit_in'">
-            <Label for="amount">Allotted Time</Label>
+            <Label for="amount">{{ $t('public.Allotted Time') }}</Label>
             <div class="flex gap-12 mb-4">
                 <div>
                     <input id="with_allotted_time" type="radio" v-model="form.allotted_time" value="1" @change="handleAllottedTimeChange(1)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="with_allotted_time" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">With Allotted Time</label>
+                    <label for="with_allotted_time" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $t('public.With Allotted Time') }}</label>
                 </div>
                 <div>
                     <input id="without_allotted_time" type="radio" v-model="form.allotted_time" value="0" @change="handleAllottedTimeChange(0)" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                    <label for="without_allotted_time" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Without Allotted Time</label>
+                    <label for="without_allotted_time" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">{{ $t('public.Without Allotted Time') }}</label>
                 </div>
             </div>
         </div>
         <div class="space-y-6 mb-4 md:mb-0" v-if="form.allotted_time === 1">
-            <Label for="start_date">Start Date</Label>
+            <Label for="start_date">{{ $t('public.Start Date') }}</Label>
             <vue-tailwind-datepicker
                 id="start_date"
                 :formatter="formatter"
@@ -122,7 +122,7 @@ const handleTypeChange = (value) => {
             <InputError :message="form.errors.start_date" class="mt-2" />
         </div>
         <div class="space-y-6 mb-4 md:mb-0" v-if="form.allotted_time === 1">
-            <Label for="end_date">End Date</Label>
+            <Label for="end_date">{{ $t('public.End Date') }}</Label>
             <vue-tailwind-datepicker
                 id="end_date"
                 :formatter="formatter"
@@ -135,7 +135,7 @@ const handleTypeChange = (value) => {
         </div>
 
         <div class="space-y-6 md:col-span-2 mb-4 md:mb-0">
-            <Label for="amount">Amount ($)</Label>
+            <Label for="amount">{{ $t('public.Amount') }} ($)</Label>
             <Input
                 id="amount"
                 placeholder="0.00"
@@ -147,7 +147,7 @@ const handleTypeChange = (value) => {
             <InputError :message="form.errors.amount" class="mt-2" />
         </div>
         <div class="space-y-6 mb-4 md:mb-0">
-            <Label for="internal_description">Internal Description</Label>
+            <Label for="internal_description">{{ $t('public.Internal Description') }}</Label>
             <Input
                 id="internal_description"
                 class="block w-full dark:border-0 text-xs"
@@ -156,7 +156,7 @@ const handleTypeChange = (value) => {
             <InputError :message="form.errors.internal_description" class="mt-2" />
         </div>
         <div class="space-y-6 mb-4 md:mb-0">
-            <Label for="client_description">Description (Visible to Client)</Label>
+            <Label for="client_description">{{ $t('public.Description (Visible to Client)') }}</Label>
             <Input
                 id="client_description"
                 class="block w-full dark:border-0 text-xs"
@@ -167,8 +167,8 @@ const handleTypeChange = (value) => {
     </div>
     <div class="my-12 grid grid-cols-2 gap-4 float-right">
         <Button variant="secondary" class="px-6 justify-center" @click="closeModal">
-            Cancel
+            {{ $t('public.Cancel') }}
         </Button>
-        <Button class="px-6 justify-center" @click.prevent="submitForm" :disabled="form.processing">Confirm</Button>
+        <Button class="px-6 justify-center" @click.prevent="submitForm" :disabled="form.processing">{{ $t('public.Confirm') }}</Button>
     </div>
 </template>

@@ -69,13 +69,13 @@ const closeModal = () => {
 </script>
 
 <template>
-    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">Manage Account Type</h2>
+    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.Manage Account Type') }}</h2>
     <hr>
 
     <form action="">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             <div class="space-y-2">
-                <Label for="name">Account Type</Label>
+                <Label for="name">{{ $t('public.Account Type') }}</Label>
                 <Input
                     id="name"
                     type="text"
@@ -86,19 +86,19 @@ const closeModal = () => {
                 <InputError :message="form.errors.name" class="mt-2" />
             </div>
             <div class="space-y-2">
-                <Label for="group">Group Name</Label>
+                <Label for="group">{{ $t('public.Group Name') }}</Label>
                 <InputSelect
                     class="block w-full dark:border-0 text-xs"
                     id="group"
                     v-model="form.group"
-                    placeholder="Select a currency"
+                    :placeholder="$t('public.Select a currency')"
                 >
                     <option v-for="(groupName, key ) in groups" :value="key">{{ groupName }}</option>
                 </InputSelect>
                 <InputError :message="form.errors.group" class="mt-2" />
             </div>
             <div class="space-y-2">
-                <Label for="minimum_deposit">Minimum Deposit</Label>
+                <Label for="minimum_deposit">{{ $t('public.Minimum Deposit') }}</Label>
                 <Input
                     id="minimum_deposit"
                     placeholder="0.00"
@@ -110,63 +110,63 @@ const closeModal = () => {
                 <InputError :message="form.errors.minimum_deposit" class="mt-2" />
             </div>
             <div class="space-y-2">
-                <Label for="leverage">Leverage</Label>
+                <Label for="leverage">{{ $t('public.Leverage') }}</Label>
                 <InputSelect
                     class="block w-full dark:border-0 text-xs"
                     id="leverage"
                     v-model="form.leverage"
                     placeholder="Select a leverage"
                 >
-                    <option value="free">Free</option>
+                    <option value="free">{{ $t('public.Free') }}</option>
                     <option v-for="(leverage, key) in props.leverages" :value="key">{{ leverage }}</option>
                 </InputSelect>
                 <InputError :message="form.errors.leverage" class="mt-2" />
             </div>
             <div class="space-y-2">
-                <Label for="currency">Currency</Label>
+                <Label for="currency">{{ $t('public.Currency') }}</Label>
                 <InputSelect
                     class="block w-full dark:border-0 text-xs"
                     id="currency"
                     v-model="form.currency"
-                    placeholder="Select a currency"
+                    :placeholder="$t('public.Select a currency')"
                 >
                     <option v-for="currency in currencies" :value="currency.value">{{ currency.name }}</option>
                 </InputSelect>
                 <InputError :message="form.errors.currency" class="mt-2" />
             </div>
             <div class="space-y-2">
-                <Label for="allow_create_account">Allow New Account Creation</Label>
+                <Label for="allow_create_account">{{ $t('public.Allow New Account Creation') }}</Label>
                 <InputSelect
                     class="block w-full dark:border-0 text-xs"
                     id="allow_create_account"
                     v-model="form.allow_create_account"
                 >
-                    <option value=1>Yes</option>
-                    <option value=-1>No</option>
+                    <option value=1>{{ $t('public.Yes') }}</option>
+                    <option value=-1>{{ $t('public.No') }}</option>
                 </InputSelect>
                 <InputError :message="form.errors.allow_create_account" class="mt-2" />
             </div>
             <div class="space-y-2">
-                <Label for="commission_structure">Commission Structure</Label>
+                <Label for="commission_structure">{{ $t('public.Commission Structure') }}</Label>
                 <InputSelect
                     class="block w-full dark:border-0 text-xs"
                     id="commission_structure"
                     v-model="form.commission_structure"
-                    placeholder="Select a commission structure"
+                    :placeholder="$t('public.Select a commission structure')"
                 >
-                    <option value="self">Self</option>
-                    <option value="fixed">Fixed</option>
-                    <option value="percent">Percent</option>
+                    <option value="self">{{ $t('public.Self') }}</option>
+                    <option value="fixed">{{ $t('public.Fixed') }}</option>
+                    <option value="percent">{{ $t('public.Percent') }}</option>
                 </InputSelect>
                 <InputError :message="form.errors.commission_structure" class="mt-2" />
             </div>
             <div class="space-y-2">
-                <Label for="trade_open_duration">Trade Open Duration</Label>
+                <Label for="trade_open_duration">{{ $t('public.Trade Open Duration') }}</Label>
                 <InputSelect
                     class="block w-full dark:border-0 text-xs"
                     id="trade_open_duration"
                     v-model="form.trade_open_duration"
-                    placeholder="Select a trade open duration"
+                    :placeholder="$t('public.Select a trade open duration')"
                 >
                     <option v-for="duration in durations" :value="duration.value">{{ duration.name }}</option>
                 </InputSelect>
@@ -175,7 +175,7 @@ const closeModal = () => {
         </div>
         <div class="mt-6 flex justify-end">
             <Button variant="secondary" @click.prevent="closeModal">
-                Cancel
+                {{ $t('public.Cancel') }}
             </Button>
             <Button
                 variant="primary"
@@ -183,7 +183,7 @@ const closeModal = () => {
                 @click.prevent="submit"
                 :disabled="form.processing"
             >
-                Save
+                {{ $t('public.Save') }}
             </Button>
         </div>
     </form>

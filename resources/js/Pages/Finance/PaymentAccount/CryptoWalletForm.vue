@@ -55,11 +55,11 @@ const toggleEdit = () => {
 </script>
 
 <template>
-    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">Edit Cryptocurrency Wallet Details</h2>
+    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.Cryptocurrency Wallet Details') }}</h2>
     <hr>
     <form>
         <div class="my-6">
-            <Label for="type" value="Select a USDT protocol type " />
+            <Label for="type" :value="$t('public.Select a USDT protocol type')" />
             <ul class="my-4 grid w-full gap-6 grid-cols-2 md:grid-cols-4">
                 <li v-for="(crypto, index) in crypto_types" :key="index">
                     <input
@@ -86,7 +86,7 @@ const toggleEdit = () => {
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div class="space-y-2">
-                <Label for="payment_account_name" value="USDT e-Wallet Name" />
+                <Label for="payment_account_name" :value="$t('public.USDT e-Wallet Name')" />
 
                 <Input
                     id="payment_account_name"
@@ -101,7 +101,7 @@ const toggleEdit = () => {
 
             </div>
             <div class="space-y-2">
-                <Label for="account_no" value="Token Address" />
+                <Label for="account_no" :value="$t('public.Token Address')" />
 
                 <Input
                     id="account_no"
@@ -117,7 +117,7 @@ const toggleEdit = () => {
         </div>
         <div class="mt-6 flex justify-end">
             <Button variant="secondary" v-if="isEditing" @click.prevent="toggleEdit">
-                Cancel
+                {{ $t('public.Cancel') }}
             </Button>
             <Button
                 variant="primary"
@@ -125,7 +125,7 @@ const toggleEdit = () => {
                 @click.prevent="submit"
                 :disabled="form.processing"
             >
-                {{ props.isEditing ? 'Save' : 'Edit' }}
+                {{ $t('public.' + (props.isEditing ? 'Save' : 'Edit')) }}
             </Button>
         </div>
     </form>

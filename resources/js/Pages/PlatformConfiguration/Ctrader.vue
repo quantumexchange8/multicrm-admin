@@ -56,11 +56,11 @@ const formattedTradeOpenDuration = (trade_open_duration) => {
 </script>
 
 <template>
-    <AuthenticatedLayout title="cTrader Platform Configuration">
+    <AuthenticatedLayout :title="$t('public.cTrader Platform Configuration')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    cTrader Platform Configuration
+                    {{ $t('public.cTrader Platform Configuration') }}
                 </h2>
             </div>
         </template>
@@ -81,31 +81,31 @@ const formattedTradeOpenDuration = (trade_open_duration) => {
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                     <tr>
                         <th scope="col" class="px-4 py-3">
-                            Account Type
+                            {{ $t('public.Account Type') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Group Name
+                            {{ $t('public.Group Name') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Min Deposit
+                            {{ $t('public.Min Deposit') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Leverage
+                            {{ $t('public.Leverage') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Currency
+                            {{ $t('public.Currency') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Allow New Account Creation
+                            {{ $t('public.Allow New Account Creation') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Commission Structure
+                            {{ $t('public.Commission Structure') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Trade Open Duration
+                            {{ $t('public.Trade Open Duration') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Action
+                            {{ $t('public.Action') }}
                         </th>
                     </tr>
                     </thead>
@@ -127,7 +127,7 @@ const formattedTradeOpenDuration = (trade_open_duration) => {
                             {{ account.currency }}
                         </td>
                         <td class="p-4">
-                            {{ account.allow_create_account === -1 ? 'No' : 'Yes' }}
+                            {{ account.allow_create_account === -1 ? $t('public.No') : $t('public.Yes') }}
                         </td>
                         <td class="p-4">
                             {{ formatType(account.commission_structure) }}

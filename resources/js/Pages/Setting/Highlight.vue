@@ -114,17 +114,17 @@ Array.prototype.remove = function() {
 </script>
 
 <template>
-    <AuthenticatedLayout title="Highlight Setting">
+    <AuthenticatedLayout :title="$t('public.Highlight Setting')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Highlight Setting
+                    {{ $t('public.Highlight Setting') }}
                 </h2>
             </div>
         </template>
 
         <form class="space-y-2">
-            <Label for="image">Highlight Images</Label>
+            <Label for="image">{{ $t('public.Highlight Images') }}</Label>
             <div class="bg-white rounded-md shadow-md dark:bg-dark-eval-1 mt-6">
                 <file-pond
                     name="imageHighlight"

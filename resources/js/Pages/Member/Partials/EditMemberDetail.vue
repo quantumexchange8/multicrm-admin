@@ -112,7 +112,7 @@ const toggleEdit = () => {
     <h2
         class="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100"
     >
-        View Member Details
+        {{ $t('public.View Member Details') }}
     </h2>
     <hr>
 
@@ -125,11 +125,11 @@ const toggleEdit = () => {
             >
         </div>
         <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100">
-            Personal Information
+            {{ $t('public.Personal Information') }}
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <div class="space-y-2">
-                <Label for="first_name">Full Name</Label>
+                <Label for="first_name">{{ $t('public.Full Name') }}</Label>
 
                 <Input
                     id="first_name"
@@ -143,7 +143,7 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.first_name" />
             </div>
             <div class="space-y-2">
-                <Label for="chinese_name">Chinese Name</Label>
+                <Label for="chinese_name">{{ $t('public.Chinese Name') }}</Label>
 
                 <Input
                     id="chinese_name"
@@ -157,12 +157,12 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.chinese_name" />
             </div>
             <div class="space-y-2">
-                <Label for="dob">Date of Birth</Label>
+                <Label for="dob">{{ $t('public.Date of Birth') }}</Label>
 
                 <vue-tailwind-datepicker :formatter="formatter" as-single v-model="form.dob" input-classes="py-2 border-gray-400 w-full rounded-full text-sm placeholder:text-sm focus:border-gray-400 focus:ring focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white dark:border-gray-600 dark:bg-[#202020] dark:text-gray-300 dark:focus:ring-offset-dark-eval-1 disabled:dark:bg-dark-eval-0 disabled:dark:text-dark-eval-4" :disabled="!isEditing" />
             </div>
             <div class="space-y-2">
-                <Label for="email">Email</Label>
+                <Label for="email">{{ $t('public.Email') }}</Label>
 
                 <Input
                     id="email"
@@ -173,7 +173,7 @@ const toggleEdit = () => {
                 />
             </div>
             <div class="space-y-2">
-                <Label for="country">Country</Label>
+                <Label for="country">{{ $t('public.Country') }}</Label>
 
                 <InputSelect v-model="selectedCountry" class="block w-full text-sm" placeholder="Choose Country" :disabled="!isEditing">
                     <option v-for="country in props.countries" :value="country.name_en" :key="country.id">{{ country.name_en }}</option>
@@ -182,7 +182,7 @@ const toggleEdit = () => {
                 <InputError class="mt-2" :message="form.errors.country" />
             </div>
             <div class="space-y-2">
-                <Label for="phone">Mobile Phone</Label>
+                <Label for="phone">{{ $t('public.Mobile Phone') }}</Label>
                 <Input
                     id="phone"
                     type="text"
@@ -196,16 +196,16 @@ const toggleEdit = () => {
             </div>
             <div class="space-y-2">
                 <Label for="front_identity">
-                    Proof of Identity (FRONT)
+                    {{ $t('public.Proof of Identity (FRONT)') }}
                 </Label>
                 <Modal :show="frontIdentityModal" @close="backButton">
                     <div class="relative bg-white rounded-lg shadow dark:bg-dark-eval-1">
                         <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" @click="backButton">
                             <svg class="h-7 w-7 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 13l-4 -4l4 -4m-4 4h11a4 4 0 0 1 0 8h-1" /></svg>
-                            <span class="sr-only">Back</span>
+                            <span class="sr-only">{{ $t('public.Back') }}</span>
                         </button>
                         <div class="px-6 py-6 lg:px-8">
-                            <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white"> Proof of Identity (Front)</h3>
+                            <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white"> {{ $t('public.Proof of Identity (Front)') }}</h3>
                             <div class="flex justify-center">
                                 <img class="rounded" :src="getMediaUrlByCollection(member, 'front_identity')" alt="Proof of Identity (Front)">
                             </div>
@@ -222,22 +222,22 @@ const toggleEdit = () => {
                     <a v-if="hasMediaCollection(member, 'front_identity')" href="javascript:void(0);" @click.prevent="openFrontIdentityModal" class="text-blue-500 hover:underline ml-2">
                         {{ getMediaNameByCollection(member, 'front_identity') }}
                     </a>
-                    <span v-else>Pending KYC</span>
+                    <span v-else>{{ $t('public.Pending KYC') }}</span>
                 </div>
             </div>
 
             <div class="space-y-2">
                 <Label for="back_identity">
-                    Proof of Identity (BACK)
+                    {{ $t('public.Proof of Identity (BACK)') }}
                 </Label>
                 <Modal :show="backIdentityModal" @close="backButton">
                     <div class="relative bg-white rounded-lg shadow dark:bg-dark-eval-1">
                         <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" @click="backButton">
                             <svg class="h-7 w-7 text-white"  width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">  <path stroke="none" d="M0 0h24v24H0z"/>  <path d="M9 13l-4 -4l4 -4m-4 4h11a4 4 0 0 1 0 8h-1" /></svg>
-                            <span class="sr-only">Back</span>
+                            <span class="sr-only">{{ $t('public.Back') }}</span>
                         </button>
                         <div class="px-6 py-6 lg:px-8">
-                            <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white"> Proof of Identity (Back)</h3>
+                            <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white"> {{ $t('public.Proof of Identity (Back)') }}</h3>
                             <div class="flex justify-center">
                                 <img class="rounded" :src="getMediaUrlByCollection(member, 'back_identity')" alt="Proof of Identity (Back)">
                             </div>
@@ -254,23 +254,23 @@ const toggleEdit = () => {
                     <a v-if="hasMediaCollection(member, 'back_identity')" href="javascript:void(0);" @click.prevent="openBackIdentityModal" class="text-blue-500 hover:underline ml-2">
                         {{ getMediaNameByCollection(member, 'back_identity') }}
                     </a>
-                    <span v-else>Pending KYC</span>
+                    <span v-else>{{ $t('public.Pending KYC') }}</span>
                 </div>
             </div>
 
             <div class="space-y-2" v-if="member.kyc_approval === 'pending'">
-                <Label for="kyc_approval">KYC Approval</Label>
+                <Label for="kyc_approval">{{ $t('public.KYC Approval') }}</Label>
 
-                <InputSelect v-model="form.kyc_approval" class="block w-full text-sm" placeholder="Choose Status" :disabled="!isEditing">
-                    <option value="pending">Pending</option>
-                    <option value="approve">Approve</option>
-                    <option value="reject">Reject</option>
+                <InputSelect v-model="form.kyc_approval" class="block w-full text-sm" :placeholder="$t('public.Choose Status')" :disabled="!isEditing">
+                    <option value="pending">{{ $t('public.Pending') }}</option>
+                    <option value="approve">{{ $t('public.Approve') }}</option>
+                    <option value="reject">{{ $t('public.Reject') }}</option>
                 </InputSelect>
 
                 <InputError class="mt-2" :message="form.errors.kyc_approval" />
             </div>
             <div class="space-y-2" v-if="member.kyc_approval === 'pending'">
-                <Label for="kyc_approval_description">KYC Approval Description</Label>
+                <Label for="kyc_approval_description">{{ $t('public.KYC Approval Description') }}</Label>
                 <Input
                     id="kyc_approval_description"
                     type="text"
@@ -287,7 +287,7 @@ const toggleEdit = () => {
 
     <div class="mt-6 flex justify-end">
         <Button variant="secondary" v-if="isEditing" @click="toggleEdit">
-            Cancel
+            {{ $t('public.Cancel') }}
         </Button>
         <Button
             variant="primary"
@@ -295,7 +295,7 @@ const toggleEdit = () => {
             @click="submit"
             :disabled="form.processing"
         >
-            {{ isEditing ? 'Save' : 'Edit' }}
+            {{ $t('public.' + (isEditing ? 'Save' : 'Edit')) }}
         </Button>
     </div>
 </template>

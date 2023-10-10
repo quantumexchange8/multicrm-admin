@@ -40,7 +40,7 @@ const closeModal = () => {
             class="text-xs justify-center"
             @click="openWithdrawalActionModal(withdrawal.id, 'approval', 'Approve')"
         >
-            Approve
+            {{ $t('public.Approve') }}
         </Button>
         <Button
             v-if="type !== 'history'"
@@ -48,7 +48,7 @@ const closeModal = () => {
             class="text-xs justify-center"
             @click="openWithdrawalActionModal(withdrawal.id, 'approval', 'Reject')"
         >
-            Reject
+            {{ $t('public.Reject') }}
         </Button>
         <div class="flex justify-center items-center">
             <Tooltip content="View" placement="top">
@@ -58,7 +58,7 @@ const closeModal = () => {
                     @click="openWithdrawalActionModal(withdrawal.id, 'view')"
                 >
                     <ViewIcon aria-hidden="true" class="w-5 h-5 absolute" />
-                    <span class="sr-only">View</span>
+                    <span class="sr-only">{{ $t('public.View') }}</span>
                 </Button>
             </Tooltip>
         </div>

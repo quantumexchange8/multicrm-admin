@@ -36,16 +36,16 @@ const closeModal = () => {
     </div>
     <div class="mt-6 text-center">
         <h1 class="mb-4 text-xl font-bold leading-none tracking-tight text-gray-900 md:text-2xl lg:text-4xl dark:text-white" style="font-family: Montserrat,sans-serif">
-            Delete Cryptocurrency Wallet?
+            {{ $t('public.Delete Cryptocurrency Wallet?') }}
         </h1>
         <p class="dark:text-dark-eval-3">
-            The cryptocurrency wallet will be deleted permanently!
+            {{ $t('public.The cryptocurrency wallet will be deleted permanently!') }}
         </p>
     </div>
     <div class="mt-6 flex gap-4 justify-center">
         <Button variant="secondary" class="px-6" @click="closeModal">
-            Cancel
+            {{ $t('public.Cancel') }}
         </Button>
-        <Button class="px-6" variant="danger" @click.prevent="deleteAccount">Delete</Button>
+        <Button class="px-6" variant="danger" @click.prevent="deleteAccount">{{ $t('public.Delete') }}</Button>
     </div>
 </template>

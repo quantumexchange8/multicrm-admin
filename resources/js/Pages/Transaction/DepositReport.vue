@@ -128,11 +128,11 @@ const paginationActiveClass = [
 </script>
 
 <template>
-    <AuthenticatedLayout title="Deposit Report">
+    <AuthenticatedLayout :title="$t('public.Deposit Report')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Deposit Report
+                    {{ $t('public.Deposit Report') }}
                 </h2>
             </div>
         </template>
@@ -140,19 +140,19 @@ const paginationActiveClass = [
         <form @submit.prevent="submitSearch">
             <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="space-y-2">
-                    <Label>Filter By Deposit Method</Label>
+                    <Label>{{ $t('public.Filter By Deposit Method') }}</Label>
                     <InputSelect
                         class="block w-full text-sm"
                         v-model="type"
-                        placeholder="All"
+                        :placeholder="$t('public.All')"
                     >
-                        <option value="bank">Bank Transfer</option>
-                        <option value="crypto">Cryptocurrency</option>
+                        <option value="bank">{{ $t('public.Bank Transfer') }}</option>
+                        <option value="crypto">{{ $t('public.Cryptocurrency') }}</option>
                         <option value="fpx">FPX</option>
                     </InputSelect>
                 </div>
                 <div class="space-y-2">
-                    <Label>Filter By Date</Label>
+                    <Label>{{ $t('public.Filter By Date') }}</Label>
                     <vue-tailwind-datepicker
                         :formatter="formatter"
                         v-model="date"
@@ -160,7 +160,7 @@ const paginationActiveClass = [
                     />
                 </div>
                 <div class="space-y-2">
-                    <Label>Search By Name / Email / Transaction ID / Account No</Label>
+                    <Label>{{ $t('public.Search By Name / Email / Transaction ID / Account No') }}</Label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -191,14 +191,14 @@ const paginationActiveClass = [
                             variant="primary-opacity"
                             class="justify-center"
                         >
-                            Search
+                            {{ $t('public.Search') }}
                         </Button>
                         <Button
                             variant="danger-opacity"
                             class="justify-center"
                             @click.prevent="reset"
                         >
-                            Reset
+                            {{ $t('public.Reset') }}
                         </Button>
                     </div>
                 </div>
@@ -208,7 +208,7 @@ const paginationActiveClass = [
                         class="justify-center w-full md:w-1/3"
                         @click.prevent="exportDeposit"
                     >
-                        Export
+                        {{ $t('public.Export') }}
                     </Button>
                 </div>
             </div>
@@ -231,34 +231,34 @@ const paginationActiveClass = [
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                     <tr>
                         <th scope="col" class="px-4 py-3">
-                            Name
+                            {{ $t('public.Name') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Email
+                            {{ $t('public.Email') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            To Account
+                            {{ $t('public.To Account') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Date
+                            {{ $t('public.Date') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Deposit Method
+                            {{ $t('public.Deposit Method') }}
                         </th>
                         <th scope="col" class="px-2 py-3">
-                            Payment Gateway
+                            {{ $t('public.Payment Gateway') }}
                         </th>
                         <th scope="col" class="px-2 py-3">
-                            Transaction ID
+                            {{ $t('public.Transaction ID') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Deposit Amount
+                            {{ $t('public.Deposit Amount') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Payment Charges
+                            {{ $t('public.Payment Charges') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Status
+                            {{ $t('public.Status') }}
                         </th>
                     </tr>
                     </thead>
@@ -277,7 +277,7 @@ const paginationActiveClass = [
                             {{ formatDate(deposit.created_at) }}
                         </th>
                         <th class="px-6 py-4">
-                            {{ getChannelName(deposit.channel) }}
+                            {{ $t('public.' + getChannelName(deposit.channel)) }}
                         </th>
                         <th>
                             {{ formatType(deposit.gateway) }}
@@ -292,14 +292,14 @@ const paginationActiveClass = [
                             {{ deposit.payment_charges }}
                         </th>
                         <th class="px-6 py-2 font-thin rounded-r-full">
-                            <Badge :status="getStatusClass(deposit.status)">{{ deposit.status }}</Badge>
+                            <Badge :status="getStatusClass(deposit.status)">{{ $t('public.' + deposit.status) }}</Badge>
                         </th>
                     </tr>
                     </tbody>
                 </table>
                 <div v-if="!isLoading" class="flex md:flex-row flex-col md:justify-between mt-4">
                     <div class="ml-1 my-4">
-                        <span class="text-sm dark:text-dark-eval-4">Total Success Deposit:</span> $ {{ formatAmount(totalDeposit) }}
+                        <span class="text-sm dark:text-dark-eval-4">{{ $t('public.Total Success Deposit') }} :</span> $ {{ formatAmount(totalDeposit) }}
                     </div>
                     <TailwindPagination
                         :item-classes=paginationClass

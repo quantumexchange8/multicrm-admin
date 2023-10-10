@@ -11,11 +11,11 @@ defineProps({
 </script>
 
 <template>
-    <AuthenticatedLayout title="Dashboard">
+    <AuthenticatedLayout :title="$t('public.Dashboard')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Dashboard
+                    {{ $t('public.Dashboard') }}
                 </h2>
             </div>
         </template>
@@ -25,21 +25,21 @@ defineProps({
             <fieldset
                 class="border-2 border-[#05C46B] p-4 rounded-lg shadow-md text-center bg-gradient-to-b from-transparent to-[#05c46b33]"
             >
-                <legend class="text-xl px-4 uppercase font-semibold">Total Deposit {{ $page.totalApprovedDeposit}}</legend>
+                <legend class="text-xl px-4 uppercase font-semibold">{{ $t('public.Total Deposit') }} {{ $page.totalApprovedDeposit}}</legend>
                 <p class="text-4xl">$ {{ totalDeposit }}</p>
             </fieldset>
 
             <fieldset
                 class="border-2 border-[#FF3F34] p-4 rounded-lg shadow-md text-center bg-gradient-to-b from-transparent to-[#ff3f3433]"
             >
-                <legend class="text-xl px-4 uppercase font-semibold">Total Withdrawal</legend>
+                <legend class="text-xl px-4 uppercase font-semibold">{{ $t('public.Total Withdrawal') }}</legend>
                 <p class="text-4xl">$ {{ totalWithdrawal }}</p>
             </fieldset>
 
         </div>
 
         <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
-            You're logged in!
+            {{ $t("public.You're logged in!") }}
         </div>
     </AuthenticatedLayout>
 </template>

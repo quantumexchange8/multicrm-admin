@@ -83,11 +83,11 @@ const paginationActiveClass = [
 </script>
 
 <template>
-    <AuthenticatedLayout title="Credit Amount Adjustment">
+    <AuthenticatedLayout :title="$t('public.Credit Amount Adjustment')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Credit Amount Adjustment
+                    {{ $t('public.Credit Amount Adjustment') }}
                 </h2>
             </div>
         </template>
@@ -95,7 +95,7 @@ const paginationActiveClass = [
         <form @submit.prevent="submitSearch">
             <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="space-y-2 col-span-2">
-                    <Label>Search By Name / Email / Account No</Label>
+                    <Label>{{ $t('public.Search By Name / Email / Account No') }}</Label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -126,14 +126,14 @@ const paginationActiveClass = [
                             variant="primary-opacity"
                             class="justify-center py-3"
                         >
-                            Search
+                            {{ $t('public.Search') }}
                         </Button>
                         <Button
                             variant="danger-opacity"
                             class="justify-center py-3"
                             @click.prevent="reset"
                         >
-                            Reset
+                            {{ $t('public.Reset') }}
                         </Button>
                     </div>
                 </div>
@@ -157,25 +157,25 @@ const paginationActiveClass = [
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                     <tr>
                         <th scope="col" class="px-4 py-3">
-                            Name
+                            {{ $t('public.Name') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Email
+                            {{ $t('public.Email') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Upline Email
+                            {{ $t('public.Upline Email')}}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Account Number
+                            {{ $t('public.Account Number') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Balance (USD)
+                            {{ $t('public.Balance') }} (USD)
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Credit (USD)
+                            {{ $t('public.Credit') }} (USD)
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Action
+                            {{ $t('public.Action') }}
                         </th>
                     </tr>
                     </thead>

@@ -28,7 +28,7 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
         class="relative flex flex-col flex-1 max-h-full gap-4 px-3"
     >
         <SidebarLink
-            title="Dashboard"
+            :title="$t('public.sidebar.Dashboard')"
             :href="route('dashboard')"
             :active="route().current('dashboard')"
         >
@@ -43,7 +43,7 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
 
         <!-- announcement -->
         <SidebarLink
-            title="Announcement"
+            :title="$t('public.sidebar.Announcement')"
             :href="route('announcement.index')"
             :active="route().current('announcement.index')"
         >
@@ -58,7 +58,7 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
 
         <!-- member -->
         <SidebarCollapsible
-            title="Members"
+            :title="$t('public.sidebar.Members')"
             :active="route().current('member.*')"
         >
             <template #icon>
@@ -71,32 +71,32 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
 
             <SidebarCollapsibleItem
                 :href="route('member.member_listing')"
-                title="Member Listing"
+                :title="$t('public.sidebar.Member Listing')"
                 :active="route().current('member.member_listing')"
             />
 
             <SidebarCollapsibleItem
                 :href="route('member.member_tree')"
-                title="Member Tree"
+                :title="$t('public.sidebar.Member Tree')"
                 :active="route().current('member.member_tree')"
             />
 
             <SidebarCollapsibleItem
                 :href="route('member.rebate_payout')"
-                title="Rebate Payout"
+                :title="$t('public.sidebar.Rebate Payout')"
                 :active="route().current('member.rebate_payout')"
             />
 
             <SidebarCollapsibleItem
                 :href="route('member.rebate_allocation')"
-                title="Rebate Allocation"
+                :title="$t('public.sidebar.Rebate Allocation')"
                 :active="route().current('member.rebate_allocation')"
             />
         </SidebarCollapsible>
 
         <!-- transaction -->
         <SidebarCollapsible
-            title="Finance"
+            :title="$t('public.sidebar.Finance')"
             :active="route().current('finance.*')"
         >
             <template #icon>
@@ -109,19 +109,19 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
 
             <SidebarCollapsibleItem
                 :href="route('finance.payment_account_listing')"
-                title="Payment Account Listing"
+                :title="$t('public.sidebar.Payment Account Listing')"
                 :active="route().current('finance.payment_account_listing')"
             />
             <SidebarCollapsibleItem
                 :href="route('finance.credit_amount_adjustment')"
-                title="Credit Amount Adjustment"
+                :title="$t('public.sidebar.Credit Amount Adjustment')"
                 :active="route().current('finance.credit_amount_adjustment')"
             />
         </SidebarCollapsible>
 
         <!-- transaction -->
         <SidebarCollapsible
-            title="Transaction"
+            :title="$t('public.sidebar.Transaction')"
             :active="route().current('transaction.*')"
         >
             <template #icon>
@@ -134,29 +134,29 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
 
             <SidebarCollapsibleItem
                 :href="route('transaction.deposit_report')"
-                title="Deposit Report"
+                :title="$t('public.sidebar.Deposit Report')"
                 :active="route().current('transaction.deposit_report')"
             />
             <SidebarCollapsibleItem
                 :href="route('transaction.withdrawal_report')"
-                title="Withdrawal Report"
+                :title="$t('public.sidebar.Withdrawal Report')"
                 :active="route().current('transaction.withdrawal_report')"
             />
             <SidebarCollapsibleItem
                 :href="route('transaction.internal_transfer_report')"
-                title="Internal Transfer Report"
+                :title="$t('public.sidebar.Internal Transfer Report')"
                 :active="route().current('transaction.internal_transfer_report')"
             />
             <SidebarCollapsibleItem
                 :href="route('transaction.wallet_report')"
-                title="All Wallet Report"
+                :title="$t('public.sidebar.All Wallet Report')"
                 :active="route().current('transaction.wallet_report')"
             />
         </SidebarCollapsible>
 
         <!-- platform configuration -->
         <SidebarCollapsible
-            title="Platform Configuration"
+            :title="$t('public.sidebar.Platform Configuration')"
             :active="route().current('platform_configuration.*')"
         >
             <template #icon>
@@ -169,14 +169,14 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
 
             <SidebarCollapsibleItem
                 :href="route('platform_configuration.ctrader')"
-                title="CTrader"
+                :title="$t('public.sidebar.CTrader')"
                 :active="route().current('platform_configuration.ctrader')"
             />
         </SidebarCollapsible>
 
         <!-- setting -->
         <SidebarCollapsible
-            title="Setting"
+            :title="$t('public.sidebar.Setting')"
             :active="route().current('setting.*')"
         >
             <template #icon>
@@ -194,7 +194,7 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
 <!--            />-->
             <SidebarCollapsibleItem
                 :href="route('setting.highlights_setting')"
-                title="Highlights"
+                :title="$t('public.sidebar.Highlights')"
                 :active="route().current('setting.highlights_setting')"
             />
         </SidebarCollapsible>

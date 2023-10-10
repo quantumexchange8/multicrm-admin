@@ -36,16 +36,16 @@ const closeModal = () => {
     </div>
     <div class="mt-6 text-center">
         <h1 class="mb-4 text-2xl font-bold leading-none tracking-tight text-gray-900 md:text-4xl lg:text-5xl dark:text-white" style="font-family: Montserrat,sans-serif">
-            Delete Member?
+            {{ $t('public.Delete Member?') }}
         </h1>
         <p class="dark:text-dark-eval-3">
-            The selected member will be deleted permanently!
+            {{ $t('public.The selected member will be deleted permanently!') }}
         </p>
     </div>
     <div class="mt-6 flex gap-4 justify-center">
         <Button variant="secondary" class="px-6" @click="closeModal">
-            Cancel
+            {{ $t('public.Cancel') }}
         </Button>
-        <Button class="px-6" variant="danger" @click.prevent="deleteUser">Delete</Button>
+        <Button class="px-6" variant="danger" @click.prevent="deleteUser">{{ $t('public.Delete') }}</Button>
     </div>
 </template>

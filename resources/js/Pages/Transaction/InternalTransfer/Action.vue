@@ -25,7 +25,7 @@ const closeModal = () => {
 </script>
 
 <template>
-    <Tooltip content="View" placement="top">
+    <Tooltip :content="$t('public.View')" placement="top">
         <Button
             class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
             variant="primary-opacity"
@@ -37,11 +37,11 @@ const closeModal = () => {
 
     <Modal :show="internalTransferModal" @close="closeModal" max-width="7xl">
         <div class="p-6">
-            <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">View More Details</h2>
+            <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.View More Details') }}</h2>
             <hr>
 
             <div class="flex justify-center flex-col text-center mt-8 space-y-2">
-                <h4 class="text-lg font-medium text-gray-900 dark:text-dark-eval-4">Cash Wallet Balance</h4>
+                <h4 class="text-lg font-medium text-gray-900 dark:text-dark-eval-4">{{ $t('public.Cash Wallet Balance') }}</h4>
                 <h3 class="text-4xl mb-2 font-medium text-gray-900 dark:text-gray-100">
                     $ {{ formatAmount(history.of_user.cash_wallet) }}
                 </h3>
@@ -49,7 +49,7 @@ const closeModal = () => {
 
             <div class="grid grid-cols-1 md:grid-cols-2 mt-4 gap-6">
                 <div class="space-y-2 mb-4 md:mb-0">
-                    <Label for="type">Internal Transfer Type</Label>
+                    <Label for="type">{{ $t('public.Internal Transfer Type') }}</Label>
                     <Input
                         id="type"
                         class="block w-full dark:border-0 text-xs"
@@ -58,7 +58,7 @@ const closeModal = () => {
                     />
                 </div>
                 <div class="space-y-2 mb-4 md:mb-0">
-                    <Label for="amount">Amount</Label>
+                    <Label for="amount">{{ $t('public.Amount') }}</Label>
                     <Input
                         id="amount"
                         class="block w-full dark:border-0 text-xs"
@@ -67,7 +67,7 @@ const closeModal = () => {
                     />
                 </div>
                 <div class="space-y-2 mb-4 md:mb-0" v-if="history.type==='AccountToWallet' || history.type==='AccountToAccount'">
-                    <Label for="account_platform_transfer">Account Platform To Transfer</Label>
+                    <Label for="account_platform_transfer">{{ $t('public.Account Platform To Transfer') }}</Label>
                     <Input
                         id="account_platform_transfer"
                         class="block w-full dark:border-0 text-xs"
@@ -76,7 +76,7 @@ const closeModal = () => {
                     />
                 </div>
                 <div class="space-y-2 mb-4 md:mb-0" v-if="history.type==='AccountToWallet' || history.type==='AccountToAccount'">
-                    <Label for="account_no_transfer">Account NO. To Transfer</Label>
+                    <Label for="account_no_transfer">{{ $t('public.Account No. To Transfer') }}</Label>
                     <Input
                         id="account_no_transfer"
                         class="block w-full dark:border-0 text-xs"
@@ -85,7 +85,7 @@ const closeModal = () => {
                     />
                 </div>
                 <div class="space-y-2 mb-4 md:mb-0" v-if="history.type==='WalletToAccount' || history.type==='AccountToAccount'">
-                    <Label for="account_platform_receive">Account Platform To Receive</Label>
+                    <Label for="account_platform_receive">{{ $t('public.Account Platform To Receive') }}</Label>
                     <Input
                         id="account_platform_receive"
                         class="block w-full dark:border-0 text-xs"
@@ -94,7 +94,7 @@ const closeModal = () => {
                     />
                 </div>
                 <div class="space-y-2 mb-4 md:mb-0" v-if="history.type==='WalletToAccount' || history.type==='AccountToAccount'">
-                    <Label for="account_no_receive">Account NO. To Receive</Label>
+                    <Label for="account_no_receive">{{ $t('public.Account No. To Receive') }}</Label>
                     <Input
                         id="account_no_receive"
                         class="block w-full dark:border-0 text-xs"
@@ -103,7 +103,7 @@ const closeModal = () => {
                     />
                 </div>
                 <div class="space-y-2 mb-4 md:mb-0" v-if="history.type==='RebateToWallet'">
-                    <Label for="account_platform_receive">Date</Label>
+                    <Label for="account_platform_receive">{{ $t('public.Date') }}</Label>
                     <Input
                         id="account_platform_receive"
                         class="block w-full dark:border-0 text-xs"

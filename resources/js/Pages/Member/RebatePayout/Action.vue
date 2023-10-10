@@ -8,6 +8,8 @@ import StructureRebate from "@/Pages/Member/RebateAllocation/StructureRebate.vue
 import Swal from "sweetalert2";
 import PayoutDetails from "@/Pages/Member/RebatePayout/PayoutDetails.vue";
 import Tooltip from "@/Components/Tooltip.vue";
+import {trans} from "laravel-vue-i18n";
+
 
 const props = defineProps({
     list: Object,
@@ -48,12 +50,12 @@ async function confirmRebatePayout(amount, type) {
 
     if (type === 'approve') {
         const result = await swalWithBootstrapButtons.fire({
-            title: 'Are you sure?',
-            text: `A total of $${amount.toFixed(2)} will be paid to the selected IB!`,
+            title: trans('public.Are you sure?'),
+            text: trans('public.A total of') + ` $${amount.toFixed(2)} ` + trans('public.will be paid to the selected IB!'),
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            cancelButtonText: 'Cancel',
+            confirmButtonText: trans('public.Confirm'),
+            cancelButtonText: trans('public.Cancel'),
             reverseButtons: true,
         });
 
@@ -62,12 +64,12 @@ async function confirmRebatePayout(amount, type) {
         }
     } else {
         const result = await swalWithBootstrapButtons.fire({
-            title: 'Are you sure?',
-            text: `A total of $${amount.toFixed(2)} will be rejected to the selected IB!`,
+            title: trans('public.Are you sure?'),
+            text: trans('public.A total of') + ` $${amount.toFixed(2)} ` + trans('public.will be rejected to the selected IB!'),
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            cancelButtonText: 'Cancel',
+            confirmButtonText: trans('public.Confirm'),
+            cancelButtonText: trans('public.Cancel'),
             reverseButtons: true,
         });
 
@@ -95,13 +97,13 @@ async function rebate_payout() {
 
         if (response.data.success) {
             await Swal.fire({
-                title: 'Success',
+                title: trans('public.Success'),
                 text: response.data.message,
                 icon: 'success',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -116,13 +118,13 @@ async function rebate_payout() {
     } catch (error) {
         if (error.response && error.response.status === 422) {
             await Swal.fire({
-                title: 'Error',
+                title: trans('public.Error'),
                 text: error.response.data.message,
                 icon: 'error',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -130,13 +132,13 @@ async function rebate_payout() {
             });
         } else {
             await Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while applying the rebate.',
+                title: trans('public.Error'),
+                text: trans('public.An error occurred while applying the rebate.'),
                 icon: 'error',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -159,13 +161,13 @@ async function reject_payout() {
 
         if (response.data.success) {
             await Swal.fire({
-                title: 'Success',
+                title: trans('public.Success'),
                 text: response.data.message,
                 icon: 'success',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -180,13 +182,13 @@ async function reject_payout() {
     } catch (error) {
         if (error.response && error.response.status === 422) {
             await Swal.fire({
-                title: 'Error',
+                title: trans('public.Error'),
                 text: error.response.data.message,
                 icon: 'error',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -194,13 +196,13 @@ async function reject_payout() {
             });
         } else {
             await Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while applying the rebate.',
+                title: trans('public.Error'),
+                text: trans('public.An error occurred while applying the rebate.'),
                 icon: 'error',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -231,7 +233,7 @@ const getRebatePayoutInfo = async () => {
         rebatePayoutDetails.value = response.data;
         loading.value = false; // Hide loading state after getting the response
     } catch (error) {
-        console.error('Error fetching rebate payout detail: ', error);
+        console.error(trans('public.Error fetching rebate payout detail: '), error);
         loading.value = false; // Hide loading state in case of an error
     }
 };
@@ -246,7 +248,7 @@ const getRebatePayoutInfo = async () => {
             @click.prevent="showConfirmation(list.total_revenue, 'approve')"
             class="text-xs"
         >
-            Approve
+            {{ $t('public.Approve') }}
         </Button>
         <Button
             v-if="status === 'pending'"
@@ -254,16 +256,16 @@ const getRebatePayoutInfo = async () => {
             @click.prevent="showConfirmation(list.total_revenue, 'reject')"
             class="text-xs"
         >
-            Reject
+            {{ $t('public.Reject') }}
         </Button>
-        <Tooltip content="View" placement="top">
+        <Tooltip :content="$t('public.View')" placement="top">
             <Button
                 class="justify-center rounded-full w-7 h-7 focus:outline-none"
                 variant="primary-opacity"
                 @click="handleViewButton"
             >
                 <ViewIcon aria-hidden="true" class="w-5 h-5 absolute" />
-                <span class="sr-only">View</span>
+                <span class="sr-only">{{ $t('public.View') }}</span>
             </Button>
         </Tooltip>
     </div>
@@ -276,7 +278,7 @@ const getRebatePayoutInfo = async () => {
             <template v-if="modalComponent === 'ViewRebate'">
                 <div v-if="loading" class="w-full flex justify-center mt-4">
                     <div class="px-4 py-2 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
-                        loading...
+                        {{ $t('public.loading...') }}
                     </div>
                 </div>
                 <PayoutDetails

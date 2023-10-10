@@ -16,7 +16,7 @@ const setActiveComponent = (component) => {
 </script>
 
 <template>
-    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">View Transaction History</h2>
+    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.View Transaction History') }}</h2>
     <hr>
 
     <div class="grid grid-cols-2 my-8 gap-6">
@@ -26,7 +26,7 @@ const setActiveComponent = (component) => {
             :class="{ 'bg-transparent': activeComponent !== 'cash_wallet', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'cash_wallet' }"
             @click="setActiveComponent('cash_wallet')"
         >
-            Cash Wallet Transaction
+            {{ $t('public.Cash Wallet Transaction') }}
         </Button>
         <Button
             v-if="user.role ==='ib'"
@@ -35,7 +35,7 @@ const setActiveComponent = (component) => {
             :class="{ 'bg-transparent': activeComponent !== 'rebate_wallet', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'rebate_wallet' }"
             @click="setActiveComponent('rebate_wallet')"
         >
-            Rebate Wallet Transaction
+            {{ $t('public.Rebate Wallet Transaction') }}
         </Button>
     </div>
 

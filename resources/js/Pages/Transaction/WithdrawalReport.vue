@@ -121,11 +121,11 @@ const paginationActiveClass = [
 </script>
 
 <template>
-    <AuthenticatedLayout title="Withdrawal Report">
+    <AuthenticatedLayout :title="$t('public.Withdrawal Report')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Withdrawal Report
+                    {{ $t('public.Withdrawal Report') }}
                 </h2>
             </div>
         </template>
@@ -133,18 +133,18 @@ const paginationActiveClass = [
         <form @submit.prevent="submitSearch">
             <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div class="space-y-2">
-                    <Label>Filter By Withdrawal Method</Label>
+                    <Label>{{ $t('public.Filter By Withdrawal Method') }}</Label>
                     <InputSelect
                         class="block w-full text-sm"
                         v-model="type"
-                        placeholder="All"
+                        :placeholder="$t('public.All')"
                     >
-                        <option value="bank">Bank Transfer</option>
-                        <option value="crypto">Cryptocurrency</option>
+                        <option value="bank">{{ $t('public.Bank Transfer') }}</option>
+                        <option value="crypto">{{ $t('public.Cryptocurrency') }}</option>
                     </InputSelect>
                 </div>
                 <div class="space-y-2">
-                    <Label>Filter By Date</Label>
+                    <Label>{{ $t('public.Filter By Date') }}</Label>
                     <vue-tailwind-datepicker
                         :formatter="formatter"
                         v-model="date"
@@ -152,7 +152,7 @@ const paginationActiveClass = [
                     />
                 </div>
                 <div class="space-y-2">
-                    <Label>Search By Name / Email</Label>
+                    <Label>{{ $t('public.Search By Name / Email') }}</Label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -183,14 +183,14 @@ const paginationActiveClass = [
                             variant="primary-opacity"
                             class="justify-center"
                         >
-                            Search
+                            {{ $t('public.Search') }}
                         </Button>
                         <Button
                             variant="danger-opacity"
                             class="justify-center"
                             @click.prevent="reset"
                         >
-                            Reset
+                            {{ $t('public.Reset') }}
                         </Button>
                     </div>
                 </div>
@@ -204,7 +204,7 @@ const paginationActiveClass = [
                 :class="{ 'bg-transparent': activeComponent !== 'pending', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'pending' }"
                 @click="setActiveComponent('pending')"
             >
-                Pending Transaction
+                {{ $t('public.Pending Transaction') }}
             </Button>
             <Button
                 variant="primary-opacity"
@@ -212,7 +212,7 @@ const paginationActiveClass = [
                 :class="{ 'bg-transparent': activeComponent !== 'history', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'history' }"
                 @click="setActiveComponent('history')"
             >
-                Transaction History
+                {{ $t('public.Transaction History') }}
             </Button>
         </div>
 
@@ -234,32 +234,32 @@ const paginationActiveClass = [
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                     <tr>
                         <th scope="col" class="px-4 py-3">
-                            Name
+                            {{ $t('public.Name') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Email
+                            {{ $t('public.Email') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Date
+                            {{ $t('public.Date') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Withdrawal Method
+                            {{ $t('public.Withdrawal Method') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Withdrawal Amount
+                            {{ $t('public.Withdrawal Amount') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Payment Charges
+                            {{ $t('public.Payment Charges') }}
                         </th>
                         <th scope="col" class="px-4 py-3 w-56">
-                            Action
+                            {{ $t('public.Action') }}
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-if="pendingTransaction.data.length === 0">
                         <th colspan="8" class="py-4 text-lg text-center">
-                            No Pending
+                            {{ $t('public.No Pending') }}
                         </th>
                     </tr>
                     <tr v-for="withdrawal in pendingTransaction.data" :key="withdrawal.id" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
@@ -273,7 +273,7 @@ const paginationActiveClass = [
                             {{ formatDate(withdrawal.created_at) }}
                         </th>
                         <th>
-                            {{ getChannelName(withdrawal.channel) }}
+                            {{ $t('public.' + getChannelName(withdrawal.channel)) }}
                         </th>
                         <th>
                             $ {{ formatAmount(withdrawal.amount) }}
@@ -308,35 +308,35 @@ const paginationActiveClass = [
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                     <tr>
                         <th scope="col" class="px-4 py-3">
-                            Name
+                            {{ $t('public.Name') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Email
+                            {{ $t('public.Email') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Date
+                            {{ $t('public.Date') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Withdrawal Method
+                            {{ $t('public.Withdrawal Method') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Withdrawal Amount
+                            {{ $t('public.Withdrawal Amount') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Payment Charges
+                            {{ $t('public.Payment Charges') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Status
+                            {{ $t('public.Status') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Action
+                            {{ $t('public.Action') }}
                         </th>
                     </tr>
                     </thead>
                     <tbody>
                     <tr v-if="transactionHistory.data.length === 0">
                         <th colspan="8" class="py-4 text-lg text-center">
-                            No Pending
+                            {{ $t('public.No Pending') }}
                         </th>
                     </tr>
                     <tr v-for="history in transactionHistory.data" :key="history.id" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
@@ -350,7 +350,7 @@ const paginationActiveClass = [
                             {{ formatDate(history.created_at) }}
                         </th>
                         <th>
-                            {{ getChannelName(history.channel) }}
+                            {{ $t('public.' + getChannelName(history.channel)) }}
                         </th>
                         <th>
                             $ {{ formatAmount(history.amount) }}
@@ -359,7 +359,7 @@ const paginationActiveClass = [
                             {{ history.payment_charges ?? '-' }}
                         </th>
                         <th>
-                            <Badge :status="getStatusClass(history.status)">{{ history.status }}</Badge>
+                            <Badge :status="getStatusClass(history.status)">{{ $t('public.' + history.status) }}</Badge>
                         </th>
                         <th class="py-2 font-thin rounded-r-full">
                             <Action

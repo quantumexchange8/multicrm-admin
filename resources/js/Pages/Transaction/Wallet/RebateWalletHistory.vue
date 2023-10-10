@@ -90,18 +90,18 @@ const paginationActiveClass = [
 <template>
     <div class="grid grid-cols-3 mt-8 gap-6">
         <div class="space-y-2">
-            <Label>Filter by Transaction Type</Label>
+            <Label>{{ $t('public.Filter by Transaction Type') }}</Label>
             <InputSelect
                 class="block w-full text-sm"
                 v-model="type"
             >
-                <option value="">All</option>
-                <option value="RebateEarned">RebateEarned</option>
-                <option value="RebateToWallet">Rebate To Wallet</option>
+                <option value="">{{ $t('public.All') }}</option>
+                <option value="RebateEarned">{{ $t('public.Rebate Earned') }}</option>
+                <option value="RebateToWallet">{{ $t('public.Rebate To Wallet') }}</option>
             </InputSelect>
         </div>
         <div class="space-y-2">
-            <Label>Filter By Date</Label>
+            <Label>{{ $t('public.Filter By Date') }}</Label>
             <vue-tailwind-datepicker
                 :formatter="formatter"
                 v-model="date"
@@ -117,26 +117,26 @@ const paginationActiveClass = [
         <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
         <tr class="uppercase">
             <th scope="col" class="px-6 py-3 w-24">
-                Date
+                {{ $t('public.Date') }}
             </th>
             <th scope="col" class="px-6 py-3 w-48">
-                Transaction Type
+                {{ $t('public.Transaction Type') }}
             </th>
             <th scope="col" class="px-6 py-3 w-48">
-                Amount ($)
+                {{ $t('public.Amount') }} ($)
             </th>
             <th scope="col" class="px-6 py-3 w-48">
-                Status
+                {{ $t('public.Status')}}
             </th>
             <th scope="col" class="px-6 py-3">
-                Description
+                {{ $t('public.Description') }}
             </th>
         </tr>
         </thead>
         <tbody>
         <tr v-if="rebateWalletHistory.data.length === 0">
             <th colspan="5" class="py-4 text-lg text-center">
-                No History
+                {{ $t('public.No History') }}
             </th>
         </tr>
         <tr v-for="history in rebateWalletHistory.data" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
@@ -144,7 +144,7 @@ const paginationActiveClass = [
                 {{ formatDate(history.created_at) }}
             </th>
             <th class="px-6 py-4">
-                {{ formatType(history.type) }}
+                {{ $t('public.' + formatType(history.type)) }}
             </th>
             <th>
                 <span :class="getAmountClass(history)">{{ getAmountPrefix(history) }} {{ history.amount }}</span>

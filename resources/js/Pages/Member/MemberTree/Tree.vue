@@ -60,9 +60,9 @@ export default {
             <svg class="flex-shrink-0 inline w-4 h-4 mr-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
             </svg>
-            <span class="sr-only">Info</span>
+            <span class="sr-only">{{ $t('public.Info') }}</span>
             <div>
-                <span class="font-medium">No Records!</span> Try another Name/Email.
+                <span class="font-medium">{{ $t('public.No Records!') }}</span> {{ $t('public.Try another Name/Email.') }}
             </div>
         </div>
     </div>
@@ -117,23 +117,23 @@ export default {
                         <div class="flex items-center justify-between w-full gap-2 text-lg dark:text-white">
                             <div class="flex flex-col text-center ml-6">
                                 <span>{{ node.level }}</span>
-                                <span class="text-xs dark:text-dark-eval-4">Level</span>
+                                <span class="text-xs dark:text-dark-eval-4">{{ $t('public.Level') }}</span>
                             </div>
                             <div class="flex flex-col text-center">
                                 <span>$ {{ node.total_group_deposit }}</span>
-                                <span class="text-xs dark:text-dark-eval-4">Total Group Deposit</span>
+                                <span class="text-xs dark:text-dark-eval-4">{{ $t('public.Total Group Deposit') }}</span>
                             </div>
                             <div class="flex flex-col text-center">
                                 <span>$ {{ node.total_group_withdrawal }}</span>
-                                <span class="text-xs dark:text-dark-eval-4">Total Group Withdrawal</span>
+                                <span class="text-xs dark:text-dark-eval-4">{{ $t('public.Total Group Withdrawal') }}</span>
                             </div>
                             <div class="flex flex-col text-center">
                                 <span>{{ node.total_ib }}</span>
-                                <span class="text-xs dark:text-dark-eval-4">Total IB</span>
+                                <span class="text-xs dark:text-dark-eval-4">{{ $t('public.Total IB') }}</span>
                             </div>
                             <div class="flex flex-col text-center">
                                 <span>{{ node.total_member }}</span>
-                                <span class="text-xs dark:text-dark-eval-4">Total Client</span>
+                                <span class="text-xs dark:text-dark-eval-4">{{ $t('public.Total Client') }}</span>
                             </div>
                         </div>
                     </div>
@@ -183,11 +183,11 @@ export default {
                         </div>
                         <div class="flex flex-col w-full gap-2 text-lg dark:text-white">
                             <div class="flex flex-col text-center text-sm dark:text-white">
-                                <span>Level: {{ node.level }}</span>
-                                <span class="text-xs dark:text-dark-eval-4">Total Group Deposit:</span><span> $ {{ node.total_group_deposit }}</span>
-                                <span class="text-xs dark:text-dark-eval-4">Total Group Withdrawal:</span><span> $ {{ node.total_group_withdrawal }}</span>
-                                <span class="text-xs dark:text-dark-eval-4">Total IB:</span><span> {{ node.total_ib }}</span>
-                                <span class="text-xs dark:text-dark-eval-4">Total Client:</span><span> {{ node.total_member }}</span>
+                                <span>{{ $t('public.Level') }}: {{ node.level }}</span>
+                                <span class="text-xs dark:text-dark-eval-4">{{ $t('public.Total Group Deposit') }} :</span><span> $ {{ node.total_group_deposit }}</span>
+                                <span class="text-xs dark:text-dark-eval-4">{{ $t('public.Total Group Withdrawal') }} :</span><span> $ {{ node.total_group_withdrawal }}</span>
+                                <span class="text-xs dark:text-dark-eval-4">{{ $t('public.Total IB') }} :</span><span> {{ node.total_ib }}</span>
+                                <span class="text-xs dark:text-dark-eval-4">{{ $t('public.Total Client') }} :</span><span> {{ node.total_member }}</span>
                             </div>
                         </div>
                     </div>

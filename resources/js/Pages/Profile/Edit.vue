@@ -11,12 +11,12 @@ defineProps({
 </script>
 
 <template>
-    <AuthenticatedLayout title="Profile">
+    <AuthenticatedLayout :title="$t('public.Profile')">
         <template #header>
             <h2
                 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight"
             >
-                Profile
+                {{ $t('public.Profile') }}
             </h2>
         </template>
 

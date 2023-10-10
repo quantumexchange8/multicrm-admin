@@ -54,7 +54,7 @@ class WalletController extends Controller
         $balance = $user->cash_wallet + $amount;
 
         if ($balance < 0 || $amount == 0) {
-            throw ValidationException::withMessages(['amount' => 'Insufficient balance']);
+            throw ValidationException::withMessages(['amount' => trans('public.Insufficient balance')]);
         } else {
             $user->cash_wallet += $amount;
             $user->save();
@@ -69,7 +69,7 @@ class WalletController extends Controller
                 'status' => 'Successful',
                 'description' => $request->comment,
             ]);
-            return redirect()->back()->with('toast', 'Successfully Adjusted Cash Wallet');
+            return redirect()->back()->with('toast', trans('public.Successfully Adjusted Cash Wallet'));
         }
     }
 

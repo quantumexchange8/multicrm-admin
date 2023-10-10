@@ -65,7 +65,7 @@ class PlatformConfigurationController extends Controller
             AccountTypeSymbolGroup::create(['account_type' => $accountType->id, 'symbol_group' => $row['id']]);
         }
 
-        return redirect()->back()->with('toast', 'The new account type has been created successfully!');
+        return redirect()->back()->with('toast', trans('public.The new account type has been created successfully!'));
     }
 
     public function updateAccountType(AccountTypeRequest $request): \Illuminate\Http\RedirectResponse
@@ -86,7 +86,7 @@ class PlatformConfigurationController extends Controller
             'end_date' => $end_date,
         ]);
 
-        return redirect()->back()->with('toast', 'The account type details has been saved successfully!');
+        return redirect()->back()->with('toast', trans('public.The account type details has been saved successfully!'));
     }
 
     public function deleteAccountType(Request $request): \Illuminate\Http\RedirectResponse
@@ -99,6 +99,6 @@ class PlatformConfigurationController extends Controller
             $accountGroup->delete();
         }
 
-        return redirect()->back()->with('toast', 'The account type details has been deleted successfully!');
+        return redirect()->back()->with('toast', trans('public.The account type details has been deleted successfully!'));
     }
 }

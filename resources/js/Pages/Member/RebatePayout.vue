@@ -60,11 +60,11 @@ const reset = () => {
 </script>
 
 <template>
-    <AuthenticatedLayout title="Trading Account Listing">
+    <AuthenticatedLayout :title="$t('public.Trading Account Listing')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Rebate Payout
+                    {{ $t('public.Rebate Payout') }}
                 </h2>
             </div>
         </template>
@@ -110,14 +110,14 @@ const reset = () => {
                         @click.prevent="submitSearch"
                         :disabled="form.processing"
                     >
-                        Search
+                        {{ $t('public.Search') }}
                     </Button>
                     <Button
                         variant="danger-opacity"
                         class="justify-center"
                         @click.prevent="reset"
                     >
-                        Reset
+                        {{ $t('public.Reset') }}
                     </Button>
                 </div>
 
@@ -130,7 +130,7 @@ const reset = () => {
                         :class="{ 'bg-transparent': activeComponent !== 'pending', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'pending' }"
                         @click="setActiveComponent('pending')"
                     >
-                        Pending Payout
+                        {{ $t('public.Pending Payout') }}
                     </Button>
                     <Button
                         variant="primary-opacity"
@@ -138,7 +138,7 @@ const reset = () => {
                         :class="{ 'bg-transparent': activeComponent !== 'history', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'history' }"
                         @click="setActiveComponent('history')"
                     >
-                        Payout History
+                        {{ $t('public.Payout History') }}
                     </Button>
                 </div>
             </div>

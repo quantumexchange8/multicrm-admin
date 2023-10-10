@@ -55,11 +55,11 @@ function viewUpline() {
 </script>
 
 <template>
-    <AuthenticatedLayout title="Member Tree">
+    <AuthenticatedLayout :title="$t('public.Member Tree')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    Member Tree
+                    {{ $t('public.Member Tree') }}
                 </h2>
             </div>
         </template>
@@ -71,8 +71,8 @@ function viewUpline() {
                     @change="viewUpline"
                     class="block w-full text-sm"
                 >
-                    <option selected value="no">No</option>
-                    <option value="yes">Yes</option>
+                    <option selected value="no">{{ $t('public.No') }}</option>
+                    <option value="yes">{{ $t('public.Yes') }}</option>
                 </InputSelect>
             </div>
             <div class="col-span-2 flex justify-between">
@@ -90,7 +90,7 @@ function viewUpline() {
                                 aria-hidden="true"
                             />
                         </template>
-                        <Input withIcon id="name" type="text" placeholder="Name / Email" class="block w-full" v-model="search" @keydown="handleKeyDown" />
+                        <Input withIcon id="name" type="text" :placeholder="$t('public.Name / Email')" class="block w-full" v-model="search" @keydown="handleKeyDown" />
                     </InputIconWrapper>
                     <button type="submit" class="absolute right-1 bottom-2 py-2.5 text-gray-500 hover:text-dark-eval-4 font-medium rounded-full w-8 h-8 text-sm"><font-awesome-icon
                         icon="fa-solid fa-x"
@@ -112,7 +112,7 @@ function viewUpline() {
         <div v-if="search">
             <div v-if="isLoading" class="w-full flex justify-center mt-4">
                 <div class="px-4 py-2 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
-                    loading...
+                    {{ $t('public.loading...') }}
                 </div>
             </div>
             <div v-else>
@@ -130,9 +130,9 @@ function viewUpline() {
                     class="flex-shrink-0 w-5 h-5 cursor-pointer"
                     aria-hidden="true"
                 />
-                <span class="sr-only">Info</span>
+                <span class="sr-only">{{ $t('public.Info') }}</span>
                 <div class="ml-4">
-                    <span class="font-medium">Search Name/Email. </span>
+                    <span class="font-medium">{{ $t('public.Search Name/Email.') }}</span>
                 </div>
             </div>
         </div>

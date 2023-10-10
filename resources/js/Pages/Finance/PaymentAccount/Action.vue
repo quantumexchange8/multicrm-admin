@@ -37,7 +37,7 @@ const closeModal = () => {
 
 <template>
     <div class="flex justify-center">
-        <Tooltip content="View" placement="top">
+        <Tooltip :content="$t('public.View')" placement="top">
             <Button
                 class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
                 variant="primary-opacity"
@@ -46,7 +46,7 @@ const closeModal = () => {
                 <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
             </Button>
         </Tooltip>
-        <Tooltip content="Edit" placement="top">
+        <Tooltip :content="$t('public.Edit')" placement="top">
             <Button
                 class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
                 variant="primary-opacity"
@@ -55,7 +55,7 @@ const closeModal = () => {
                 <EditIcon aria-hidden="true" class="w-6 h-6 absolute" />
             </Button>
         </Tooltip>
-        <Tooltip content="Delete" placement="top">
+        <Tooltip :content="$t('public.Delete')" placement="top">
             <Button
                 class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
                 variant="danger-opacity"

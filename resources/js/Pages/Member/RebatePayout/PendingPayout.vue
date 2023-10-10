@@ -5,6 +5,7 @@ import {computed, ref, watch} from "vue";
 import Button from "@/Components/Button.vue";
 import Swal from "sweetalert2";
 import Paginator from "@/Components/Paginator.vue";
+import {trans} from "laravel-vue-i18n";
 
 const props = defineProps({
     lists: Object,
@@ -72,12 +73,12 @@ async function confirmAction(type) {
 
     if (type === 'approve') {
         const result = await swalWithBootstrapButtons.fire({
-            title: 'Are you sure?',
-            text: `Approve all selected IB!`,
+            title: trans('public.Are you sure?'),
+            text: trans('public.Approve all selected IB!'),
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            cancelButtonText: 'Cancel',
+            confirmButtonText: trans('public.Confirm'),
+            cancelButtonText: trans('public.Cancel'),
             reverseButtons: true,
         });
 
@@ -86,12 +87,12 @@ async function confirmAction(type) {
         }
     } else {
         const result = await swalWithBootstrapButtons.fire({
-            title: 'Are you sure?',
-            text: `Reject all selected IB!`,
+            title: trans('public.Are you sure?'),
+            text: trans('public.Reject all selected IB!'),
             icon: 'warning',
             showCancelButton: true,
-            confirmButtonText: 'Confirm',
-            cancelButtonText: 'Cancel',
+            confirmButtonText: trans('public.Confirm'),
+            cancelButtonText: trans('public.Cancel'),
             reverseButtons: true,
         });
 
@@ -112,13 +113,13 @@ async function approveSelectedRebatePayout() {
 
         if (response.data.success) {
             await Swal.fire({
-                title: 'Success',
+                title: trans('public.Success'),
                 text: response.data.message,
                 icon: 'success',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -133,13 +134,13 @@ async function approveSelectedRebatePayout() {
     } catch (error) {
         if (error.response && error.response.status === 422) {
             await Swal.fire({
-                title: 'Error',
+                title: trans('public.Error'),
                 text: error.response.data.message,
                 icon: 'error',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -147,13 +148,13 @@ async function approveSelectedRebatePayout() {
             });
         } else {
             await Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while applying the rebate.',
+                title: trans('public.Error'),
+                text: trans('public.An error occurred while applying the rebate.'),
                 icon: 'error',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -174,13 +175,13 @@ async function rejectSelectedRebatePayout() {
 
         if (response.data.success) {
             await Swal.fire({
-                title: 'Success',
+                title: trans('public.Success'),
                 text: response.data.message,
                 icon: 'success',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -195,13 +196,13 @@ async function rejectSelectedRebatePayout() {
     } catch (error) {
         if (error.response && error.response.status === 422) {
             await Swal.fire({
-                title: 'Error',
+                title: trans('public.Error'),
                 text: error.response.data.message,
                 icon: 'error',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -209,13 +210,13 @@ async function rejectSelectedRebatePayout() {
             });
         } else {
             await Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while applying the rebate.',
+                title: trans('public.Error'),
+                text: trans('public.An error occurred while applying the rebate.'),
                 icon: 'error',
                 background: '#000000',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -238,32 +239,32 @@ async function rejectSelectedRebatePayout() {
                 />
             </th>
             <th scope="col" class="px-6 py-3">
-                Date
+                {{ $t('public.Date') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                IB Name
+                {{ $t('public.IB Name') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                IB Number
+                {{ $t('public.IB Number') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                Account Type
+                {{ $t('public.Account Type') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                Total Volume (LOTS)
+                {{ $t('public.Total Volume (LOTS)') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                Total Payout
+                {{ $t('public.Total Payout') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                Action
+                {{ $t('public.Action') }}
             </th>
         </tr>
         </thead>
         <tbody>
         <tr v-if="lists.data.length === 0">
             <th colspan="8" class="py-4 text-lg text-center">
-                No Pending
+                {{ $t('public.No Pending') }}
             </th>
         </tr>
         <tr v-for="list in lists.data" :key="list.ib_account_types_id" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
@@ -311,7 +312,7 @@ async function rejectSelectedRebatePayout() {
             class="float-right text-xs"
             @click="confirmAction('approve')"
         >
-            Confirm Approve
+            {{ $t('public.Confirm Approve') }}
         </Button>
         <Button
             v-if="showConfirmButton"
@@ -319,7 +320,7 @@ async function rejectSelectedRebatePayout() {
             class="float-right text-xs"
             @click="confirmAction('reject')"
         >
-            Confirm Reject
+            {{ $t('public.Confirm Reject') }}
         </Button>
     </div>
 </template>

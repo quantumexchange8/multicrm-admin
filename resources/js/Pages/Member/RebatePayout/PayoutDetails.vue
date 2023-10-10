@@ -11,7 +11,7 @@ const props = defineProps({
     <h2
         class="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100"
     >
-        View Rebate Payout Details
+        {{ $t('public.View Rebate Payout Details') }}
     </h2>
     <hr>
 
@@ -26,22 +26,22 @@ const props = defineProps({
             <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
             <tr class="uppercase">
                 <th scope="col" class="px-6 py-3">
-                    Client Name
+                    {{ $t('public.Client Name') }}
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Trading Account
+                    {{ $t('public.Trading Account') }}
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Account Platform
+                    {{ $t('public.Account Platform') }}
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Volume (Lot)
+                    {{ $t('public.Volume (Lot)') }}
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Rebate / Lot
+                    {{ $t('public.Rebate / Lot') }}
                 </th>
                 <th scope="col" class="px-6 py-3">
-                    Rebate Earned
+                    {{ $t('public.Rebate Earned') }}
                 </th>
             </tr>
             </thead>
@@ -71,7 +71,7 @@ const props = defineProps({
         <h3
             class="text-lg font-medium text-gray-900 dark:text-gray-100 float-right mr-2 mt-4"
         >
-            Total Payout: $ {{ list.total_revenue.toFixed(2) }}
+            {{ $t('public.Total Payout') }} : $ {{ list.total_revenue.toFixed(2) }}
         </h3>
     </div>
 

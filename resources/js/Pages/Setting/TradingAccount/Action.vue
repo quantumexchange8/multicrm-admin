@@ -5,6 +5,8 @@ import Swal from "sweetalert2";
 import {ref} from "vue";
 import Modal from "@/Components/Modal.vue";
 import ManageGroup from "@/Pages/Setting/TradingAccount/ManageGroup.vue";
+import {trans} from "laravel-vue-i18n";
+
 
 async function refreshGroup() {
 
@@ -12,13 +14,13 @@ async function refreshGroup() {
         const response = await axios.get('/setting/refreshGroup');
         if (response.data.success) {
             await Swal.fire({
-                title: 'Success',
+                title: trans('public.Success'),
                 text: response.data.message,
                 icon: 'success',
                 background: '#202020',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -30,13 +32,13 @@ async function refreshGroup() {
     } catch (error) {
         if (error.response && error.response.status === 422) {
             await Swal.fire({
-                title: 'Error',
+                title: trans('public.Error'),
                 text: error.response.data.message,
                 icon: 'error',
                 background: '#202020',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',
@@ -44,13 +46,13 @@ async function refreshGroup() {
             });
         } else {
             await Swal.fire({
-                title: 'Error',
-                text: 'An error occurred while refreshing the groups.',
+                title: trans('public.Error'),
+                text: trans('public.An error occurred while refreshing the groups.'),
                 icon: 'error',
                 background: '#202020',
                 iconColor: '#ffffff',
                 color: '#ffffff',
-                confirmButtonText: 'OK',
+                confirmButtonText: trans('public.OK'),
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: 'bg-blue-500 py-2 px-6 rounded-full text-white hover:bg-blue-600 focus:ring-blue-500',

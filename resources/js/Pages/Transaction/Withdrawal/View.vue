@@ -9,6 +9,8 @@ import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 import Button from "@/Components/Button.vue";
 import {transactionFormat} from "@/Composables/index.js";
 import toast from "@/Composables/toast.js";
+import {trans} from "laravel-vue-i18n";
+
 library.add(faCopy);
 
 const props = defineProps({
@@ -37,7 +39,7 @@ function copyAddress() {
         document.body.removeChild(textArea);
 
         toast.add({
-            message: "Copied",
+            message: trans("public.Copied"),
         });
     }
 }
@@ -45,16 +47,16 @@ function copyAddress() {
 
 <template>
     <div v-if="type !== 'history'">
-        <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">View More Details</h2>
+        <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.View More Details') }}</h2>
         <hr>
         <div class="flex justify-center flex-col text-center mt-8 space-y-2">
-            <h4 class="text-lg font-medium text-gray-900 dark:text-dark-eval-4">Cash Wallet Balance</h4>
+            <h4 class="text-lg font-medium text-gray-900 dark:text-dark-eval-4">{{ $t('public.Cash Wallet Balance') }}</h4>
             <h3 class="text-4xl mb-2 font-medium text-gray-900 dark:text-gray-100">$ {{ formatAmount(withdrawal.of_user.cash_wallet) }}</h3>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-4 md:gap-4 mt-4">
             <div class="space-y-2 mb-4 md:mb-0">
-                <Label>{{ withdrawal.channel === 'bank' ? 'Bank Account' : 'Crypto Network' }}</Label>
+                <Label>{{ withdrawal.channel === 'bank' ? $t('public.Bank Account') : $t('public.Crypto Network') }}</Label>
                 <Input
                     class="block w-full dark:border-0 text-xs"
                     disabled
@@ -64,7 +66,7 @@ function copyAddress() {
             <div class="space-y-2 col-span-3">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div class="space-y-2">
-                        <Label>{{ withdrawalLabel }}</Label>
+                        <Label>{{ $t('public.' + withdrawalLabel) }}</Label>
                         <div class="relative w-full">
                             <Input
                                 class="block w-full dark:border-0 text-xs"
@@ -83,7 +85,7 @@ function copyAddress() {
                         </div>
                     </div>
                     <div class="space-y-2">
-                        <Label>Withdrawal Amount</Label>
+                        <Label>{{ $t('public.Withdrawal Amount') }}</Label>
                         <Input
                             class="block w-full dark:border-0 text-xs"
                             disabled
@@ -97,10 +99,10 @@ function copyAddress() {
         </div>
     </div>
     <div v-else>
-        <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">View Reason</h2>
+        <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.View Reason') }}</h2>
         <hr>
 
-        <Label for="comment" class="mt-8" value="Remarks"></Label>
+        <Label for="comment" class="mt-8" :value="$t('public.Remarks')"></Label>
         <Textarea
             class="mt-2"
             id="comment"

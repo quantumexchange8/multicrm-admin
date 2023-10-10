@@ -89,7 +89,7 @@ class MemberController extends Controller
             'kyc_approval_description' => $request->kyc_approval_description,
         ]);
 
-        return redirect()->back()->with('toast', 'The member’s detail has been edited successfully!');
+        return redirect()->back()->with('toast', trans('public.The member’s detail has been edited successfully!'));
 
     }
 
@@ -215,9 +215,9 @@ class MemberController extends Controller
                 ]);
             }
         } else {
-            return response(['success' => false, 'message' => 'Already have this account type']);
+            return response(['success' => false, 'message' => trans('public.Already have this account type')]);
         }
-        return redirect()->back()->with('toast', 'New IB Created');
+        return redirect()->back()->with('toast', trans('public.New IB Created'));
     }
 
     public function reset_member_password(ResetMemberPasswordRequest $request)
@@ -229,7 +229,7 @@ class MemberController extends Controller
             'password' => Hash::make($validated['password']),
         ]);
 
-        return back()->with('toast', 'The member portal password has been reset successfully');
+        return back()->with('toast', trans('public.The member portal password has been reset successfully'));
     }
 
     public function delete_member(Request $request)
@@ -238,7 +238,7 @@ class MemberController extends Controller
 
         $user->delete();
 
-        return redirect()->back()->with('toast', 'The member has been deleted successfully');
+        return redirect()->back()->with('toast', trans('public.The member has been deleted successfully'));
     }
 
     public function trading_account_listing()
@@ -367,7 +367,7 @@ class MemberController extends Controller
 
             if ($parent && $amount > $parent->amount) {
                 $fieldKey = 'ibGroupRates.' . $key;
-                $errorMessage = $parent->symbolGroup->name . ' amount cannot be higher than ' . $parent->amount;
+                $errorMessage = $parent->symbolGroup->name . trans('public. amount cannot be higher than ') . $parent->amount;
                 $validationErrors->add($fieldKey, $errorMessage);
             }
         }
@@ -382,7 +382,7 @@ class MemberController extends Controller
 
                 if ($childRate && $amount < $childRate->amount) {
                     $fieldKey = 'ibGroupRates.' . $key;
-                    $errorMessage = $childRate->symbolGroup->name . ' amount cannot be lower than ' . $childRate->amount;
+                    $errorMessage = $childRate->symbolGroup->name . trans('public. amount cannot be lower than ') . $childRate->amount;
                     $validationErrors->add($fieldKey, $errorMessage);
                 }
             }
@@ -408,7 +408,7 @@ class MemberController extends Controller
 
         }
 
-        return back()->with('toast', 'The rebate allocation has been saved!');
+        return back()->with('toast', trans('public.The rebate allocation has been saved!'));
     }
 
     public function updateRebateStructure(Request $request)
@@ -420,7 +420,7 @@ class MemberController extends Controller
 
             $exists = RebateAllocation::where('to', $ib)->whereRelation('request', 'status', '=', 'pending')->exists();
             if ($exists)
-                return response()->json(['success' => false, 'message' => $ib . ' has a pending request']);
+                return response()->json(['success' => false, 'message' => $ib . trans('public. has a pending request')]);
 
             $validationErrors = new MessageBag();
 
@@ -483,7 +483,7 @@ class MemberController extends Controller
                 $curIbRate[$key]->update(['amount' => $amount]);
             }
         }
-        return redirect()->back()->with('toast', 'New rebate allocation has been saved!');
+        return redirect()->back()->with('toast', trans('public.New rebate allocation has been saved!'));
     }
 
     public function rebate_payout(Request $request)
@@ -616,7 +616,7 @@ class MemberController extends Controller
             default:
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error Updating Rebate Payout',
+                    'message' => trans('public.Error Updating Rebate Payout'),
                 ], 422);
         }
 
@@ -657,7 +657,7 @@ class MemberController extends Controller
             ]);
         }
 
-        return response()->json(['success' => true, 'message' => 'Rebate payout approved successfully']);
+        return response()->json(['success' => true, 'message' => trans('public.Rebate payout approved successfully')]);
 
     }
 
@@ -716,13 +716,13 @@ class MemberController extends Controller
             default:
                 return response()->json([
                     'success' => false,
-                    'message' => 'Error Updating Rebate Payout',
+                    'message' => trans('public.Error Updating Rebate Payout'),
                 ], 422);
         }
 
         $rec->update(['status' => 'rejected']);
 
-        return response()->json(['success' => true, 'message' => 'Rebate payout rejected successfully']);
+        return response()->json(['success' => true, 'message' => trans('public.Rebate payout rejected successfully')]);
 
     }
 
@@ -754,7 +754,7 @@ class MemberController extends Controller
         $newUpline = $newUpline->first();
 
         if ($request->new_upline && !$newUpline) {
-            throw ValidationException::withMessages(['new_upline' => 'Upline Not Found']);
+            throw ValidationException::withMessages(['new_upline' => trans('public.Upline Not Found')]);
         }
         $oldUpline = User::find($user->upline_id);
 
@@ -762,12 +762,12 @@ class MemberController extends Controller
 
         if ($role == "member") {
             if ($user->id == $newUpline->id) {
-                throw ValidationException::withMessages(['new_upline' => 'Upline cannot be themselves']);
+                throw ValidationException::withMessages(['new_upline' => trans('public.Upline cannot be themselves')]);
             }
             if ($oldUpline) {
 
                 if ($newUpline->id == $oldUpline->id) {
-                    throw ValidationException::withMessages(['new_upline' => 'Upline cannot be the same']);
+                    throw ValidationException::withMessages(['new_upline' => trans('public.Upline cannot be the same')]);
                 }
 
                 $oldUpline->decrement('direct_client');
@@ -824,7 +824,7 @@ class MemberController extends Controller
                 }
             }
         }
-        return redirect()->back()->with('toast', 'Successfully Transfer');
+        return redirect()->back()->with('toast', trans('public.Successfully Transfer'));
     }
 
     private function updateHierarchyList($user, $list, $id)

@@ -86,28 +86,28 @@ function handleKeyDown(event) {
                 <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                 <tr class="uppercase">
                     <th scope="col" class="px-6 py-3">
-                        IB Name
+                        {{ $t('public.IB Name') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        IB Number
+                        {{ $t('public.IB Number') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Current Upline
+                        {{ $t('public.Current Upline') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Direct IB
+                        {{ $t('public.Direct IB') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Direct Client
+                        {{ $t('public.Direct Client') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Total Group IB
+                        {{ $t('public.Total Group IB') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Total Group Client
+                        {{ $t('public.Total Group Client') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Action
+                        {{ $t('public.Action') }}
                     </th>
                 </tr>
                 </thead>

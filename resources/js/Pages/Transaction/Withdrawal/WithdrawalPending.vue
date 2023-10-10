@@ -15,32 +15,32 @@ const { getChannelName, formatDate, formatAmount } = transactionFormat();
         <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
         <tr>
             <th scope="col" class="px-4 py-3">
-                Name
+                {{ $t('public.Name') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Email
+                {{ $t('public.Email') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Date
+                {{ $t('public.Date') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Withdrawal Method
+                {{ $t('public.Withdrawal Method') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Withdrawal Amount
+                {{ $t('public.Withdrawal Amount') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Payment Charges
+                {{ $t('public.Payment Charges') }}
             </th>
             <th scope="col" class="px-4 py-3 w-56">
-                Action
+                {{ $t('public.Action') }}
             </th>
         </tr>
         </thead>
         <tbody>
         <tr v-if="withdrawals.data.length === 0">
             <th colspan="8" class="py-4 text-lg text-center">
-                No Pending
+                {{ $t('public.No Pending') }}
             </th>
         </tr>
         <tr v-for="withdrawal in withdrawals.data" :key="withdrawal.id" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
@@ -54,7 +54,7 @@ const { getChannelName, formatDate, formatAmount } = transactionFormat();
                 {{ formatDate(withdrawal.created_at) }}
             </th>
             <th>
-                {{ getChannelName(withdrawal.channel) }}
+                {{ $t('public.' + getChannelName(withdrawal.channel)) }}
             </th>
             <th>
                 $ {{ formatAmount(withdrawal.amount) }}

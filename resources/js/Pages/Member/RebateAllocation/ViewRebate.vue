@@ -45,12 +45,12 @@ const cancel = () => {
 </script>
 
 <template>
-    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">View More Details</h2>
+    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.View More Details') }}</h2>
     <hr>
 
     <div class="grid grid-cols-1 md:grid-cols-2 mt-6">
         <div>
-            <p class="text-black dark:text-white mb-5">Upline Rebate Info</p>
+            <p class="text-black dark:text-white mb-5">{{ $t('public.Upline Rebate Info') }}</p>
             <div v-if="ib.upline">
                 <div v-for="uplineRebate in ib.upline.symbol_groups">
                     <div class="grid grid-cols-2 text-black dark:text-white pr-4 mb-5 items-center">
@@ -70,7 +70,7 @@ const cancel = () => {
         </div>
 
         <div v-if="showForm">
-            <p class="text-black dark:text-white mb-5">IB Name: {{ ib.of_user.first_name }}</p>
+            <p class="text-black dark:text-white mb-5">{{ $t('public.IB Name') }} : {{ ib.of_user.first_name }}</p>
 
             <form @submit.prevent="submitForm">
                 <div v-for="ibRebateInfo in ib.symbol_groups" :key="ibRebateInfo.id">
@@ -90,15 +90,15 @@ const cancel = () => {
                 </div>
                 <div class="grid grid-cols-2 gap-4 w-full md:w-1/2 md:float-right">
                     <Button variant="secondary" class="justify-center" @click="cancel">
-                        Cancel
+                        {{ $t('public.Cancel') }}
                     </Button>
-                    <Button class="px-6 justify-center" :disabled="form.processing">Save</Button>
+                    <Button class="px-6 justify-center" :disabled="form.processing">{{ $t('public.Save') }}</Button>
                 </div>
             </form>
         </div>
 
         <div v-else>
-            <p class="text-black dark:text-white mb-5">IB Name: {{ ib.of_user.first_name }}</p>
+            <p class="text-black dark:text-white mb-5">{{ $t('public.IB Name') }} : {{ ib.of_user.first_name }}</p>
             <div v-for="ibRebateInfo in ib.symbol_groups" :key="ibRebateInfo.id">
                 <div class="grid grid-cols-2 text-black dark:text-white pr-4 mb-5 items-center">
                     <span class="text-black dark:text-dark-eval-3 uppercase">{{ ibRebateInfo.symbol_group.name }} (USD)/LOT</span>
@@ -107,7 +107,7 @@ const cancel = () => {
 
             </div>
 
-            <Button @click="showForm = !showForm" class="px-6 float-right">Edit</Button>
+            <Button @click="showForm = !showForm" class="px-6 float-right">{{ $t('public.Edit') }}</Button>
         </div>
     </div>
 </template>

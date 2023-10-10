@@ -47,11 +47,11 @@ const paginationActiveClass = [
 </script>
 
 <template>
-    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">Manage Groups</h2>
+    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.Manage Groups') }}</h2>
     <hr>
     <div class="grid grid-cols-3 mt-8 gap-6">
         <div class="space-y-2">
-            <Label>Filter by Adjustment Type</Label>
+            <Label>{{ $t('public.Filter by Adjustment Type') }}</Label>
             <Input
                 class="block w-full text-sm"
                 v-model="search"
@@ -66,20 +66,20 @@ const paginationActiveClass = [
         <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
         <tr class="uppercase">
             <th scope="col" class="px-6 py-3 w-24">
-                Display
+                {{ $t('public.Display') }}
             </th>
             <th scope="col" class="px-6 py-3 w-48">
-                Value
+                {{ $t('public.Value') }}
             </th>
             <th scope="col" class="px-6 py-3 w-48">
-                Meta Group Name
+                {{ $t('public.Meta Group Name') }}
             </th>
         </tr>
         </thead>
         <tbody>
         <tr v-if="cTraderGroups.data.length === 0">
             <th colspan="3" class="py-4 text-lg text-center">
-                No History
+                {{ $t('public.No History') }}
             </th>
         </tr>
         <tr v-for="group in cTraderGroups.data" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">

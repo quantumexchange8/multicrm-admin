@@ -31,22 +31,22 @@ const submitForm = () => {
 </script>
 
 <template>
-    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ title }} Withdrawal Request</h2>
+    <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ title }} {{ $t('public.Withdrawal Request')}}</h2>
     <hr>
 
-    <Label for="comment" class="mt-8" value="Remarks"></Label>
+    <Label for="comment" class="mt-8" :value="$t('Remarks')"></Label>
     <Textarea
         class="mt-2"
         id="comment"
         v-model="form.comment"
-        placeholder="Please enter your reason here..."
+        :placeholder="$t('public.Please enter your reason here...')"
     />
     <InputError class="mt-2" :message="form.errors.comment" />
 
     <div class="my-6 grid grid-cols-2 gap-4 float-right">
         <Button variant="secondary" class="px-6 justify-center" @click="closeModal">
-            Cancel
+            {{ $t('public.Cancel') }}
         </Button>
-        <Button class="px-6 justify-center" @click.prevent="submitForm" :disabled="form.processing">Confirm</Button>
+        <Button class="px-6 justify-center" @click.prevent="submitForm" :disabled="form.processing">{{ $t('public.Confirm') }}</Button>
     </div>
 </template>

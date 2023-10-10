@@ -67,11 +67,11 @@ const reset = () => {
 </script>
 
 <template>
-    <AuthenticatedLayout title="All Wallet Report">
+    <AuthenticatedLayout :title="$t('public.All Wallet Report')">
         <template #header>
             <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
                 <h2 class="text-xl font-semibold leading-tight">
-                    All Wallet Report
+                    {{ $t('public.All Wallet Report')}}
                 </h2>
             </div>
         </template>
@@ -79,18 +79,18 @@ const reset = () => {
         <form @submit.prevent="submitSearch">
             <div class="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div class="space-y-2">
-                    <Label>Filter By</Label>
+                    <Label>{{ $t('public.Filter By') }}</Label>
                     <InputSelect
                         class="block w-full text-sm"
                         v-model="form.role"
-                        placeholder="All"
+                        :placeholder="$t('public.All')"
                     >
-                        <option value="ib">With Rebate Wallet</option>
-                        <option value="member">Without Rebate Wallet</option>
+                        <option value="ib">{{ $t('public.With Rebate Wallet') }}</option>
+                        <option value="member">{{ $t('public.Without Rebate Wallet') }}</option>
                     </InputSelect>
                 </div>
                 <div class="space-y-2 col-span-2">
-                    <Label>Search By Name / Email / Account No</Label>
+                    <Label>{{ $t('public.Search By Name / Email / Account No') }}</Label>
                     <div class="relative w-full">
                         <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                             <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
@@ -122,14 +122,14 @@ const reset = () => {
                             class="justify-center py-3"
                             :disabled="form.processing"
                         >
-                            Search
+                            {{ $t('public.Search') }}
                         </Button>
                         <Button
                             variant="danger-opacity"
                             class="justify-center py-3"
                             @click.prevent="reset"
                         >
-                            Reset
+                            {{ $t('public.Reset') }}
                         </Button>
                     </div>
                 </div>
@@ -150,22 +150,22 @@ const reset = () => {
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                     <tr>
                         <th scope="col" class="px-4 py-3">
-                            Name
+                            {{ $t('public.Name') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Email
+                            {{ $t('public.Email') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Account Number
+                            {{ $t('public.Account Number') }}
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Cash Wallet (USD)
+                            {{ $t('public.Cash Wallet') }} (USD)
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Rebate Wallet (USD)
+                            {{ $t('public.Rebate Wallet') }} (USD)
                         </th>
                         <th scope="col" class="px-4 py-3">
-                            Action
+                            {{ $t('public.Action') }}
                         </th>
                     </tr>
                     </thead>

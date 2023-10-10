@@ -20,7 +20,7 @@
         "postcss": "^8.4.18",
         "postcss-import": "^15.1.0",
         "tailwindcss": "^3.2.1",
-        "vite": "^4.4.9",
+        "vite": "^4.4.11",
         "vue": "^3.2.41"
     },
     "dependencies": {
@@ -38,6 +38,7 @@
         "filepond-plugin-file-poster": "^2.5.1",
         "filepond-plugin-file-validate-type": "^1.2.8",
         "filepond-plugin-image-preview": "^4.6.11",
+        "laravel-vue-i18n": "^2.7.1",
         "laravel-vue-pagination": "^4.1.1",
         "lodash": "^4.17.21",
         "sweetalert2": "^11.7.20",

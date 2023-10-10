@@ -34,7 +34,7 @@ const closeModal = () => {
 
 <template>
     <div class="flex justify-center">
-        <Tooltip content="Balance Adjustment" placement="top">
+        <Tooltip :content="$t('public.Balance Adjustment')" placement="top">
             <Button
                 class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
                 variant="primary-opacity"
@@ -43,7 +43,7 @@ const closeModal = () => {
                 <GearIcon aria-hidden="true" class="w-6 h-6 absolute" />
             </Button>
         </Tooltip>
-        <Tooltip content="Credit Adjustment" placement="top">
+        <Tooltip :content="$t('public.Credit Adjustment')" placement="top">
             <Button
                 class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
                 variant="primary-opacity"
@@ -52,7 +52,7 @@ const closeModal = () => {
                 <GiftIcon aria-hidden="true" class="w-6 h-6 absolute" />
             </Button>
         </Tooltip>
-        <Tooltip content="View" placement="top">
+        <Tooltip :content="$t('public.View')" placement="top">
             <Button
                 class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
                 variant="primary-opacity"

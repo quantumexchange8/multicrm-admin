@@ -61,34 +61,34 @@ const getIbDownlineRebateInfo = async () => {
 
 <template>
     <div class="flex justify-center">
-        <Tooltip content="View" placement="top">
+        <Tooltip :content="$t('public.View')" placement="top">
             <Button
                 class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
                 variant="primary-opacity"
                 @click="openMemberDetail(ib.id, 'view')"
             >
                 <ViewIcon aria-hidden="true" class="w-6 h-6 absolute" />
-                <span class="sr-only">View</span>
+                <span class="sr-only">{{ $t('public.View') }}</span>
             </Button>
         </Tooltip>
-        <Tooltip content="Structure" placement="top">
+        <Tooltip :content="$t('public.Structure')" placement="top">
             <Button
                 class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
                 variant="primary-opacity"
                 @click="handleButtonClick"
             >
                 <GearIcon aria-hidden="true" class="w-6 h-6 absolute" />
-                <span class="sr-only">Structure</span>
+                <span class="sr-only">{{ $t('public.Structure') }}</span>
             </Button>
         </Tooltip>
-        <Tooltip content="IB Transfer" placement="top">
+        <Tooltip :content="$t('public.IB Transfer')" placement="top">
             <Button
                 class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
                 variant="primary-opacity"
                 @click="openMemberDetail(ib.id, 'transferIb')"
             >
                 <IbTransferIcon aria-hidden="true" class="w-6 h-6 absolute" />
-                <span class="sr-only">Transfer</span>
+                <span class="sr-only">{{ $t('public.Transfer') }}</span>
             </Button>
         </Tooltip>
     </div>
@@ -111,7 +111,7 @@ const getIbDownlineRebateInfo = async () => {
             <template v-if="modalComponent === 'StructureRebate'">
                 <div v-if="loading" class="w-full flex justify-center mt-4">
                     <div class="px-4 py-2 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
-                        loading...
+                        {{ $t('public.loading...') }}
                     </div>
                 </div>
                 <div v-else>

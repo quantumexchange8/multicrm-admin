@@ -16,35 +16,35 @@ const { getChannelName, formatDate, getStatusClass, formatAmount } = transaction
         <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
         <tr>
             <th scope="col" class="px-4 py-3">
-                Name
+                {{ $t('public.Name') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Email
+                {{ $t('public.Email') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Date
+                {{ $t('public.Date') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Withdrawal Method
+                {{ $t('public.Withdrawal Method') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Withdrawal Amount
+                {{ $t('public.Withdrawal Amount') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Payment Charges
+                {{ $t('public.Payment Charges') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Status
+                {{ $t('public.Status') }}
             </th>
             <th scope="col" class="px-4 py-3">
-                Action
+                {{ $t('public.Action') }}
             </th>
         </tr>
         </thead>
         <tbody>
         <tr v-if="histories.data.length === 0">
             <th colspan="8" class="py-4 text-lg text-center">
-                No Pending
+                {{ $t('public.No Pending') }}
             </th>
         </tr>
         <tr v-for="history in histories.data" :key="history.id" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">
@@ -58,7 +58,7 @@ const { getChannelName, formatDate, getStatusClass, formatAmount } = transaction
                 {{ formatDate(history.created_at) }}
             </th>
             <th>
-                {{ getChannelName(history.channel) }}
+                {{ $t('public.' + getChannelName(history.channel)) }}
             </th>
             <th>
                 $ {{ formatAmount(history.amount) }}
@@ -67,7 +67,7 @@ const { getChannelName, formatDate, getStatusClass, formatAmount } = transaction
                 {{ history.payment_charges ?? '-' }}
             </th>
             <th>
-                <Badge :status="getStatusClass(history.status)">{{ history.status }}</Badge>
+                <Badge :status="getStatusClass(history.status)">{{ $t('public.' + history.status) }}</Badge>
             </th>
             <th class="py-2 font-thin rounded-r-full">
                 <Action

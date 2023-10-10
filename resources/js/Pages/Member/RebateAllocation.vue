@@ -129,17 +129,17 @@ const accountType = computed(() => {
 
 <template>
 
-<AuthenticatedLayout title="Rebate Allocation">
+<AuthenticatedLayout :title="$t('public.Rebate Allocation')">
     <template #header>
         <div class="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <h2 class="text-xl font-semibold leading-tight">
-                Rebate Allocation
+                {{ $t('public.Rebate Allocation') }}
             </h2>
         </div>
     </template>
 
     <div class="flex flex-col space-y-2 mb-6">
-        <Label>Account Type</Label>
+        <Label>{{ $t('public.Account Type') }}</Label>
         <InputSelect
             class="block w-1/4 text-sm"
             v-model="account_type"
@@ -160,22 +160,22 @@ const accountType = computed(() => {
                 <span class="text-sm text-gray-500 dark:text-gray-400">IB00000</span>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-center md:text-left">
-                <div class="text-black dark:text-dark-eval-3">Account type:</div>
+                <div class="text-black dark:text-dark-eval-3">{{ $t('public.Account Type') }} :</div>
                 <div class="text-black dark:text-white">{{ accountType.name }}</div>
 
-                <div class="text-black dark:text-dark-eval-3">Since Date </div>
+                <div class="text-black dark:text-dark-eval-3">{{ $t('public.Since Date') }} </div>
                 <div class="text-black dark:text-white">{{ '01-09-2023' }}</div>
 
-                <div class="text-black dark:text-dark-eval-3">Direct IB </div>
+                <div class="text-black dark:text-dark-eval-3">{{ $t('public.Direct IB') }} </div>
                 <div class="text-black dark:text-white">{{ accountType.directIb }}</div>
 
-                <div class="text-black dark:text-dark-eval-3">Direct Clients </div>
+                <div class="text-black dark:text-dark-eval-3">{{ $t('public.Direct Clients') }} </div>
                 <div class="text-black dark:text-white">{{ directMember }}</div>
 
-                <div class="text-black dark:text-dark-eval-3">Total Group IB </div>
+                <div class="text-black dark:text-dark-eval-3">{{ $t('public.Total Group IB') }} </div>
                 <div class="text-black dark:text-white">{{ totalIb }}</div>
 
-                <div class="text-black dark:text-dark-eval-3">Total Group Clients </div>
+                <div class="text-black dark:text-dark-eval-3">{{ $t('public.Total Group Clients') }} </div>
                 <div class="text-black dark:text-white">{{ totalMember }}</div>
             </div>
         </div>
@@ -232,14 +232,14 @@ const accountType = computed(() => {
                     class="justify-center py-2.5"
                     @click="submitSearch"
                 >
-                    Search
+                    {{ $t('public.Search') }}
                 </Button>
                 <Button
                     variant="danger-opacity"
                     class="justify-center py-2.5"
                     @click.prevent="resetField"
                 >
-                    Reset
+                    {{ $t('public.Reset') }}
                 </Button>
             </div>
         </div>
@@ -253,38 +253,35 @@ const accountType = computed(() => {
                 <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                 <tr class="uppercase">
                     <th scope="col" class="px-6 py-3">
-                        IB Name
+                        {{ $t('public.IB Name') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        IB Number
+                        {{ $t('public.IB Number') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Account Number
+                        {{ $t('public.Current Upline') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Current Upline
+                        {{ $t('public.Direct IB') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Direct IB
+                        {{ $t('public.Direct Client') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Direct Client
+                        {{ $t('public.Total Group IB') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Total Group IB
+                        {{ $t('public.Total Group Client') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
-                        Total Group Client
-                    </th>
-                    <th scope="col" class="px-6 py-3">
-                        Action
+                        {{ $t('public.Action') }}
                     </th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-if="getIbListing.data.length === 0">
                     <th colspan="8" class="py-4 text-lg text-center">
-                        No IB
+                        {{ $t('public.No IB') }}
                     </th>
                 </tr>
                 <tr v-for="ib in getIbListing.data" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">

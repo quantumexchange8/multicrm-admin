@@ -76,10 +76,10 @@ const isRadioSelected = computed(() => {
         <h2
             class="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100"
         >
-            Manage IB Account Type
+            {{ $t('public.Manage IB Account Type') }}
         </h2>
         <div class="mt-6 space-y-2">
-            <Label for="group" value="Select Account Type" />
+            <Label for="group" :value="$t('public.Select Account Type')" />
             <ul class="grid w-full gap-6 md:grid-cols-3">
                 <li v-for="(type, index) in acc_types" :key="index">
                     <input
@@ -103,14 +103,14 @@ const isRadioSelected = computed(() => {
         </div>
         <div v-if="loading" class="w-full flex justify-center mt-4">
             <div class="px-4 py-2 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
-                loading...
+                {{ $t('public.loading...') }}
             </div>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4" v-if="symbolGroupRates.length > 0">
             <div class="space-y-2 my-2" v-for="groupRate in symbolGroupRates">
                 <div class="inline-flex gap-2">
                     <Label for="group" :value="groupRate.symbol_group.display" />
-                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">MAX: {{ groupRate.amount }}</span>
+                    <span class="bg-yellow-100 text-yellow-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">{{ $t('public.MAX') }} : {{ groupRate.amount }}</span>
                 </div>
 
                 <Input
@@ -127,10 +127,10 @@ const isRadioSelected = computed(() => {
         </div>
         <div class="mt-6 flex justify-end">
             <Button variant="secondary" @click="closeModal">
-                Cancel
+                {{ $t('public.Cancel') }}
             </Button>
             <Button v-if="isRadioSelected" @click.prevent="submit">
-                Save
+                {{ $t('public.Save') }}
             </Button>
         </div>
     </div>

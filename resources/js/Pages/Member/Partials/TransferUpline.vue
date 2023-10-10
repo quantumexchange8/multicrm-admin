@@ -45,17 +45,17 @@ const closeModal = () => {
     <h2
         class="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100"
     >
-        Transfer Upline
+        {{ $t('public.Transfer Upline') }}
     </h2>
     <hr>
 
     <div class="mt-6 w-full grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="space-y-3 my-2">
-            <Label for="current_ib" class="text-xs" value="Current Upline" />
+            <Label for="current_ib" class="text-xs" :value="$t('public.Current Upline')" />
 
             <Input
                 id="current_ib"
-                :model-value="props.member.upline ? props.member.upline.email : 'No Upline'"
+                :model-value="props.member.upline ? props.member.upline.email : $t('public.No Upline')"
                 type="email"
                 class="mt- block w-full"
                 readonly
@@ -63,11 +63,11 @@ const closeModal = () => {
         </div>
 
         <div class="space-y-3 my-2">
-            <Label for="new_upline" class="text-xs" value="New Upline" />
+            <Label for="new_upline" class="text-xs" :value="$t('public.New Upline')" />
             <Multiselect
                 v-model="selectedEmail"
                 @update:modelValue="handleEmailSelection"
-                placeholder="Search IB"
+                :placeholder="$t('public.Search IB')"
                 :options="getMemberSel"
                 :searchable="true"
                 :classes="{
@@ -109,8 +109,8 @@ const closeModal = () => {
     </div>
     <div class="mt-6 flex gap-4 justify-end">
         <Button type="button" variant="secondary" @click="closeModal">
-            Cancel
+            {{ $t('public.Cancel') }}
         </Button>
-        <Button @click.prevent="submit" :disabled="form.processing">Save</Button>
+        <Button @click.prevent="submit" :disabled="form.processing">{{ $t('public.Save') }}</Button>
     </div>
 </template>

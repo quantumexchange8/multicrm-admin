@@ -13,32 +13,32 @@ const props = defineProps({
         <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
         <tr>
             <th scope="col" class="px-6 py-3">
-                Date
+                {{ $t('public.Date') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                IB Name
+                {{ $t('public.IB Name') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                IB Number
+                {{ $t('public.IB Number') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                Account Type
+                {{ $t('public.Account Type') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                Total Volume (LOTS)
+                {{ $t('public.Total Volume (LOTS)') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                Total Payout
+                {{ $t('public.Total Payout') }}
             </th>
             <th scope="col" class="px-6 py-3">
-                Action
+                {{ $t('public.Action') }}
             </th>
         </tr>
         </thead>
         <tbody>
         <tr v-if="rebatePayoutHistory.data.length === 0">
             <th colspan="8" class="py-4 text-lg text-center">
-                No History
+                {{ $t('public.No History') }}
             </th>
         </tr>
         <tr v-for="rebateHistory in rebatePayoutHistory.data" class="bg-white odd:dark:bg-transparent even:dark:bg-dark-eval-0 text-xs font-thin text-gray-900 dark:text-white text-center">

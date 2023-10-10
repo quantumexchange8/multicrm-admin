@@ -64,17 +64,17 @@ const closeModal = () => {
     <h2
         class="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100"
     >
-        IB Transfer
+        {{ $t('public.IB Transfer') }}
     </h2>
     <hr>
 
     <div class="mt-6 w-full grid grid-cols-1 md:grid-cols-2 gap-6">
         <div class="space-y-3 my-2">
-            <Label for="current_ib" class="text-xs" value="Current IB" />
+            <Label for="current_ib" class="text-xs" :value="$t('public.Current IB')" />
 
             <Input
                 id="current_ib"
-                :model-value="props.ib.upline ? props.ib.of_user.upline.email : 'No Upline'"
+                :model-value="props.ib.upline ? props.ib.of_user.upline.email : $t('public.No Upline')"
                 type="email"
                 class="mt- block w-full"
                 readonly
@@ -82,11 +82,11 @@ const closeModal = () => {
 
         </div>
         <div class="space-y-3 my-2">
-            <Label for="new_ib" class="text-xs" value="New IB" />
+            <Label for="new_ib" class="text-xs" :value="$t('public.New IB')" />
             <Multiselect
                 v-model="selectedEmail"
                 @update:modelValue="handleEmailSelection"
-                placeholder="Search IB"
+                :placeholder="$t('public.Search IB')"
                 :options="get_ibs_sel"
                 :searchable="true"
                 :classes="{
@@ -130,7 +130,7 @@ const closeModal = () => {
             <h3
                 class="text-lg font-medium mb-6 text-gray-900 dark:text-gray-100"
             >
-                Current IB Rebate Info
+                {{ $t('public.Current IB Rebate Info') }}
             </h3>
             <div v-if="ib.upline">
                 <div v-for="uplineRebate in ib.upline.symbol_groups">
@@ -149,11 +149,11 @@ const closeModal = () => {
             <h3
                 class="text-lg font-medium mb-6 text-gray-900 dark:text-gray-100"
             >
-                New IB Rebate Info
+                {{ $t('public.New IB Rebate Info') }}
             </h3>
             <div v-if="loading" class="w-full flex justify-center mt-4">
                 <div class="px-4 py-2 text-sm font-medium leading-none text-center text-blue-800 bg-blue-200 rounded-full animate-pulse dark:bg-blue-900 dark:text-blue-200">
-                    loading...
+                    {{ $t('public.loading...')}}
                 </div>
             </div>
             <div v-else>
@@ -168,8 +168,8 @@ const closeModal = () => {
     </div>
     <div class="mt-6 flex gap-4 justify-end">
         <Button variant="secondary" @click="closeModal">
-            Cancel
+            {{ $t('public.Cancel') }}
         </Button>
-        <Button @click.prevent="updatePassword" :disabled="form.processing">Save</Button>
+        <Button @click.prevent="updatePassword" :disabled="form.processing">{{ $t('public.Save') }}</Button>
     </div>
 </template>

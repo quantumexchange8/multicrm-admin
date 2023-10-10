@@ -33,7 +33,7 @@ class SettingController extends Controller
             Group::firstOrCreate(['meta_group_name' => $group['Group']]);
         }
 
-        return response()->json(['success' => true, 'message' => 'Successfully refresh group']);
+        return response()->json(['success' => true, 'message' => trans('public.Successfully refresh group')]);
     }
 
     public function getTradingAccountSettings(Request $request)
@@ -97,7 +97,7 @@ class SettingController extends Controller
             }
         }
 
-        return redirect()->back()->with('toast', 'Successfully Update Highlights Images');
+        return redirect()->back()->with('toast', trans('public.Successfully Update Highlights Images'));
     }
 
     public function upload_highlight_image(Request $request)

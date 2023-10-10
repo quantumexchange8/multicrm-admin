@@ -110,7 +110,7 @@ class IBController extends Controller
         $newUpline = $newUpline->first();
 
         if ($request->new_ib && !$newUpline) {
-            throw ValidationException::withMessages(['new_ib' => 'IB Not Found']);
+            throw ValidationException::withMessages(['new_ib' => trans('public.IB Not Found')]);
         }
         $oldUpline = User::find($user->upline_id);
 
@@ -120,18 +120,18 @@ class IBController extends Controller
 
             if ($newUpline) {
                 if ($user->id == $newUpline->id) {
-                    throw ValidationException::withMessages(['new_ib' => 'Referral cannot be themselves']);
+                    throw ValidationException::withMessages(['new_ib' => trans('public.Referral cannot be themselves')]);
                 }
 
                 $list = Str::of($newUpline->hierarchyList)->trim('-')->explode('-');
 
                 if ($list->contains($user->id)) {
-                    throw ValidationException::withMessages(['new_ib' => 'Referral cannot be same line']);
+                    throw ValidationException::withMessages(['new_ib' => trans('public.Referral cannot be same line')]);
                 }
 
                 if ($oldUpline) {
                     if ($newUpline->id == $oldUpline->id) {
-                        throw ValidationException::withMessages(['new_ib' => 'New Referral cannot be the same as current']);
+                        throw ValidationException::withMessages(['new_ib' => trans('public.New Referral cannot be the same as current')]);
                     }
                     $oldUpline->decrement('direct_ib');
                     $upline = $oldUpline;
@@ -194,7 +194,7 @@ class IBController extends Controller
                         $this->updateIbAccountTypeHierarchyList($user, $accountType, $symbolGroups, $ib);
                     }
                 }
-                return redirect()->back()->with('toast', 'Successfully Transfer');
+                return redirect()->back()->with('toast', trans('public.Successfully Transfer'));
 
             } else {
                 if ($oldUpline) {
@@ -233,23 +233,23 @@ class IBController extends Controller
                         $this->updateIbAccountTypeHierarchyList($user, $accountType, $symbolGroups, $ib);
                     }
 
-                    return redirect()->back()->with('toast', 'Successfully Transfer');
+                    return redirect()->back()->with('toast', trans('public.Successfully Transfer'));
                 }
                 //no to no
-                return response()->json(['success' => false, 'message' => 'Empty']);
+                return response()->json(['success' => false, 'message' => trans('public.Empty')]);
             }
         } else if ($role == "member") {
             if ($newUpline) {
                 if ($oldUpline) {
                     if ($newUpline->id == $oldUpline->id) {
-                        return response()->json(['success' => false, 'message' => 'No changes']);
+                        return response()->json(['success' => false, 'message' => trans('public.No changes')]);
                     }
 
                     $list = Str::of($newUpline->hierarchyList)->trim('-')->explode('-');
 
 
                     if ($list->contains($user->id)) {
-                        throw ValidationException::withMessages(['new_ib' => 'Referral cannot be same line']);
+                        throw ValidationException::withMessages(['new_ib' => trans('public.Referral cannot be same line')]);
                     }
 
 
@@ -289,7 +289,7 @@ class IBController extends Controller
                     $this->updateUplineIbAccountTypeHierarchyList($newUpline, $accountType, $symbolGroups);
                 }
 
-                return redirect()->back()->with('toast', 'Successfully Transfer');
+                return redirect()->back()->with('toast', trans('public.Successfully Transfer'));
 
             } else {
                 if ($oldUpline) {
@@ -306,12 +306,12 @@ class IBController extends Controller
                     $user->hierarchyList = NULL;
                     $user->save();
 
-                    return redirect()->back()->with('toast', 'Successfully Transfer');
+                    return redirect()->back()->with('toast', trans('public.Successfully Transfer'));
                 }
                 //no to no
-                return ['success' => false, 'message' => 'Invalid New Upline'];
+                return ['success' => false, 'message' => trans('public.Invalid New Upline')];
             }
         }
-        return ['success' => false, 'message' => 'Failed'];
+        return ['success' => false, 'message' => trans('public.Failed')];
     }
 }

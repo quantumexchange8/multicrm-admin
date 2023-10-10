@@ -89,7 +89,7 @@ class FinanceController extends Controller
             'ticket' => $trade->getTicket()
         ]);
 
-        return redirect()->back()->with('toast', 'Successfully Updated Balance');
+        return redirect()->back()->with('toast', trans('public.Successfully Updated Balance'));
     }
 
     public function credit_adjustment(CreditRequest $request)
@@ -133,7 +133,7 @@ class FinanceController extends Controller
             'ticket' => $trade->getTicket()
         ]);
 
-        return redirect()->back()->with('toast', 'Successfully Updated Credit');
+        return redirect()->back()->with('toast', trans('public.Successfully Updated Credit'));
     }
 
     public function getBalanceHistory(Request $request, $meta_login)
@@ -234,8 +234,8 @@ class FinanceController extends Controller
         ]);
 
         $successMessage = $paymentAccount->payment_platform === 'bank'
-            ? 'The bank account details has been edited successfully!'
-            : 'The cryptocurrency wallet details has been edited successfully!';
+            ? trans('public.The bank account details has been edited successfully!')
+            : trans('public.The cryptocurrency wallet details has been edited successfully!');
 
         return redirect()->back()->with('toast', $successMessage);
     }
@@ -246,6 +246,6 @@ class FinanceController extends Controller
 
         $paymentAccount->delete();
 
-        return redirect()->back()->with('toast', 'The payment account has been deleted successfully');
+        return redirect()->back()->with('toast', trans('public.The payment account has been deleted successfully'));
     }
 }

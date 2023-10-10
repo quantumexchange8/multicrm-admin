@@ -44,13 +44,13 @@ const closeModal = () => {
     <h2
         class="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100"
     >
-        Reset Password
+        {{ $t('public.Reset Password') }}
     </h2>
     <hr>
 
     <div class="mt-6 w-full">
         <div class="space-y-2 my-4">
-            <Label for="password" value="New Password" />
+            <Label for="password" :value="$t('public.New Password')" />
 
             <Input
                 id="password"
@@ -64,7 +64,7 @@ const closeModal = () => {
             <InputError :message="form.errors.password" class="mt-2" />
         </div>
         <div class="space-y-2 my-4">
-            <Label for="password_confirmation" value="Confirm Password" />
+            <Label for="password_confirmation" :value="$t('public.Confirm Password')" />
 
             <Input
                 id="password_confirmation"
@@ -81,9 +81,9 @@ const closeModal = () => {
         </div>
         <div class="mt-6 flex gap-4 justify-end">
             <Button variant="secondary" @click="closeModal">
-                Cancel
+                {{ $t('public.Cancel') }}
             </Button>
-            <Button @click.prevent="updatePassword" :disabled="form.processing">Save</Button>
+            <Button @click.prevent="updatePassword" :disabled="form.processing">{{ $t('public.Save') }}</Button>
         </div>
     </div>
 </template>
