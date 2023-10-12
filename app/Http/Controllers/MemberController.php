@@ -488,6 +488,13 @@ class MemberController extends Controller
 
     public function rebate_payout(Request $request)
     {
+        return Inertia::render('Member/RebatePayout', [
+            'filters' => \Request::only(['search', 'date'])
+        ]);
+    }
+
+    public function getPendingRebatePayout(Request $request)
+    {
         $query = TradingAccountRebateRevenue::query()
             ->whereRelation('ofUser', 'role', 'ib')
             ->whereNot('revenue', 0);
@@ -505,8 +512,8 @@ class MemberController extends Controller
 
         if ($search) {
             $query->whereRelation('ofUser', function ($query) use ($search) {
-                $query->where('first_name', '=', $search)
-                    ->orWhere('ib_id', '=', $search);
+                $query->where('first_name', 'like', '%' . $search . '%')
+                    ->orWhere('ib_id', 'like', '%' . $search . '%');
             });
         }
 
@@ -526,10 +533,9 @@ class MemberController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        return Inertia::render('Member/RebatePayout', [
-            'lists' => $lists,
-            'histories' => $histories,
-            'filters' => \Request::only(['search', 'date'])
+        return response()->json([
+            'payoutPending' => $lists,
+            'payoutHistories' => $histories
         ]);
     }
 
