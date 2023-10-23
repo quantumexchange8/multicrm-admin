@@ -26,6 +26,7 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\MessageBag;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password;
@@ -33,6 +34,7 @@ use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Spatie\Activitylog\Models\Activity;
 use function GuzzleHttp\Promise\all;
+use App\Notifications\KYCApprovalNotification;
 
 class MemberController extends Controller
 {
@@ -54,6 +56,10 @@ class MemberController extends Controller
                 $role = $request->input('role');
                 $query->where('role', $role);
             })
+            ->when($request->filled('status'), function ($query) use ($request) {
+                $status = $request->input('status');
+                $query->where('kyc_approval', $status);
+            })
             ->with(['tradingAccounts', 'media', 'upline'])
             ->orderByDesc('created_at')
             ->paginate(10)
@@ -71,7 +77,7 @@ class MemberController extends Controller
             'countries' => $countries,
             'accountTypes' => $accountTypes,
             'getMemberSel' => $getMemberSel,
-            'filters' => \Request::only(['search', 'role']),
+            'filters' => \Request::only(['search', 'role', 'status']),
         ]);
     }
 
@@ -88,7 +94,23 @@ class MemberController extends Controller
             'kyc_approval' => $request->kyc_approval,
             'kyc_approval_description' => $request->kyc_approval_description,
         ]);
+        
+        $data = [
+            'email' => $user->email,
+            'first_name' => $user->first_name,
+            'kyc_approval' => $user->kyc_approval,
+            'kyc_approval_description' => $user->kyc_approval_description,
+            'title' => 'Quantum Capital Global'
 
+        ];
+
+        if ($request->kyc_approval === 'reject' || $request->kyc_approval === 'approve'){
+            $user->notify(new KYCApprovalNotification($user));
+            Mail::send('emails', ['emailData' => $data], function ($message) use ($data) {
+                $message->to($data['email'])
+                    ->subject($data['title']);
+            });
+        }
         return redirect()->back()->with('toast', trans('public.The member’s detail has been edited successfully!'));
 
     }

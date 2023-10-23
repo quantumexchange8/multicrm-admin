@@ -27,15 +27,17 @@ const props = defineProps({
 
 let search = ref(props.filters.search);
 let role = ref(props.filters.role);
+let status = ref(props.filters.status);
 
 watch(search, debounce(function  (value) {
-    router.get('/member/member_listing', { search: value, role: role.value }, { preserveState:true, replace:true });
+    router.get('/member/member_listing', { search: value, role: role.value, status: status.value }, { preserveState:true, replace:true });
 }, 300));
 
 function resetField() {
     const url = new URL(window.location.href);
     url.searchParams.delete('search');
-
+    url.searchParams.delete('role');
+    url.searchParams.delete('status');
     // Navigate to the updated URL without the search parameter
     window.location.href = url.href;
 }
@@ -56,7 +58,7 @@ function formatDate(date) {
 }
 
 function getRole() {
-    router.get('/member/member_listing', { role: role.value, search: search.value }, { preserveState:true, replace:true });
+    router.get('/member/member_listing', { role: role.value, search: search.value, status: status.value }, { preserveState:true, replace:true });
 }
 
 </script>
@@ -72,7 +74,7 @@ function getRole() {
             </div>
         </template>
 
-        <div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
             <div>
                 <InputSelect
                     v-model="role"
@@ -80,11 +82,25 @@ function getRole() {
                     class="block w-full text-sm"
                     placeholder="Choose Role"
                 >
+                    <option value="">All</option>
                     <option value="ib">IB</option>
                     <option value="member">{{ $t('public.Member') }}</option>
                 </InputSelect>
             </div>
-            <div class="col-span-2 flex justify-between">
+            <div>
+                <InputSelect
+                    v-model="status"
+                    @change="getRole"
+                    class="block w-full text-sm"
+                    placeholder="KYC Approval"
+                >
+                    <option value="">All</option>
+                    <option value="pending">Pending</option>
+                    <option value="approve">Approved</option>
+                    <option value="reject">Rejected</option>
+                </InputSelect>
+            </div>
+            <div class="md:col-span-2 flex justify-between">
                 <div class="relative w-full mr-4">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                         <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
