@@ -100,7 +100,7 @@ class MemberController extends Controller
             'first_name' => $user->first_name,
             'kyc_approval' => $user->kyc_approval,
             'kyc_approval_description' => $user->kyc_approval_description,
-            'title' => 'Quantum Capital Global'
+            'title' => 'KYC ' . strtoupper($user->kyc_approval),
 
         ];
 
