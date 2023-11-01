@@ -1,12 +1,13 @@
 <script setup>
 import {ref} from "vue";
-import {GearIcon, ViewIcon, GiftIcon} from "@/Components/Icons/outline.jsx";
+import {GearIcon, ViewIcon, GiftIcon, BonusIcon} from "@/Components/Icons/outline.jsx";
 import Button from "@/Components/Button.vue";
 import Modal from "@/Components/Modal.vue";
 import CreditAdjustment from "@/Pages/Finance/CreditAdjustment/CreditAdjustment.vue";
 import AdjustmentHistory from "@/Pages/Finance/CreditAdjustment/AdjustmentHistory.vue";
 import BalanceAdjustment from "@/Pages/Finance/CreditAdjustment/BalanceAdjustment.vue";
 import Tooltip from "@/Components/Tooltip.vue";
+import BonusAdjustment from "@/Pages/Finance/CreditAdjustment/BonusAdjustment.vue";
 
 const props = defineProps({
     account: Object,
@@ -21,6 +22,8 @@ const openWalletModal = (ibId, componentType) => {
         modalComponent.value = 'BalanceAdjust';
     } else if (componentType === 'creditAdjust') {
         modalComponent.value = 'CreditAdjustment';
+    } else if (componentType === 'bonusAdjust') {
+        modalComponent.value = 'BonusAdjustment';
     } else if (componentType === 'view') {
         modalComponent.value = 'ViewHistory';
     }
@@ -52,6 +55,15 @@ const closeModal = () => {
                 <GiftIcon aria-hidden="true" class="w-6 h-6 absolute" />
             </Button>
         </Tooltip>
+        <Tooltip :content="$t('public.Bonus Adjustment')" placement="top">
+            <Button
+                class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
+                variant="primary-opacity"
+                @click="openWalletModal(account.id, 'bonusAdjust')"
+            >
+                <BonusIcon aria-hidden="true" class="w-6 h-6 absolute" />
+            </Button>
+        </Tooltip>
         <Tooltip :content="$t('public.View')" placement="top">
             <Button
                 class="justify-center px-4 pt-2 mx-1 rounded-full w-8 h-8 focus:outline-none"
@@ -78,6 +90,14 @@ const closeModal = () => {
             <!-- Credit Adjust -->
             <template v-if="modalComponent === 'CreditAdjustment'">
                 <CreditAdjustment
+                    :account="account"
+                    @update:creditAdjustmentModal="creditAdjustmentModal = $event"
+                />
+            </template>
+
+            <!-- Bonus Adjust -->
+            <template v-if="modalComponent === 'BonusAdjustment'">
+                <BonusAdjustment
                     :account="account"
                     @update:creditAdjustmentModal="creditAdjustmentModal = $event"
                 />

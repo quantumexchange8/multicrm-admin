@@ -136,6 +136,50 @@ class FinanceController extends Controller
         return redirect()->back()->with('toast', trans('public.Successfully Updated Credit'));
     }
 
+    public function bonus_adjustment(CreditRequest $request)
+    {
+        $conn = (new CTraderService)->connectionStatus();
+        if ($conn['code'] != 0) {
+            if ($conn['code'] == 10) {
+                return redirect()->back()->withErrors('No Connection with CTrader');
+            }
+            return redirect()->back()->withErrors('Something Went Wrong');
+        }
+        $changeType = ($request->type === 'bonus_in') ? ChangeTraderBalanceType::DEPOSIT : ChangeTraderBalanceType::WITHDRAW;
+
+        try {
+            $trade = (new CTraderService)->changeTraderBonus($request->account_no, $request->amount, $request->internal_description, $changeType);
+        } catch (\Throwable $e) {
+            if ($e->getMessage() == "Not found") {
+                TradingUser::firstWhere('meta_login', $request->account_no)->update(['acc_status' => 'Inactive']);
+            } else {
+                \Log::error($e->getMessage());
+            }
+            return redirect()->back()->withErrors('Something Went Wrong, ' . $e->getMessage());
+        }
+
+        $comment = ($request->type === 'bonus_in') ? 'Bonus In' : 'Bonus Out';
+        $status = ($request->allotted_time === 0) ? 'completed' : 'running';
+
+        FundAdjustment::create([
+            'user_id' => $request->user_id,
+            'to' => $request->account_no,
+            'type' => $request->type,
+            'amount' => $request->amount,
+            'comment' => $comment,
+            'internal_description' => $request->internal_description,
+            'client_description' => $request->client_description,
+            'allotted_time' => $request->allotted_time,
+            'start_date' => Carbon::parse($request->start_date),
+            'expiry_date' => Carbon::parse($request->end_date),
+            'status' => $status,
+            'handle_by' => Auth::id(),
+            'ticket' => $trade->getTicket()
+        ]);
+
+        return redirect()->back()->with('toast', trans('public.Successfully Updated Bonus'));
+    }
+
     public function getBalanceHistory(Request $request, $meta_login)
     {
         $balance_histories = FundAdjustment::query()
@@ -182,6 +226,30 @@ class FinanceController extends Controller
             ->paginate(5);
 
         return response()->json($credit_histories);
+    }
+
+    public function getBonusHistory(Request $request, $meta_login)
+    {
+        $bonusHistories = FundAdjustment::query()
+            ->where('to', $meta_login)
+            ->whereIn('type', ['bonus_in', 'bonus_out'])
+            ->when($request->filled('type'), function ($query) use ($request) {
+                $type = $request->input('type');
+                $query->where(function ($innerQuery) use ($type) {
+                    $innerQuery->where('type', $type);
+                });
+            })
+            ->when($request->filled('date'), function ($query) use ($request) {
+                $date = $request->input('date');
+                $dateRange = explode(' ~ ', $date);
+                $start_date = Carbon::createFromFormat('Y-m-d', $dateRange[0])->startOfDay();
+                $end_date = Carbon::createFromFormat('Y-m-d', $dateRange[1])->endOfDay();
+                $query->whereBetween('created_at', [$start_date, $end_date]);
+            })
+            ->latest()
+            ->paginate(5);
+
+        return response()->json($bonusHistories);
     }
 
     public function payment_account_listing()

@@ -175,6 +175,9 @@ const paginationActiveClass = [
                             {{ $t('public.Credit') }} (USD)
                         </th>
                         <th scope="col" class="px-4 py-3">
+                            {{ $t('public.Bonus') }} (USD)
+                        </th>
+                        <th scope="col" class="px-4 py-3">
                             {{ $t('public.Action') }}
                         </th>
                     </tr>
@@ -199,6 +202,9 @@ const paginationActiveClass = [
                         </th>
                         <th>
                             {{ formatAmount(account.credit) }}
+                        </th>
+                        <th>
+                            {{ formatAmount(account.bonus) }}
                         </th>
                         <th class="px-6 py-2 font-thin rounded-r-full">
                             <Action

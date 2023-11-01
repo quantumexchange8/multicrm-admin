@@ -18,6 +18,7 @@ class TradingUser extends Model
     protected $casts = [
         'balance' => 'decimal:2',
         'credit' => 'decimal:2',
+        'bonus' => 'decimal:2',
         'interest_rate' => 'decimal:2',
         'commission_daily' => 'decimal:2',
         'commission_montly' => 'decimal:2',

@@ -18,6 +18,7 @@ class TradingAccount extends Model
     protected $casts = [
         'balance' => 'decimal:2',
         'credit' => 'decimal:2',
+        'bonus' => 'decimal:2',
         'margin' => 'decimal:2',
         'margin_free' => 'decimal:2',
         'margin_level' => 'decimal:2',

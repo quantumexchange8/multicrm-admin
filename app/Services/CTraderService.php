@@ -47,7 +47,7 @@ class CTraderService
         }
     }
 
-    public function changeTraderBonus($meta_login, $type, $amount)
+    public function changeTraderBonus($meta_login, $amount, $comment, $type): Trade
     {
         $response = Http::acceptJson()->post($this->baseURL . "/v2/webserv/traders/{$meta_login}/changebonus?token={$this->token}", [
             'login' => $meta_login,
@@ -58,9 +58,21 @@ class CTraderService
             'externalNote' => '', //
             'source' => '', //
             'externalId' => '', //
-        ])->json();
+        ]);
         Log::debug($response);
-        // $response['balanceHistoryId'];
+        $response = $response->json();
+        Log::debug($response);
+
+        $trade = new Trade();
+        $trade->setAmount($amount);
+        $trade->setComment($comment);
+        $trade->setType($type);
+        $trade->setTicket($response['bonusHistoryId']);
+
+        $data = $this->getUser($meta_login);
+        (new UpdateTradingUser)->execute($meta_login, $data);
+        (new UpdateTradingAccount)->execute($meta_login, $data);
+        return $trade;
     }
 
     public function listTraderGroups()

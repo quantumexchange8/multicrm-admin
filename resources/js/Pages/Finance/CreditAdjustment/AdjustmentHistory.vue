@@ -3,6 +3,7 @@ import Button from "@/Components/Button.vue";
 import {ref} from "vue";
 import BalanceHistory from "@/Pages/Finance/CreditAdjustment/BalanceHistory.vue";
 import CreditHistory from "@/Pages/Finance/CreditAdjustment/CreditHistory.vue";
+import BonusHistory from "@/Pages/Finance/CreditAdjustment/BonusHistory.vue";
 
 const props = defineProps({
     account: Object
@@ -19,7 +20,7 @@ const setActiveComponent = (component) => {
     <h2 class="text-lg mb-2 font-medium text-gray-900 dark:text-gray-100">{{ $t('public.View Adjustment History') }}</h2>
     <hr>
 
-    <div class="grid grid-cols-2 my-8 gap-6">
+    <div class="grid grid-cols-3 my-8 gap-6">
         <Button
             variant="primary-opacity"
             class="px-6 border border-blue-600 justify-center text-white mt-4 focus:ring-0"
@@ -36,6 +37,14 @@ const setActiveComponent = (component) => {
         >
             {{ $t('public.Credit History') }}
         </Button>
+        <Button
+            variant="primary-opacity"
+            class="px-6 border border-blue-600 justify-center text-white mt-4 focus:ring-0"
+            :class="{ 'bg-transparent': activeComponent !== 'rebate_wallet', 'dark:bg-[#007BFF] dark:text-white': activeComponent === 'bonus' }"
+            @click="setActiveComponent('bonus')"
+        >
+            {{ $t('public.Bonus History') }}
+        </Button>
     </div>
 
     <BalanceHistory
@@ -44,6 +53,10 @@ const setActiveComponent = (component) => {
     />
     <CreditHistory
         v-if="activeComponent === 'credit'"
+        :account="account"
+    />
+    <BonusHistory
+        v-if="activeComponent === 'bonus'"
         :account="account"
     />
 </template>

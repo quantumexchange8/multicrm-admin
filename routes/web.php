@@ -96,8 +96,10 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
         Route::get('/getTradingAccounts', [FinanceController::class, 'getTradingAccounts'])->name('finance.getTradingAccounts');
         Route::post('/balance_adjustment', [FinanceController::class, 'balance_adjustment'])->name('finance.balance_adjustment');
         Route::post('/credit_adjustment', [FinanceController::class, 'credit_adjustment'])->name('finance.credit_adjustment');
+        Route::post('/bonus_adjustment', [FinanceController::class, 'bonus_adjustment'])->name('finance.bonus_adjustment');
         Route::get('/getBalanceHistory/{id}', [FinanceController::class, 'getBalanceHistory'])->name('finance.getBalanceHistory');
         Route::get('/getCreditHistory/{id}', [FinanceController::class, 'getCreditHistory'])->name('finance.getCreditHistory');
+        Route::get('/getBonusHistory/{id}', [FinanceController::class, 'getBonusHistory'])->name('finance.getBonusHistory');
 
         Route::get('/payment_account_listing', [FinanceController::class, 'payment_account_listing'])->name('finance.payment_account_listing');
         Route::get('/getPaymentAccount', [FinanceController::class, 'getPaymentAccount'])->name('finance.getPaymentAccount');

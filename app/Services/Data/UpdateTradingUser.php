@@ -24,6 +24,7 @@ class UpdateTradingUser
         $tradingUser->last_access = $data['lastUpdateTimestamp'];
         $tradingUser->balance = $data['balance'] / 100;
         $tradingUser->credit = $data['nonWithdrawableBonus'] / 100;
+        $tradingUser->bonus = $data['bonus'] / 100;
 
         DB::transaction(function () use ($tradingUser) {
             $tradingUser->save();

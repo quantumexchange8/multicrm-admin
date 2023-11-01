@@ -94,7 +94,7 @@ class MemberController extends Controller
             'kyc_approval' => $request->kyc_approval,
             'kyc_approval_description' => $request->kyc_approval_description,
         ]);
-        
+
         $data = [
             'email' => $user->email,
             'first_name' => $user->first_name,
@@ -545,6 +545,7 @@ class MemberController extends Controller
             ->select( DB::raw('DATE(closed_time) as date'), 'trading_account_rebate_revenue.ib_account_types_id', 'trading_account_rebate_revenue.user_id', 'trading_account_rebate_revenue.account_type', 'trading_account_rebate_revenue.meta_login', DB::raw('sum(volume) as total_volume'), DB::raw('sum(revenue) as total_revenue'))
             ->groupBy(['date', 'ib_account_types_id', 'user_id', 'account_type', 'meta_login'])
             ->with(['ofUser', 'ofAccountType'])
+            ->orderByDesc('date')
             ->paginate(10)
             ->withQueryString();
 
@@ -552,6 +553,7 @@ class MemberController extends Controller
             ->select('trading_account_rebate_revenue.ib_account_types_id', 'trading_account_rebate_revenue.user_id', 'trading_account_rebate_revenue.account_type', 'trading_account_rebate_revenue.meta_login', DB::raw('sum(volume) as total_volume'), DB::raw('sum(revenue) as total_revenue'), DB::raw('DATE(closed_time) as date'))
             ->groupBy(['ib_account_types_id', 'user_id', 'account_type', 'date', 'meta_login'])
             ->with(['ofUser', 'ofAccountType'])
+            ->orderByDesc('date')
             ->paginate(10)
             ->withQueryString();
 
