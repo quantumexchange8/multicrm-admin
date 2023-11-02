@@ -92,11 +92,31 @@ export function transactionFormat() {
         return formattedType.charAt(0).toUpperCase() + formattedType.slice(1);
     };
 
+    const formatCategory = (category) => {
+        // Replace underscores with a space
+        const formattedType = category.replace(/_/g, ' ');
+
+        // Split the string into words
+        const words = formattedType.split(' ');
+
+        // Capitalize the first word
+        words[0] = words[0].charAt(0).toUpperCase() + words[0].slice(1);
+
+        // Remove 's' from the last word if it's 'earnings'
+        if (words[words.length - 1] === 'earnings') {
+            words[words.length - 1] = 'Earning';
+        }
+
+        // Join the words back together
+        return words.join(' ');
+    };
+
     return {
         getChannelName,
         formatDate,
         getStatusClass,
         formatAmount,
-        formatType
+        formatType,
+        formatCategory,
     };
 }

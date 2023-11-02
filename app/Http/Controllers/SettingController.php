@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SettingRequest;
 use App\Models\Group;
+use App\Models\Setting;
 use App\Models\SettingHighlight;
 use App\Services\CTraderService;
 use App\Services\MetaTrader5\Group\FetchGroupByPos;
@@ -66,6 +68,37 @@ class SettingController extends Controller
         return Inertia::render('Setting/Highlight', [
             'highlightImage' => $highlightImage
         ]);
+    }
+
+    public function master_setting()
+    {
+        return Inertia::render('Setting/MasterSetting');
+    }
+
+    public function getMasterSetting(Request $request)
+    {
+        $setting = Setting::query()
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->input('search');
+                $query->where(function ($innerQuery) use ($search) {
+                    $innerQuery->where('name', 'like', '%' . $search . '%');
+                });
+            })
+            ->latest()
+            ->paginate(10);
+
+        return response()->json($setting);
+    }
+
+    public function update_master_setting(SettingRequest $request)
+    {
+        $setting = Setting::find($request->setting_id);
+
+        $setting->update([
+            'value' => $request->value
+        ]);
+
+        return redirect()->back()->with('toast', trans('public.Successfully Updated Value'));
     }
 
     public function update_highlights(Request $request)

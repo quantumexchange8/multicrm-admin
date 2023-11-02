@@ -197,6 +197,12 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
                 :title="$t('public.sidebar.Highlights')"
                 :active="route().current('setting.highlights_setting')"
             />
+
+            <SidebarCollapsibleItem
+                :href="route('setting.master_setting')"
+                :title="$t('public.sidebar.Master Setting')"
+                :active="route().current('setting.master_setting')"
+            />
         </SidebarCollapsible>
 
 <!--        <SidebarCollapsible-->

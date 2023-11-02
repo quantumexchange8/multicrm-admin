@@ -151,6 +151,9 @@ Route::middleware('auth')->middleware('role:admin')->group(function () {
 //        Route::get('/getTradingAccountSettings', [SettingController::class, 'getTradingAccountSettings'])->name('setting.getTradingAccountSettings');
 
         Route::get('/highlights_setting', [SettingController::class, 'highlights_setting'])->name('setting.highlights_setting');
+        Route::get('/master_setting', [SettingController::class, 'master_setting'])->name('setting.master_setting');
+        Route::get('/getMasterSetting', [SettingController::class, 'getMasterSetting'])->name('setting.getMasterSetting');
+        Route::patch('/update_master_setting', [SettingController::class, 'update_master_setting'])->name('setting.update_master_setting');
         Route::post('/highlight/update_highlights', [SettingController::class, 'update_highlights'])->name('setting.update_highlights');
         Route::post('/highlight/upload-highlight-image', [SettingController::class, 'upload_highlight_image']);
         Route::post('/highlight/highlight-image-revert', [SettingController::class, 'revert_highlight_image']);

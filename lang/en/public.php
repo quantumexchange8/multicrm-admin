@@ -369,6 +369,7 @@ return [
         "CTrader" => "CTrader",
         "Setting" => "Setting",
         "Highlights" => "Highlights",
+        "Master Setting" => "Master Setting"
     ],
     "rightbar" => [
         "Today's Deposit" => "Today's Deposit",
@@ -696,4 +697,5 @@ return [
     " amount cannot be higher than " => " amount cannot be higher than ",
     " amount cannot be lower than " => " amount cannot be lower than ",
     "Error fetching rebate payout detail: " => "Error fetching rebate payout detail: ",
+    "Successfully Updated Value" => "Successfully Updated Value",
 ];
