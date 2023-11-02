@@ -75,8 +75,8 @@ const getResults = async (page = 1, dateRange, search = '') => {
 
         if (dateRange) {
             if (dateRange.length === 2) {
-                const formattedDates = dateRange.map(date => `date[]=${date}`).join('&');
-                url += `&${formattedDates}`;
+                const formattedDates = dateRange.map(date => `${date}`).join(' ~ ');
+                url += `&date=${formattedDates}`;
             }
         }
 

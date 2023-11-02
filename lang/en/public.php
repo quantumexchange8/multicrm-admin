@@ -698,4 +698,6 @@ return [
     " amount cannot be lower than " => " amount cannot be lower than ",
     "Error fetching rebate payout detail: " => "Error fetching rebate payout detail: ",
     "Successfully Updated Value" => "Successfully Updated Value",
+    "Remark" => "Remark",
+    "Choose Status" => "Choose Status",
 ];

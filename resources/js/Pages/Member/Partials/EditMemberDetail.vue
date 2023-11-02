@@ -39,6 +39,7 @@ const form = useForm({
     country: member.country,
     dob: member.dob,
     phone: member.phone,
+    note: member.note,
     kyc_approval: member.kyc_approval,
     kyc_approval_description: member.kyc_approval_description
 })
@@ -194,6 +195,18 @@ const toggleEdit = () => {
 
                 <InputError class="mt-2" :message="form.errors.phone" />
             </div>
+            <div class="space-y-2 md:col-span-2">
+                <Label for="remark">{{ $t('public.Remark') }}</Label>
+                <Input
+                    id="note"
+                    type="text"
+                    class="mt-1 block w-full"
+                    autocomplete="note"
+                    v-model="form.note"
+                    :disabled="!isEditing"
+                />
+                <InputError class="mt-2" :message="form.errors.note" />
+            </div>
             <div class="space-y-2">
                 <Label for="front_identity">
                     {{ $t('public.Proof of Identity (FRONT)') }}
@@ -258,7 +271,7 @@ const toggleEdit = () => {
                 </div>
             </div>
 
-            <div class="space-y-2" v-if="member.kyc_approval === 'pending'">
+            <div class="space-y-2" v-if="member.kyc_approval !== 'approve'">
                 <Label for="kyc_approval">{{ $t('public.KYC Approval') }}</Label>
 
                 <InputSelect v-model="form.kyc_approval" class="block w-full text-sm" :placeholder="$t('public.Choose Status')" :disabled="!isEditing">
@@ -269,7 +282,7 @@ const toggleEdit = () => {
 
                 <InputError class="mt-2" :message="form.errors.kyc_approval" />
             </div>
-            <div class="space-y-2" v-if="member.kyc_approval === 'pending'">
+            <div class="space-y-2" v-if="member.kyc_approval !== 'approve'">
                 <Label for="kyc_approval_description">{{ $t('public.KYC Approval Description') }}</Label>
                 <Input
                     id="kyc_approval_description"

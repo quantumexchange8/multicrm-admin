@@ -91,6 +91,7 @@ class MemberController extends Controller
             'dob' => $request->dob,
             'country' => $request->country,
             'phone' => $request->phone,
+            'note' => $request->note,
             'kyc_approval' => $request->kyc_approval,
             'kyc_approval_description' => $request->kyc_approval_description,
         ]);
