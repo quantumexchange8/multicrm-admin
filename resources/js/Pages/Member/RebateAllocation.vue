@@ -235,6 +235,7 @@ const accountType = computed(() => {
                     {{ $t('public.Search') }}
                 </Button>
                 <Button
+                    type="button"
                     variant="danger-opacity"
                     class="justify-center py-2.5"
                     @click.prevent="resetField"
@@ -257,6 +258,9 @@ const accountType = computed(() => {
                     </th>
                     <th scope="col" class="px-6 py-3">
                         {{ $t('public.IB Number') }}
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        {{ $t('public.Account No') }}
                     </th>
                     <th scope="col" class="px-6 py-3">
                         {{ $t('public.Current Upline') }}
