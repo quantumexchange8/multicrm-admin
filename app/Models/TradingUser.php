@@ -37,7 +37,8 @@ class TradingUser extends Model
             ->useLogName('trading_user')
             ->logOnly(['user_id', 'meta_login', 'meta_group', 'balance', 'credit', 'leverage', 'module', 'last_access', 'acc_status', 'remarks'])
             ->setDescriptionForEvent(function (string $eventName) use ($trading_user) {
-                return Auth::user()->first_name . " has {$eventName} trading user of {$trading_user->meta_login}.";
+                $actorName = Auth::user() ? Auth::user()->first_name : 'Cronjob ';
+                return "{$actorName} has {$eventName} trading user of {$trading_user->meta_login}.";
             })
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();

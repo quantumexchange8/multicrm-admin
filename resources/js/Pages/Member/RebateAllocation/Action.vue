@@ -12,6 +12,7 @@ const props = defineProps({
     ib: Object,
     defaultAccountSymbolGroup: Object,
     get_ibs_sel: Object,
+    account_type: String,
 })
 
 const IbManageModal = ref(false);
@@ -103,6 +104,7 @@ const getIbDownlineRebateInfo = async () => {
                     :ib="ib"
                     :getIbId="ib.id"
                     :defaultAccountSymbolGroup="defaultAccountSymbolGroup"
+                    :account_type="account_type"
                     @update:IbManageModal="IbManageModal = $event"
                 />
             </template>

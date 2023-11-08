@@ -142,7 +142,8 @@ class User extends Authenticatable implements HasMedia
             ->useLogName('user')
             ->logOnly(['first_name', 'email', 'password', 'phone', 'chinese_name', 'status', 'role', 'dob', 'country', 'referral', 'last_login_ip', 'cash_wallet', 'kyc_approval', 'kyc_approval_description', 'cash_wallet_id', 'referral_code', 'ib_id', 'upline_id', 'hierarchyList', 'ct_user_id'])
             ->setDescriptionForEvent(function (string $eventName) use ($user) {
-                return Auth::user()->first_name . " has {$eventName} {$user->first_name}.";
+                $actorName = Auth::user() ? Auth::user()->first_name : 'Cronjob ';
+                return "{$actorName} has {$eventName} {$user->first_name}.";
             })
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();

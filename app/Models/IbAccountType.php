@@ -37,7 +37,8 @@ class IbAccountType extends Model
             ->useLogName('ib_account_type')
             ->logOnly(['user_id', 'upline_id', 'hierarchyList', 'account_type', 'rebate_wallet', 'trade_lot'])
             ->setDescriptionForEvent(function (string $eventName) use ($ib_account_type) {
-                return Auth::user()->first_name . " has {$eventName} ib_account_type_id of {$ib_account_type->id}.";
+                $actorName = Auth::user() ? Auth::user()->first_name : 'Cronjob ';
+                return "{$actorName} has {$eventName} ib_account_type_id of {$ib_account_type->id}.";
             })
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();

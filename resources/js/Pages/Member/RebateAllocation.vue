@@ -34,7 +34,7 @@ watchEffect(() => {
     }
 });
 
-const account_type = ref(1);
+const account_type = ref('1');
 const getIbListing = ref({data: []});
 const defaultAccountSymbolGroup = ref();
 const directIb = ref();
@@ -46,7 +46,7 @@ const search = ref('');
 const isLoading = ref(false);
 const currentPage = ref(1);
 
-const getResults = async (page = 1, account_type = 1, search = '') => {
+const getResults = async (page = 1, account_type = '1', search = '') => {
     isLoading.value = true;
     try {
         let url = `/member/getIbListing?page=${page}`;
@@ -84,7 +84,7 @@ const submitSearch = async () => {
 
 function resetField() {
     getResults();
-    account_type.value = 1;
+    account_type.value = '1';
     search.value = '';
 }
 
@@ -201,50 +201,53 @@ const accountType = computed(() => {
         </div>
     </div>
 
-    <div class="w-full my-6 flex justify-end gap-4">
-        <div class="relative w-full md:w-2/3">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
-                </svg>
-            </div>
-            <InputIconWrapper>
-                <template #icon>
-                    <font-awesome-icon
-                        icon="fa-solid fa-search"
-                        class="flex-shrink-0 w-5 h-5 cursor-pointer"
+    <form @submit.prevent="submitSearch">
+        <div class="w-full my-6 flex justify-end gap-4">
+            <div class="relative w-full md:w-2/3">
+                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
+                    </svg>
+                </div>
+                <InputIconWrapper>
+                    <template #icon>
+                        <font-awesome-icon
+                                icon="fa-solid fa-search"
+                                class="flex-shrink-0 w-5 h-5 cursor-pointer"
+                                aria-hidden="true"
+                        />
+                    </template>
+                    <Input withIcon id="name" type="text" placeholder="Name / Email / Account No" class="block w-full" v-model="search" @keydown="handleKeyDown" />
+                </InputIconWrapper>
+                <button type="submit" class="absolute right-1 bottom-2 py-2.5 text-gray-500 hover:text-dark-eval-4 font-medium rounded-full w-8 h-8 text-sm"><font-awesome-icon
+                        icon="fa-solid fa-x"
+                        class="flex-shrink-0 w-3 h-3 cursor-pointer"
                         aria-hidden="true"
-                    />
-                </template>
-                <Input withIcon id="name" type="text" placeholder="Name / Email / Account No" class="block w-full" v-model="search" @keydown="handleKeyDown" />
-            </InputIconWrapper>
-            <button type="submit" class="absolute right-1 bottom-2 py-2.5 text-gray-500 hover:text-dark-eval-4 font-medium rounded-full w-8 h-8 text-sm"><font-awesome-icon
-                icon="fa-solid fa-x"
-                class="flex-shrink-0 w-3 h-3 cursor-pointer"
-                aria-hidden="true"
-                @click="clearField"
-            /></button>
-        </div>
-        <div>
-            <div class="grid grid-cols-2 gap-4 mt-2 md:mt-0">
-                <Button
-                    variant="primary-opacity"
-                    class="justify-center py-2.5"
-                    @click="submitSearch"
-                >
-                    {{ $t('public.Search') }}
-                </Button>
-                <Button
-                    type="button"
-                    variant="danger-opacity"
-                    class="justify-center py-2.5"
-                    @click.prevent="resetField"
-                >
-                    {{ $t('public.Reset') }}
-                </Button>
+                        @click="clearField"
+                /></button>
+            </div>
+            <div>
+                <div class="grid grid-cols-2 gap-4 mt-2 md:mt-0">
+                    <Button
+                            variant="primary-opacity"
+                            class="justify-center py-2.5"
+                            @click="submitSearch"
+                    >
+                        {{ $t('public.Search') }}
+                    </Button>
+                    <Button
+                            type="button"
+                            variant="danger-opacity"
+                            class="justify-center py-2.5"
+                            @click.prevent="resetField"
+                    >
+                        {{ $t('public.Reset') }}
+                    </Button>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
+
     <div class="p-6 overflow-hidden bg-white rounded-md shadow-md dark:bg-dark-eval-1">
         <div class="relative overflow-x-auto sm:rounded-lg mt-4">
             <div v-if="isLoading" class="w-full flex justify-center my-12">
@@ -296,7 +299,9 @@ const accountType = computed(() => {
                         {{ ib.of_user.ib_id }}
                     </th>
                     <th class="px-6 py-4">
-                        <span v-for="tradeAccount in ib.of_user.trading_accounts">{{ tradeAccount.meta_login }} <br/></span>
+                        <div v-for="tradeAccount in ib.of_user.trading_accounts">
+                            <span v-if="tradeAccount.account_type === parseInt(account_type)">{{ tradeAccount.meta_login }}</span>
+                        </div>
                     </th>
                     <th>
                         {{ ib.of_user.upline ? ib.of_user.upline.first_name : '' }}
@@ -319,6 +324,7 @@ const accountType = computed(() => {
                             :ib="ib"
                             :defaultAccountSymbolGroup="defaultAccountSymbolGroup"
                             :get_ibs_sel="get_ibs_sel"
+                            :account_type="account_type"
                         />
                     </th>
                 </tr>

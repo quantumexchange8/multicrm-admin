@@ -353,6 +353,7 @@ class MemberController extends Controller
                     $innerQuery->where('account_type', $account_type);
                 });
             })
+            ->latest()
             ->paginate(10);
 
         return response()->json([
@@ -382,7 +383,7 @@ class MemberController extends Controller
                     ->where('symbol_group', $key)
                     ->first();
             } else {
-                $parent = AccountTypeSymbolGroup::where('account_type', 1)
+                $parent = AccountTypeSymbolGroup::where('account_type', intval($request->account_type))
                     ->with('symbolGroup')
                     ->where('symbol_group', $key)
                     ->first();

@@ -8,7 +8,8 @@ import Input from "@/Components/Input.vue";
 const props = defineProps({
     ib: Object,
     getIbId: Number,
-    defaultAccountSymbolGroup: Object
+    defaultAccountSymbolGroup: Object,
+    account_type: String,
 });
 
 const emit = defineEmits(['update:IbManageModal']);
@@ -26,6 +27,7 @@ props.ib.symbol_groups.forEach((ibRebateInfo) => {
 const form = useForm({
     user_id: props.getIbId,
     upline_id: props.ib.upline_id,
+    account_type: props.account_type,
     ibGroupRates
 });
 

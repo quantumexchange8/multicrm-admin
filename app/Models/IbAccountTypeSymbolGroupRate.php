@@ -27,7 +27,8 @@ class IbAccountTypeSymbolGroupRate extends Model
             ->useLogName('ib_account_type_group_rate')
             ->logOnly(['ib_account_type', 'symbol_group', 'amount'])
             ->setDescriptionForEvent(function (string $eventName) use ($ib_account_type_group_rate) {
-                return Auth::user()->first_name . " has {$eventName} ib_account_type_id of {$ib_account_type_group_rate->ib_account_type}.";
+                $actorName = Auth::user() ? Auth::user()->first_name : 'Cronjob ';
+                return "{$actorName} has {$eventName} ib_account_type_id of {$ib_account_type_group_rate->ib_account_type}.";
             })
             ->logOnlyDirty()
             ->dontSubmitEmptyLogs();
