@@ -166,6 +166,9 @@ class MemberController extends Controller
 
             foreach ($request->ibGroupRates as $key => $amount) {
                 if ($upline) {
+                    if ($upline->role == 'member') {
+                        throw ValidationException::withMessages(['account_type' => trans('public.Invalid Upline Role')]);
+                    }
                     $ibAccountType = IbAccountType::query()
                         ->where('user_id', $upline->id)
                         ->first();
