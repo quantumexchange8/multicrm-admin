@@ -72,7 +72,7 @@ const isRadioSelected = computed(() => {
 </script>
 
 <template>
-    <div v-if="member.upline.role === 'ib'">
+    <div>
         <h2
             class="text-lg font-medium mb-2 text-gray-900 dark:text-gray-100"
         >
