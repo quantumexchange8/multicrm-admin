@@ -339,21 +339,21 @@ class MemberController extends Controller
 
 
         $ibs = IbAccountType::query()
-            ->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline', 'upline.symbolGroups', 'upline.symbolGroups.symbolGroup','ofUser.tradingAccounts'])
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $search = $request->input('search');
-                $query->whereHas('ofUser', function ($innerQuery) use ($search) {
-                    $innerQuery->where('first_name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
-                })
-                    ->orWhereHas('ofUser.tradingAccounts', function ($accQuery) use ($search) {
-                        $accQuery->where('meta_login', 'like', "%{$search}%");
-                    });
-            })
+            ->with(['ofUser', 'symbolGroups.symbolGroup', 'accountType', 'ofUser.upline', 'upline.symbolGroups', 'upline.symbolGroups.symbolGroup', 'ofUser.tradingAccounts'])
             ->when($request->filled('account_type'), function ($query) use ($request) {
                 $account_type = $request->input('account_type');
-                $query->where(function ($innerQuery) use ($account_type) {
-                    $innerQuery->where('account_type', $account_type);
+                $query->where('account_type', $account_type);
+            })
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->input('search');
+                $query->where(function ($innerQuery) use ($search) {
+                    $innerQuery->whereHas('ofUser', function ($innerQuery) use ($search) {
+                        $innerQuery->where('first_name', 'like', "%{$search}%")
+                            ->orWhere('email', 'like', "%{$search}%");
+                    })
+                        ->orWhereHas('ofUser.tradingAccounts', function ($accQuery) use ($search) {
+                            $accQuery->where('meta_login', 'like', "%{$search}%");
+                        });
                 });
             })
             ->latest()
