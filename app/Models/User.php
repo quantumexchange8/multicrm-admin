@@ -74,6 +74,14 @@ class User extends Authenticatable implements HasMedia
         return $users;
     }
 
+    public function getIbChildrenIds(): array
+    {
+        return User::query()->where('hierarchyList', 'like', '%-' . $this->id . '-%')
+            ->where('role', '=', 'ib')
+            ->where('status', 1)
+            ->pluck('id')->toArray();
+    }
+
     public function totalGroupDeposit($user_id)
     {
         $users = $this->getChildrenIds();
