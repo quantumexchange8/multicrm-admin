@@ -700,4 +700,5 @@ return [
     "Successfully Updated Value" => "Successfully Updated Value",
     "Remark" => "Remark",
     "Choose Status" => "Choose Status",
+    "Member is yet to be approved." => "Member is yet to be approved."
 ];

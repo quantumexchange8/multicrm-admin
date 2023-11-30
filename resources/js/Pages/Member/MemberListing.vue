@@ -14,6 +14,7 @@ import Action from "@/Pages/Member/Partials/Action.vue";
 import InputSelect from "@/Components/InputSelect.vue";
 import {sidebarState} from "@/Composables/index.js";
 import ApplicationLogo from "@/Components/ApplicationLogo.vue";
+import { ssrRenderTeleport } from '@vue/server-renderer';
 
 library.add(faSearch,faX,faRotateRight);
 
@@ -28,9 +29,11 @@ const props = defineProps({
 let search = ref(props.filters.search);
 let role = ref(props.filters.role);
 let status = ref(props.filters.status);
+let sort = ref(props.filters.sort);
+let sortField = ref(props.filters.sortField);
 
 watch(search, debounce(function  (value) {
-    router.get('/member/member_listing', { search: value, role: role.value, status: status.value }, { preserveState:true, replace:true });
+    router.get('/member/member_listing', { search: value, role: role.value, status: status.value, sort: sort.value, sortField: sortField.value }, { preserveState:true, replace:true });
 }, 300));
 
 function resetField() {
@@ -38,6 +41,8 @@ function resetField() {
     url.searchParams.delete('search');
     url.searchParams.delete('role');
     url.searchParams.delete('status');
+    url.searchParams.delete('sort');
+    url.searchParams.delete('sortField');
     // Navigate to the updated URL without the search parameter
     window.location.href = url.href;
 }
@@ -58,7 +63,18 @@ function formatDate(date) {
 }
 
 function getRole() {
-    router.get('/member/member_listing', { role: role.value, search: search.value, status: status.value }, { preserveState:true, replace:true });
+    router.get('/member/member_listing', { role: role.value, search: search.value, status: status.value, sort: sort.value, sortField: sortField.value }, { preserveState:true, replace:true });
+}
+
+function sortByColumn(column) {
+    if (sortField.value == column) {
+        sort.value = sort.value == "asc" ? "desc" : "asc";
+        console.log(sort.value);
+    }else {
+        sortField.value = column;
+        sort.value = "asc";
+    }
+    router.get('/member/member_listing', { role: role.value, search: search.value, status: status.value, sort: sort.value, sortField: sortField.value}, { preserveState:true, replace:true });
 }
 
 </script>
@@ -141,19 +157,39 @@ function getRole() {
                     <thead class="text-xs font-bold text-gray-700 uppercase bg-gray-50 dark:bg-transparent dark:text-white text-center">
                         <tr class="uppercase">
                             <th scope="col" class="px-6 py-3">
-                                {{ $t('public.Name') }}
+                                <div class="inline-flex gap-3">
+                                    <a href="#" @click="sortByColumn('first_name')">{{ $t('public.Name') }}</a>
+                                    <span v-if="sortField == 'first_name' && sort == 'asc'">&#9650;</span>
+                                    <span v-if="sortField == 'first_name' && sort == 'desc'">&#9660;</span>
+                                </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                {{ $t('public.Email') }}
+                                <div class="inline-flex gap-3">
+                                    <a href="#" @click="sortByColumn('email')">{{ $t('public.Email') }}</a>
+                                    <span v-if="sortField == 'email' && sort == 'asc'">&#9650;</span>
+                                    <span v-if="sortField == 'email' && sort == 'desc'">&#9660;</span>
+                                </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                {{ $t('public.Register Date') }}
+                                <div class="inline-flex gap-3">
+                                    <a href="#" @click="sortByColumn('created_at')">{{ $t('public.Register Date') }}</a>
+                                    <span v-if="sortField == 'created_at' && sort == 'asc'">&#9650;</span>
+                                    <span v-if="sortField == 'created_at' && sort == 'desc'">&#9660;</span>
+                                </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                {{ $t('public.Wallet Balance') }}
+                                <div class="inline-flex gap-3">
+                                    <a href="#" @click="sortByColumn('cash_wallet')">{{ $t('public.Wallet Balance') }}</a>
+                                    <span v-if="sortField == 'cash_wallet' && sort == 'asc'">&#9650;</span>
+                                    <span v-if="sortField == 'cash_wallet' && sort == 'desc'">&#9660;</span>
+                                </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                {{ $t('public.Role') }}
+                                <div class="inline-flex gap-3">
+                                    <a href="#" @click="sortByColumn('role')">{{ $t('public.Role') }}</a>
+                                    <span v-if="sortField == 'role' && sort == 'asc'">&#9650;</span>
+                                    <span v-if="sortField == 'role' && sort == 'desc'">&#9660;</span>
+                                </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 {{ $t('public.Upline Email') }}
@@ -162,7 +198,11 @@ function getRole() {
                                 {{ $t('public.Account Number') }}
                             </th>
                             <th scope="col" class="px-6 py-3">
-                                {{ $t('public.Country') }}
+                                <div class="inline-flex gap-3">
+                                    <a href="#" @click="sortByColumn('country')">{{ $t('public.Country') }}</a>
+                                    <span v-if="sortField == 'country' && sort == 'asc'">&#9650;</span>
+                                    <span v-if="sortField == 'country' && sort == 'desc'">&#9660;</span>
+                                </div>
                             </th>
                             <th scope="col" class="px-6 py-3">
                                 {{ $t('public.Action') }}
@@ -191,8 +231,12 @@ function getRole() {
                                 {{ member.upline ? member.upline.email : '' }}
                                 <span v-if="!member.upline" class="bg-purple-100 text-purple-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-purple-500 dark:text-purple-100 uppercase">No Upline</span>
                             </td>
-                            <td>
-                                <span v-for="tradeAccount in member.trading_accounts">{{ tradeAccount.meta_login }} <br/></span>
+                            <td class="py-2">
+                                <div v-for="tradeAccount in member.trading_accounts" class="inline-flex gap-1 items-center">
+                                    {{ tradeAccount.meta_login }}
+                                    <span v-if="String(tradeAccount.meta_login).includes('800')" class="bg-green-100 text-green-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-green-500 dark:text-dark-eval-1 uppercase">LIVE <br/></span>
+                                    <span v-else class="bg-gray-100 text-gray-800 text-xs font-medium px-2.5 py-0.5 rounded dark:bg-gray-500 dark:text-dark-eval-1 uppercase">DEMO <br/></span>
+                                </div>
                             </td>
                             <td>
                                 {{ member.country }}

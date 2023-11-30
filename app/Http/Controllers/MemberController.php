@@ -60,6 +60,11 @@ class MemberController extends Controller
                 $status = $request->input('status');
                 $query->where('kyc_approval', $status);
             })
+            ->when($request->filled('sortField'), function ($query) use ($request) {
+                $sortField = $request->input('sortField');
+                $sort = $request->input('sort');
+                $query->orderBy($sortField, $sort);
+            })
             ->with(['tradingAccounts', 'media', 'upline'])
             ->orderByDesc('created_at')
             ->paginate(10)
@@ -77,7 +82,7 @@ class MemberController extends Controller
             'countries' => $countries,
             'accountTypes' => $accountTypes,
             'getMemberSel' => $getMemberSel,
-            'filters' => \Request::only(['search', 'role', 'status']),
+            'filters' => \Request::only(['search', 'role', 'status', 'sortField', 'sort']),
         ]);
     }
 
@@ -159,8 +164,11 @@ class MemberController extends Controller
         $user = User::find($request->id);
 
         if ($user->role == 'member') {
+            if ($user->kyc_approval != 'approve') {
+                throw ValidationException::withMessages(['account_type' => trans('public.Member is yet to be approved.')]);
+            }
             $ib_id = RunningNumberService::getID('broker_id');
-
+            
             $upline = $user->upline;
             $validationErrors = new MessageBag();
 

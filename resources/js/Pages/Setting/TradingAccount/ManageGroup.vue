@@ -42,7 +42,7 @@ const paginationClass = [
 ];
 
 const paginationActiveClass = [
-    'dark:bg-transparent border-0 text-[#FF9E23] dark:text-[#FF9E23] text-xs'
+    'dark:bg-transparent border-0 text-[#FF9E23] dark:text-[#FF9E23] !font-bold text-xs'
 ];
 </script>
 

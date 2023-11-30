@@ -124,7 +124,7 @@ const openInNewTab = (url) => {
                     @update:memberDetailModal="memberDetailModal = $event"
                 />
                 <ManageIbAccountType
-                    v-if="member.role === 'member'"
+                    v-if="member.role === 'member' && member.kyc_approval === 'approve'"
                     :accountTypes="accountTypes"
                     :member="member"
                     @update:memberDetailModal="memberDetailModal = $event"
