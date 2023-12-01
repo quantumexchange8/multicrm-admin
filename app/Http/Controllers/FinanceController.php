@@ -30,14 +30,25 @@ class FinanceController extends Controller
     public function getTradingAccounts(Request $request)
     {
         $conn = (new CTraderService)->connectionStatus();
-        if ($conn['code'] == 0) {
-            try {
-                $tradingUsers = TradingUser::where('acc_status', 'Active')->where('remarks', 'vietnam plan')->whereNot('module', 'pamm')->get();
-                (new CTraderService)->getUserInfo($tradingUsers);
-            } catch (\Exception $e) {
-                \Log::error('CTrader Error');
-            }
+        if ($conn['code'] != 0) {
+            return; // No need to proceed if the connection is not established
         }
+
+        try {
+
+            $trading_users = TradingUser::query()
+                ->where('acc_status', '=', 'Active')
+                ->where('remarks', '=', 'vietnam plan')
+                ->whereNot('module', 'pamm')
+                ->get();
+
+            foreach ($trading_users as $user) {
+                (new CTraderService)->getUserInfo($user);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Cronjob Updating got CTrader Error: ' . $e->getMessage());
+        }
+
         $tradingAccounts = TradingAccount::query()
             ->with(['ofUser.upline', 'accountType', 'tradingUser'])
             ->when($request->filled('search'), function ($query) use ($request) {
