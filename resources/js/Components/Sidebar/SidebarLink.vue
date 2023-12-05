@@ -1,7 +1,7 @@
 <script setup>
 import { Link } from '@inertiajs/vue3'
 import { sidebarState } from '@/Composables'
-import { EmptyCircleIcon } from '@/Components/Icons/outline'
+import { EmptyCircleIcon, AlertIcon } from '@/Components/Icons/outline'
 
 const props = defineProps({
     href: {
@@ -19,6 +19,14 @@ const props = defineProps({
     external: {
         type: Boolean,
         default: false,
+    },
+    withBadge: {
+        type: Boolean,
+        default: false,
+    },
+    badgeCount: {
+        type: Number,
+        default: 0,
     },
 })
 
@@ -68,12 +76,17 @@ const Tag = !props.external ? Link : 'a'
             <EmptyCircleIcon aria-hidden="true" class="flex-shrink-0 w-6 h-6" />
         </slot>
 
-        <span
-            class="text-base font-medium text-left w-2/3"
+        <div
+            class="inline-flex text-base font-medium text-left w-2/3 gap-2 items-center"
             v-show="sidebarState.isOpen || sidebarState.isHovered"
         >
-            {{ title }}
-        </span>
+            <span>
+                {{ title }}
+            </span>
+            <span v-if="withBadge && badgeCount > 0">
+                <AlertIcon aria-hidden="true" class="flex-shrink-0 w-6 h-6 text-red-700" />
+            </span>
+        </div>
         <slot name="arrow" />
     </button>
 </template>

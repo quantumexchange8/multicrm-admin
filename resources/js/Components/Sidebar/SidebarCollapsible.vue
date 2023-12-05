@@ -14,6 +14,14 @@ const props = defineProps({
     active: {
         type: Boolean,
     },
+    withBadge: {
+        type: Boolean,
+        default: false,
+    },
+    badgeCount: {
+        type: Number,
+        default: 0,
+    },
 })
 
 const { active } = props
@@ -39,7 +47,7 @@ const leave = (el) => {
 
 <template>
     <div class="relative">
-        <SidebarLink @click="isOpen = !isOpen" :title="title" :active="active">
+        <SidebarLink @click="isOpen = !isOpen" :title="title" :active="active" :withBadge="withBadge" :badgeCount="badgeCount">
             <template #icon>
                 <slot name="icon">
                     <EmptyCircleIcon

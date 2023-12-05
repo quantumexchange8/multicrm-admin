@@ -33,4 +33,12 @@ class RightbarService
     {
         return $this->getPaymentQuery('payment', 'Withdrawal', 'Submitted');
     }
+    public function getPendingWithdrawalCount()
+    {
+        return Payment::query()
+            ->where('category', 'payment')
+            ->where('type', 'Withdrawal')
+            ->where('status', 'Submitted')
+            ->count();
+    }
 }

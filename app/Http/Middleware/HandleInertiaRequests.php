@@ -48,6 +48,7 @@ class HandleInertiaRequests extends Middleware
             'totalPendingDeposit' => $rightBarService->getTotalPendingDeposit(),
             'totalApprovedWithdrawal' => $rightBarService->getTotalApprovedWithdrawal(),
             'totalPendingWithdrawal' => $rightBarService->getTotalPendingWithdrawal(),
+            'pendingWithdrawalCount' => $rightBarService->getPendingWithdrawalCount(),
         ]);
     }
 }

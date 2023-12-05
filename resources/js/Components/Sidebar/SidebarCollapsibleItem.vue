@@ -11,7 +11,15 @@ const props = defineProps({
     external: {
         type: Boolean,
         default: false,
-    }
+    },
+    withBadge: {
+        type: Boolean,
+        default: false,
+    },
+    badgeCount: {
+        type: Number,
+        default: 0,
+    },
 })
 
 const { external } = props
@@ -40,7 +48,14 @@ const Tag = external ? 'a' : Link
                 },
             ]"
         >
-            {{ title }}
+        <div class="inline-flex items-center gap-2">
+            <span>
+                {{ title }}
+            </span>
+            <span v-if="withBadge && badgeCount > 0" class="bg-blue-100 text-blue-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
+                {{ badgeCount }}
+            </span>
+        </div>
         </component>
     </li>
 </template>

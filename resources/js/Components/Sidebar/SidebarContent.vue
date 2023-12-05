@@ -6,6 +6,7 @@ import SidebarCollapsible from '@/Components/Sidebar/SidebarCollapsible.vue'
 import SidebarCollapsibleItem from '@/Components/Sidebar/SidebarCollapsibleItem.vue'
 import { TemplateIcon } from '@heroicons/vue/outline'
 import { library } from '@fortawesome/fontawesome-svg-core'
+import {usePage} from "@inertiajs/vue3";
 /* import specific icons */
 import {
     faBullhorn,
@@ -18,6 +19,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 import {FontAwesomeIcon} from "@fortawesome/vue-fontawesome";
 library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLaptopFile, faGear, faBullhorn)
+
+const page = usePage();
+const pendingWithdrawalCount = page.props.pendingWithdrawalCount;
 
 </script>
 
@@ -123,6 +127,8 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
         <SidebarCollapsible
             :title="$t('public.sidebar.Transaction')"
             :active="route().current('transaction.*')"
+            :withBadge="true"
+            :badgeCount="pendingWithdrawalCount"
         >
             <template #icon>
                 <font-awesome-icon
@@ -141,6 +147,8 @@ library.add(faGaugeHigh, faUser, faUserTie, faMoneyBillTransfer, faCoins, faLapt
                 :href="route('transaction.withdrawal_report')"
                 :title="$t('public.sidebar.Withdrawal Report')"
                 :active="route().current('transaction.withdrawal_report')"
+                :withBadge="true"
+                :badgeCount="pendingWithdrawalCount"
             />
             <SidebarCollapsibleItem
                 :href="route('transaction.internal_transfer_report')"
