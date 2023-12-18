@@ -22,6 +22,8 @@ const { formatDate, formatAmount } = transactionFormat();
 const tradingAccounts = ref({data: []});
 const search = ref('');
 const isLoading = ref(false);
+const currentPage = ref(1);
+
 const getResults = async (page = 1, search = '') => {
     isLoading.value = true;
     try {
@@ -80,6 +82,13 @@ const paginationClass = [
 const paginationActiveClass = [
     'dark:bg-transparent border-0 text-[#FF9E23] dark:text-[#FF9E23] !font-bold text-xs'
 ];
+
+const handlePageChange = (newPage) => {
+    if (newPage >= 1) {
+        currentPage.value = newPage;
+        getResults(currentPage.value, search.value);
+    }
+};
 </script>
 
 <template>
@@ -221,7 +230,7 @@ const paginationActiveClass = [
                         :data="tradingAccounts"
                         :limit=1
                         :keepLength="true"
-                        @pagination-change-page="getResults"
+                        @pagination-change-page="handlePageChange"
                     />
                 </div>
             </div>
